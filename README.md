@@ -1,2 +1,2 @@
 # cpp-risk
-C++ implementation of the strategy board game known as risk
+C++ implementation of a strategy board game known as risk
