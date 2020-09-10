@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# Project files
+pdfs
+
+# CMake
+Makefile
+[Cc][Mm]ake*
+!CMakeLists.txt
+
+# Build
+Risk
