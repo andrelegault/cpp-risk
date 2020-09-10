@@ -29,7 +29,7 @@ class Player {
          */
         void attack();
         /**
-         * The reinforce phase of the Player's turn.
+         * The fortify phase of the Player's turn.
          */
         void foritfy();
 };
