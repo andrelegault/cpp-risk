@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18.2)
 
-project("Risk")
+project("WarZone")
 
-add_executable("${PROJECT_NAME}" "src/main.cpp")
+add_executable("${PROJECT_NAME}_Card" "src/drivers/CardsDriver.cpp")

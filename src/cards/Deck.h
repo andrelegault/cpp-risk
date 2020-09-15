@@ -1,10 +1,10 @@
-#include <card_collection.h>
-#include <hand.h>
+#include <CardCollection.h>
+#include <Hand.h>
 
 /**
  * A collection of card that can be drawn from.
  */
-class Deck: public Card_Collection {
+class Deck: public CardCollection {
     private:
         // Size of the deck. Should start with as many cards as there are countries.
         int size;
@@ -16,5 +16,5 @@ class Deck: public Card_Collection {
          * 
          * @param hand Hand to place Card into.
          */
-        void draw(Hand hand);
+        void draw(Hand& hand);
 };
