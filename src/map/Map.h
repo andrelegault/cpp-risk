@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <Continent.h>
 #include <Territory.h>
@@ -11,29 +13,27 @@ using namespace std;
  */
 class Map {
     private:
-        // Collection of territories. (Up for discussion)
-        vector<Territory*> territories;
-        // Collection of borders. (Up for discussion)
-        vector<Border*> borders;
         // Collection of continents.
         vector<Continent*> continents;
 
     public:
+        Map();
+        ~Map();
+
+        friend ostream& operator<<(ostream& stream, const Map* map);
+
         /**
-         * Adds a territory to the map.
-         * @param territory Territory to insert.
-         */
-        void addTerritory(Territory* territory);
-         /**
          * Adds a continent to the map.
          * @param continent Continent to insert.
          */
-        void addContinent(Continent* continent);
+        void add(Continent* continent);
+
         /**
-         * Adds a border to the map.
-         * @param border Border to insert.
+         * Removes a continent to the map.
+         * @param continent Continent to remove.
          */
-        void addBorder(Border* border);
+        void remove(Continent* continent);
+
         /**
          * Method that checks if: 
          * 1) The map is a connected graph
@@ -42,3 +42,5 @@ class Map {
          */  
         bool validate();
 };
+
+ostream& operator<<(ostream& stream, const Map* map);

@@ -1,21 +1,27 @@
+#pragma once
+
 #include <vector>
 #include <string>
+#include <Map.h>
 #include <Territory.h>
+#include <Border.h>
+#include <MapNode.h>
 
 using namespace std;
 
 /**
  * A Node Subgroup for the Map graph.
  */
-class Continent {
+class Continent: public MapNode<Map> {
     private:
-        // Name of continent as defined in the Conquer Map.
-        string name;
         // Territories inside continent subgroup.
         vector<Territory*> territories;
     
     public:
-        Continent(string);
+        Continent(string name);
+        Continent(Continent* continent);
+
+        friend ostream& operator<<(ostream& stream, const Continent* continent);
 
         /**
          * Adds a territory to the territories list.
@@ -23,12 +29,28 @@ class Continent {
          * 
          * @param territory Territory to add.
          */
-        void addTerritory(Territory* territory);
+        void add(Territory* territory);
+
         /**
-         * Extension of the add_territory method.
-         * This could be useful to make one-line insertions.
+         * Removes Territory from territories.
          * 
-         * @param territories List of territories to add.
+         * @param territory Territory to remove.
          */
-        void addTerritories(vector<Territory*> territories);
+        void remove(Territory* territory);
+
+        /**
+         * Get territories.
+         * 
+         * @return Territories.
+         */
+        vector<Territory*> getTerritories();
+
+        /**
+         * Checks if containing territories are connected.
+         * 
+         * @return Are territories connected?
+         */
+        bool validate();
 };
+
+ostream& operator<<(ostream& stream, const Continent* continent);

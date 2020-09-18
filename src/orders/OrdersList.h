@@ -1,8 +1,8 @@
+#pragma once
+
 #include <vector>
 #include <Order.h>
-#ifndef Player_H
-#define Player_H
-#endif
+#include <Player.h>
 
 using namespace std;
 

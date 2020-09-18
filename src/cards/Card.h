@@ -1,9 +1,7 @@
-#ifndef Player_H
-#define Player_H
-#endif
-#ifndef Deck_H
-#define Deck_H
-#endif
+#pragma once
+
+#include <Player.h>
+#include <Deck.h>
 #include <CardType.h>
 
 /**

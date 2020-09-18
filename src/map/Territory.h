@@ -1,35 +1,36 @@
+#pragma once
+
 #include <string>
 #include <vector>
+#include <MapNode.h>
+#include <Continent.h>
 #include <Border.h>
-#include <Player.h>
+//#include <Player.h>
 
 using namespace std;
 
 /**
  * Node for the Map graph.
  */
-class Territory {
+class Territory: public MapNode<Continent> {
     private:
-        // The name of the country as defined in the Conquer Map file.
-        string name;
         // Current player that owns this country.
-        Player* playerOwner;
-        // Collection of Border edges.
-        vector<Border*> borders;
+        // Player* playerOwner;
     
     public:
         // Counter for number of armies that current player owns in this country.
         int number_of_armies;
 
         Territory(string name);
+        Territory(Territory* territory);
+
+        friend ostream& operator<<(ostream& stream, const Territory* territory);
 
         /**
-         * Inserts the Border edge reference.
-         * We expect the border to include self.
-         * 
-         * @param border Border to attach to self.
+         * Connects bidirectionally two Territory.
          */
-        void addBorder(Border* border);
+        void connect(Territory* territory);
+
         /**
          * Changes the ownership of the country to a certain Player.
          * We expect the country to be removed from the previous Player's list 
@@ -37,5 +38,14 @@ class Territory {
          * 
          * @param player Player to make owner of.
          */
-        void setOwnerPlayer(Player* player);
+        //void set(Player* player);
+
+        /**
+         * Validates that node is connected.
+         * 
+         * @return Node is connected.
+         */
+        bool validate();
 };
+
+ostream& operator<<(ostream& stream, const Territory* territory);

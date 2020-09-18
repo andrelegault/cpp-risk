@@ -1,25 +1,35 @@
-#ifndef Territory_H
-#define Territory_H
-#endif
+#pragma once
+
+#include <iostream>
+
+using namespace std;
 
 /**
  * Bidirectional edge for the Map graph.
  */
+template <typename T>
 class Border {
     private:
-        // Territory node connected to Border edge.
-        Territory* t1;
-        // Territory node connected to Border edge.
-        Territory* t2;
+        // MapNode connected to Border edge.
+        T* n1;
+        // MapNode node connected to Border edge.
+        T* n2;
 
     public:
-        Border(Territory* t1, Territory* t2);
+        Border(T* n1, T* n2);
+        Border(Border* border);
+        ~Border();
+
+        friend ostream& operator<<(ostream& stream, const Border<T>* border);
         
         /**
-         * Fetches the other Territory node from the current territory.
+         * Fetches the other MapNode from the current node.
          * 
-         * @param territory Territory node to find the other node from.
-         * @return Other territory node.
+         * @param self MapNode to find the other node from.
+         * @return Other MapNode.
          */
-        Territory* getOtherTerritory(Territory* territory);
+        T* getOther(T* self);
 };
+
+template <typename T>
+ostream& operator<<(ostream& stream, const Border<T>* border);

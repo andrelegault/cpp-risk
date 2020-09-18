@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  * Enumerator for card types.
  */

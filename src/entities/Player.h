@@ -1,8 +1,8 @@
+#pragma once
+
 #include <vector>
 
-#ifndef Territory_H
-#define Territory_H
-#endif
+#include <Territory.h>
 #include <Hand.h>
 #include <OrdersList.h>
 
@@ -34,4 +34,14 @@ class Player {
          * Creates an Order and adds it to the list of orders.
          */
         void issueOrder();
+
+        /**
+         * Add territory to territories.
+         */
+        void addTerritory(Territory* territory);
+
+        /**
+         * Remove territory from territories.
+         */
+        void removeTerritory(Territory* territory);
 };

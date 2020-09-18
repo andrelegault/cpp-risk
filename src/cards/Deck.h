@@ -1,3 +1,5 @@
+#pragma once
+
 #include <CardCollection.h>
 #include <Hand.h>
 
@@ -16,5 +18,5 @@ class Deck: public CardCollection {
          * 
          * @param hand Hand to place Card into.
          */
-        void draw(Hand& hand);
+        void draw(Hand* hand);
 };
