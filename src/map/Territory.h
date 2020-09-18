@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <MapNode.h>
-#include <Continent.h>
 #include <Border.h>
 //#include <Player.h>
 
@@ -12,7 +11,7 @@ using namespace std;
 /**
  * Node for the Map graph.
  */
-class Territory: public MapNode<Continent> {
+class Territory: public MapNode {
     private:
         // Current player that owns this country.
         // Player* playerOwner;

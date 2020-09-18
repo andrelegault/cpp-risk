@@ -1,39 +1,30 @@
 #include <MapNode.h>
+#include <algorithm>
 
-template <typename T>
-MapNode<T>::MapNode(string name) {
+MapNode::MapNode(string name) {
     this->name = name;
 }
 
-template <typename T>
-MapNode<T>::~MapNode() {
+MapNode::~MapNode() {
     for(auto border : this->borders) {
         delete border;
     }
-
-    if(this->parent) this->parent.remove(this);
 }
 
-template <typename T>
-void MapNode<T>::add(Border<MapNode<T>>* border) {
+
+void MapNode::add(Border<MapNode>* border) {
     this->borders.push_back(border);
 }
 
-template <typename T>
-void MapNode<T>::remove(Border<MapNode<T>>* border) {
+
+void MapNode::remove(Border<MapNode>* border) {
     auto it = find(this->borders.begin(), this->borders.end(), border);
 
     if(it != this->borders.end()) this->borders.erase(it);
 }
 
-template <typename T>
-void MapNode<T>::set(T* parent) {
-    this->parent = parent;
-}
-
-template <typename T>
-void MapNode<T>::connect(MapNode<T>* node) {
-    auto border = &Border<MapNode<T>>(this, node);
-    this->add(border);
-    node->add(border);
+void MapNode::connect(MapNode* node) {
+    Border<MapNode> border = Border<MapNode>(this, node);
+    this->add(&border);
+    node->add(&border);
 }

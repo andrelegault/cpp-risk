@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Continent;
+
 /**
  * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
  * We can discuss if borders and territories should be handle by the subgroups.

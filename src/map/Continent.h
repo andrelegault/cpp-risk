@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <string>
-#include <Map.h>
 #include <Territory.h>
 #include <Border.h>
 #include <MapNode.h>
@@ -12,7 +11,7 @@ using namespace std;
 /**
  * A Node Subgroup for the Map graph.
  */
-class Continent: public MapNode<Map> {
+class Continent: public MapNode {
     private:
         // Territories inside continent subgroup.
         vector<Territory*> territories;

@@ -1,7 +1,7 @@
 #include <iostream>
-#include <WarZone/Map.h>
-#include <WarZone/Territory.h>
-#include <WarZone/Continent.h>
+#include <Map.h>
+#include <Territory.h>
+#include <Continent.h>
 
 using namespace std;
 

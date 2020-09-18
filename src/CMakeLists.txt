@@ -7,4 +7,4 @@ file(GLOB_RECURSE SOURCES
 )
 
 add_library(WarZone STATIC ${HEADERS} ${SOURCES})
-target_include_directories(WarZone PUBLIC map)
+target_include_directories(WarZone PUBLIC map orders entities cards)
