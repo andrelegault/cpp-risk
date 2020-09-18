@@ -2,9 +2,9 @@
 
 #include <vector>
 #include <string>
-#include <Territory.h>
-#include <Border.h>
-#include <MapNode.h>
+#include <Territory.hpp>
+#include <Border.hpp>
+#include <MapNode.hpp>
 
 using namespace std;
 

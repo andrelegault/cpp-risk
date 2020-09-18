@@ -2,8 +2,8 @@
 
 #include <string>
 #include <vector>
-#include <MapNode.h>
-#include <Border.h>
+#include <MapNode.hpp>
+#include <Border.hpp>
 //#include <Player.h>
 
 using namespace std;

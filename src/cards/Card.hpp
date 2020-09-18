@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Player.h>
-#include <Deck.h>
-#include <CardType.h>
+#include <Player.hpp>
+#include <Deck.hpp>
+#include <CardType.hpp>
 
 /**
  * A Risk card.

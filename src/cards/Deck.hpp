@@ -1,7 +1,7 @@
 #pragma once
 
-#include <CardCollection.h>
-#include <Hand.h>
+#include <CardCollection.hpp>
+#include <Hand.hpp>
 
 /**
  * A collection of card that can be drawn from.

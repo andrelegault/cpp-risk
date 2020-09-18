@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <Continent.h>
-#include <Territory.h>
-#include <Border.h>
+#include <Continent.hpp>
+#include <Territory.hpp>
+#include <Border.hpp>
 
 using namespace std;
 

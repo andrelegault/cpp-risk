@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Card.h>
-#include <CardCollection.h>
+#include <Card.hpp>
+#include <CardCollection.hpp>
 
 /**
  * A card collection used by the Player.

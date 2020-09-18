@@ -1,7 +1,5 @@
 #include <iostream>
-#include <Map.h>
-#include <Territory.h>
-#include <Continent.h>
+#include <Map.hpp>
 
 using namespace std;
 
@@ -10,14 +8,11 @@ using namespace std;
  * Checks whether they are valid or not.
  */
 int main() {
-    Map map = Map();
-    Continent continent = Continent("Continent");
-    Territory territory = Territory("Territory");
-    
-    continent.add(&territory);
-    map.add(&continent);
+    Map m;
 
-    cout << &map;
+    Continent continent("Contient");
+
+    cout << continent.getName();
 
     return 0;
 }

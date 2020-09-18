@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Map.h>
+#include <Map.hpp>
 
 using namespace std;
 

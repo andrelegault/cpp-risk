@@ -1,34 +1,32 @@
+#include <Border.hpp>
+
 #include <iostream>
 
-#include <Border.h>
-
-template <typename T>
-ostream& operator<<(ostream& stream, const Border<T>* border) {
+ostream& operator<<(ostream& stream, const Border* border) {
     stream << border->n1 << " <-> " << border->n2;
 
     return stream;
 }
 
-template <typename T>
-Border<T>::Border(T* n1, T* n2) {
+Border::Border(MapNode* n1, MapNode* n2) {
     this->n1 = n1;
     this->n2 = n2;
 }
 
-template <typename T>
-Border<T>::Border(Border<T>* border) {
-    this->o1 = &T(border->o1);
-    this->o2 = &T(border->o2);
+Border::Border(Border* border) {
+    MapNode n1(border->n1);
+    MapNode n2(border->n2);
+
+    this->n1 = &n1;
+    this->n2 = &n2;
 }
 
-template <typename T>
-Border<T>::~Border() {
-    if(this->o1) this->o1->removeBorder(this);
-    if(this->o2) this->o2->removeBorder(this);
+Border::~Border() {
+    if(this->n1) this->n1->remove(this);
+    if(this->n2) this->n2->remove(this);
 }
 
-template <typename T>
-T* Border<T>::getOther(T* o) {
-    if(o == this->o1) return this->o2;
-    else return this->o1; 
+MapNode* Border::getOther(MapNode* n) {
+    if(n == this->n1) return this->n2;
+    else return this->n1; 
 }

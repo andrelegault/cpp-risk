@@ -1,9 +1,11 @@
-#include <Territory.h>
+#include <Territory.hpp>
 
 Territory::Territory(string name): MapNode(name) {}
 
 ostream& operator<<(ostream& stream, const Territory* territory) {
     stream << territory->name;
+
+    return stream;
 }
 
 /**

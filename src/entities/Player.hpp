@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include <Territory.h>
-#include <Hand.h>
-#include <OrdersList.h>
+#include <Territory.hpp>
+#include <Hand.hpp>
+#include <OrdersList.hpp>
 
 using namespace std;
 

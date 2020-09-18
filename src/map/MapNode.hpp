@@ -1,11 +1,13 @@
 #pragma once
 
-#include <Border.h>
+#include <Border.hpp>
 
 #include <string>
 #include <vector>
 
 using namespace std;
+
+class Border;
 
 /**
  * Abstracted node for bidirectional graphs.
@@ -15,9 +17,10 @@ class MapNode {
         // The name as defined in the Conquer Map file.
         string name;
         // Collection of Border edges.
-        vector<Border<MapNode>*> borders;
+        vector<Border*> borders;
     public:
         MapNode(string name);
+        MapNode(MapNode* mapNode);
         ~MapNode();
 
         string getName();
@@ -28,14 +31,14 @@ class MapNode {
          * 
          * @param border Border to attach to self.
          */
-        void add(Border<MapNode>* border);
+        void add(Border* border);
 
         /**
          * Removes the Border edge reference.
          * 
          * @param border Border to detach from self.
          */
-        void remove(Border<MapNode>* border);
+        void remove(Border* border);
 
         /**
          * Connects other node to this node

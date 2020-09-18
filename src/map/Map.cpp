@@ -1,6 +1,9 @@
-#include<Map.h>
+#include<Map.hpp>
+
 #include<set>
 #include<algorithm>
+
+Map::Map() {}
 
 Map::~Map() {
     for(auto continent : this->continents) delete continent;
@@ -30,4 +33,6 @@ ostream& operator<<(ostream& stream, const Map* m) {
     for(auto continent : m->continents) {
         stream << continent;
     }
+
+    return stream;
 }
