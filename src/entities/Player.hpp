@@ -20,12 +20,7 @@ private:
     // The card collection for the Player.
     Hand hand;
     // Orders to apply.
-        OrdersList orders;
-    public:
-        /**
-         * @return A list of territories to defended.
-         */
-        vector<Territory*> toDefend();
+    OrdersList* orders;
 public:
     /**
      * @return A list of territories to defended.
