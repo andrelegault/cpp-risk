@@ -1,4 +1,13 @@
+#include <iostream>
 #include <Order.hpp>
+
+using std::endl;
+using std::ostream;
+
+ostream& operator<<(ostream& os, const Order& order) {
+    os << &order << endl;
+    return os;
+}
 
 Order::~Order() {}
 
@@ -27,6 +36,13 @@ OrdersList::~OrdersList() {
         delete order;
         order = nullptr;
     }
+}
+
+ostream& operator<<(ostream& os, const OrdersList& ordersList) {
+    for (Order* order : ordersList.orders) {
+        os << *order << endl;
+    }
+    return os;
 }
 
 void OrdersList::remove(const int& index) {
