@@ -1,4 +1,5 @@
 #include <iostream>
+#include <Order.hpp>
 
 using namespace std;
 
@@ -8,5 +9,12 @@ using namespace std;
  */
 int main() {
     cout << "Hello World!";
+    OrdersList ordersList;
+    Deploy deploy;
+    Advance advance;
+    Bomb bomb;
+    Blockade blockade;
+    Airlift order;
+    Negotiate negotiate;
     return 0;
 }
