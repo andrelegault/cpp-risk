@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <Player.hpp>
 
 using namespace std;
 
@@ -29,6 +30,37 @@ public:
      */
     virtual bool execute(Player* player) = 0;
 };
+
+class Deploy : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
+class Advance : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
+class Bomb : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
+class Blockade : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
+class Airlift : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
+class Negotiate : public Order {
+    bool validate();
+    bool execute(Player* player);
+};
+
 /**
  * Structure to hold orders and apply operations over.
  */
