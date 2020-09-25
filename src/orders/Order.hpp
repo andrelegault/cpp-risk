@@ -67,10 +67,9 @@ class Negotiate : public Order {
  * Structure to hold orders and apply operations over.
  */
 class OrdersList {
-private:
+public:
     // List of orders.
     vector<Order*> orders;
-public:
     /**
      * Default constructor.
      */
@@ -85,6 +84,8 @@ public:
      * Desctuctor.
      */
     ~OrdersList();
+
+    friend ostream& operator<<(ostream& os, const OrdersList& ordersList);
 
     /**
      * Deletes an order from the list
