@@ -4,6 +4,8 @@
 #include <Deck.hpp>
 #include <CardType.hpp>
 
+class Player;
+
 /**
  * A Risk card.
  */

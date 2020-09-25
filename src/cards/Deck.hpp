@@ -3,6 +3,8 @@
 #include <CardCollection.hpp>
 #include <Hand.hpp>
 
+class Hand;
+
 /**
  * A collection of card that can be drawn from.
  */

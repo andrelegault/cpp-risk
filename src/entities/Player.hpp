@@ -8,6 +8,8 @@
 
 using namespace std;
 
+class OrdersList;
+
 /**
  * A Risk player.
  */
