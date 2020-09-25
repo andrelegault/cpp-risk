@@ -11,45 +11,45 @@ using namespace std;
 /**
  * A Node Subgroup for the Map graph.
  */
-class Continent: public MapNode {
-    private:
-        // Territories inside continent subgroup.
-        vector<Territory*> territories;
-    
-    public:
-        Continent(string name);
-        Continent(Continent* continent);
+class Continent : public MapNode {
+private:
+    // Territories inside continent subgroup.
+    vector<Territory*> territories;
 
-        friend ostream& operator<<(ostream& stream, const Continent* continent);
+public:
+    Continent(string name);
+    Continent(Continent* continent);
 
-        /**
-         * Adds a territory to the territories list.
-         * We expect the territory to stay in self for the duration of the game.
-         * 
-         * @param territory Territory to add.
-         */
-        void add(Territory* territory);
+    friend ostream& operator<<(ostream& stream, const Continent* continent);
 
-        /**
-         * Removes Territory from territories.
-         * 
-         * @param territory Territory to remove.
-         */
-        void remove(Territory* territory);
+    /**
+     * Adds a territory to the territories list.
+     * We expect the territory to stay in self for the duration of the game.
+     *
+     * @param territory Territory to add.
+     */
+    void add(Territory* territory);
 
-        /**
-         * Get territories.
-         * 
-         * @return Territories.
-         */
-        vector<Territory*> getTerritories();
+    /**
+     * Removes Territory from territories.
+     *
+     * @param territory Territory to remove.
+     */
+    void remove(Territory* territory);
 
-        /**
-         * Checks if containing territories are connected.
-         * 
-         * @return Are territories connected?
-         */
-        bool validate();
+    /**
+     * Get territories.
+     *
+     * @return Territories.
+     */
+    vector<Territory*> getTerritories();
+
+    /**
+     * Checks if containing territories are connected.
+     *
+     * @return Are territories connected?
+     */
+    bool validate();
 };
 
 ostream& operator<<(ostream& stream, const Continent* continent);

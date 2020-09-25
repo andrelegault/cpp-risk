@@ -1,6 +1,6 @@
 #include <Territory.hpp>
 
-Territory::Territory(string name): MapNode(name) {}
+Territory::Territory(string name) : MapNode(name) {}
 
 ostream& operator<<(ostream& stream, const Territory* territory) {
     stream << territory->name;
@@ -9,9 +9,9 @@ ostream& operator<<(ostream& stream, const Territory* territory) {
 }
 
 /**
-void Territory::set(Player* player) { 
+void Territory::set(Player* player) {
     if(this->playerOwner) this->playerOwner->removeTerritory(this);
-    
+
     player->addTerritory(this);
 
     this->playerOwner = player;

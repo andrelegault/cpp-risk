@@ -8,7 +8,7 @@ ostream& operator<<(ostream& stream, const Continent* continent) {
     return stream;
 }
 
-Continent::Continent(string name): MapNode(name) {}
+Continent::Continent(string name) : MapNode(name) {}
 
 void Continent::add(Territory* territory) {
     this->territories.push_back(territory);
@@ -19,9 +19,9 @@ void Continent::remove(Territory* territory) {
 }
 
 bool Continent::validate() {
-    if(this->borders.size() == 0) return false;
+    if (this->borders.size() == 0) return false;
 
-    for(auto territory : this->territories) if(!territory->validate()) return false;
+    for (auto territory : this->territories) if (!territory->validate()) return false;
 
     return true;
 }

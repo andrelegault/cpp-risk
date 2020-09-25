@@ -22,11 +22,11 @@ Border::Border(Border* border) {
 }
 
 Border::~Border() {
-    if(this->n1) this->n1->remove(this);
-    if(this->n2) this->n2->remove(this);
+    if (this->n1) this->n1->remove(this);
+    if (this->n2) this->n2->remove(this);
 }
 
 MapNode* Border::getOther(MapNode* n) {
-    if(n == this->n1) return this->n2;
-    else return this->n1; 
+    if (n == this->n1) return this->n2;
+    else return this->n1;
 }

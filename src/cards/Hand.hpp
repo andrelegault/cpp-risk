@@ -6,4 +6,4 @@
 /**
  * A card collection used by the Player.
  */
-class Hand: public CardCollection {};
+class Hand : public CardCollection {};

@@ -11,7 +11,7 @@ MapNode::MapNode(MapNode* mapNode) {
 }
 
 MapNode::~MapNode() {
-    for(auto border : this->borders) {
+    for (auto border : this->borders) {
         delete border;
     }
 }
@@ -26,7 +26,7 @@ void MapNode::add(Border* border) {
 void MapNode::remove(Border* border) {
     auto it = find(this->borders.begin(), this->borders.end(), border);
 
-    if(it != this->borders.end()) this->borders.erase(it);
+    if (it != this->borders.end()) this->borders.erase(it);
 }
 
 void MapNode::connect(MapNode* node) {
