@@ -15,6 +15,20 @@ public:
      * @return Updates ostream.
      */
     friend ostream& operator<<(ostream& os, const Order& order);
+
+    /**
+     * Validates the order.
+     * @return True if the order is valid.
+     */
+    virtual bool validate() = 0;
+
+    /**
+     * Validate then executes orders according to player's state and order definition.
+     * @param player Player to execute orders on.
+     * @return Whether the order was successfully executed.
+     */
+    virtual bool execute(Player* player) = 0;
+};
 /**
  * Structure to hold orders and apply operations over.
  */
