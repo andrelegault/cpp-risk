@@ -1,5 +1,6 @@
 #include <Order.hpp>
 
+Order::~Order() {}
 OrdersList::OrdersList(vector<Order*>* orders) : orders(*orders) {}
 
 OrdersList::~OrdersList() {

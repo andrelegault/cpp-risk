@@ -17,6 +17,8 @@ public:
      */
     friend ostream& operator<<(ostream& os, const Order& order);
 
+    ~Order();
+
     /**
      * Validates the order.
      * @return True if the order is valid.
