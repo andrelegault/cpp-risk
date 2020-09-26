@@ -10,4 +10,4 @@ cmake .
 make
 ```
 
-Files should be released as `WarZone*`.
+Build files are released as `WarZone_Basename` in the `drivers` directory, e.g., `drivers/WarZone_CardsDriver`.
