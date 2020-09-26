@@ -2,7 +2,6 @@
 
 #include <Order.fwd.hpp>
 #include <iostream>
-#include <vector>
 #include <Player.hpp>
 
 using namespace std;
@@ -18,6 +17,9 @@ public:
      */
     friend ostream& operator<<(ostream& os, const Order& order);
 
+    /**
+     * Destructor.
+     */
     ~Order();
 
     /**
@@ -86,6 +88,12 @@ public:
      */
     ~OrdersList();
 
+    /**
+     * Stream operator to describe ordersList in string format.
+     * @param os The stream to output to.
+     * @param ordersList The object to convert to string.
+     * @return Updates ostream&.
+     */
     friend ostream& operator<<(ostream& os, const OrdersList& ordersList);
 
     /**
@@ -98,5 +106,5 @@ public:
      * Moves an order to the provided index.
      * @param index Index to move the order to.
      */
-    void move(const int& prev, const int& next);
+    void move(const int prev, const int next);
 };
