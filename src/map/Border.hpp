@@ -1,11 +1,10 @@
 #pragma once
 
+#include <Border.fwd.hpp>
 #include <iostream>
 #include <MapNode.hpp>
 
 using namespace std;
-
-class MapNode;
 
 /**
  * Bidirectional edge for the Map graph.

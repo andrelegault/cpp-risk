@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Continent.fwd.hpp>
 #include <vector>
 #include <string>
 #include <Territory.hpp>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Order.fwd.hpp>
 #include <iostream>
 #include <vector>
 #include <Player.hpp>
@@ -69,7 +70,7 @@ class Negotiate : public Order {
 class OrdersList {
 public:
     // List of orders.
-    vector<Order*> orders;
+    vector<Order*> orders{};
     /**
      * Default constructor.
      */
@@ -91,7 +92,7 @@ public:
      * Deletes an order from the list
      * @param index Index containing element to be deleted.
      */
-    void remove(const int& index);
+    void remove(const int index);
 
     /**
      * Moves an order to the provided index.

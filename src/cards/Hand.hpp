@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Hand.fwd.hpp>
 #include <Card.hpp>
 #include <CardCollection.hpp>
 

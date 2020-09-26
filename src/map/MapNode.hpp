@@ -1,13 +1,11 @@
 #pragma once
 
-#include <Border.hpp>
-
 #include <string>
 #include <vector>
+#include <MapNode.fwd.hpp>
+#include <Border.hpp>
 
 using namespace std;
-
-class Border;
 
 /**
  * Abstracted node for bidirectional graphs.

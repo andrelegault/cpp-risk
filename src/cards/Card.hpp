@@ -1,10 +1,9 @@
 #pragma once
 
+#include <Card.fwd.hpp>
 #include <Player.hpp>
 #include <Deck.hpp>
 #include <CardType.hpp>
-
-class Player;
 
 /**
  * A Risk card.

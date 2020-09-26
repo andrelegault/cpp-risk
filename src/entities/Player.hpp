@@ -2,12 +2,12 @@
 
 #include <vector>
 
+#include <Player.fwd.hpp>
 #include <Territory.hpp>
 #include <Hand.hpp>
+#include <Order.hpp>
 
 using namespace std;
-
-class OrdersList;
 
 /**
  * A Risk player.
