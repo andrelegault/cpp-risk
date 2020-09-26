@@ -100,11 +100,11 @@ public:
      * Deletes an order from the list
      * @param index Index containing element to be deleted.
      */
-    void remove(const int index);
+    void remove(const unsigned int index);
 
     /**
      * Moves an order to the provided index.
      * @param index Index to move the order to.
      */
-    void move(const int prev, const int next);
+    void move(const unsigned int prev, const unsigned int next);
 };

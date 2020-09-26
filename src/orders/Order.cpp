@@ -45,9 +45,9 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-void OrdersList::remove(const int index) {
+void OrdersList::remove(const unsigned int index) {
     orders[index] = nullptr;
     orders.erase(orders.begin() + index);
 }
 
-void OrdersList::move(const int prev, const int next) { }
+void OrdersList::move(const unsigned int prev, const unsigned int next) { }
