@@ -1,20 +1,25 @@
 #include <iostream>
 #include <Order.hpp>
+#include <assert.h>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 /**
  * Creates a list of orders.
  * Demonstrates that the order/orderlist objects indeed have the mentioned features.
  */
 int main() {
-    cout << "Hello World!";
     OrdersList ordersList;
     Deploy deploy;
     Advance advance;
-    Bomb bomb;
-    Blockade blockade;
-    Airlift order;
-    Negotiate negotiate;
+
+    ordersList.orders.push_back(&deploy);
+    ordersList.orders.push_back(&advance);
+    assert(ordersList.orders.size() == 2);
+    ordersList.remove(0);
+    assert(ordersList.orders.size() == 1);
+    ordersList.remove(0);
+    assert(ordersList.orders.size() == 0);
     return 0;
 }
