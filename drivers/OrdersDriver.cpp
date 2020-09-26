@@ -14,12 +14,12 @@ int main() {
     Deploy deploy;
     Advance advance;
 
-    ordersList.orders.push_back(&deploy);
-    ordersList.orders.push_back(&advance);
-    assert(ordersList.orders.size() == 2);
+    ordersList.orders->push_back(&deploy);
+    ordersList.orders->push_back(&advance);
+    assert(ordersList.orders->size() == 2);
     ordersList.remove(0);
-    assert(ordersList.orders.size() == 1);
+    assert(ordersList.orders->size() == 1);
     ordersList.remove(0);
-    assert(ordersList.orders.size() == 0);
+    assert(ordersList.orders->size() == 0);
     return 0;
 }

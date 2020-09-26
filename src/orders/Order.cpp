@@ -29,25 +29,27 @@ bool Airlift::execute(Player* player) { return true; }
 bool Negotiate::validate() { return true; }
 bool Negotiate::execute(Player* player) { return true; }
 
-OrdersList::OrdersList(vector<Order*>* orders) : orders(*orders) {}
+OrdersList::OrdersList(vector<Order*>* orders) : orders(orders) {}
+
+OrdersList::OrdersList(const OrdersList& old) : orders(new vector<Order*>(*(old.orders))) {}
 
 OrdersList::~OrdersList() {
-    for (Order* order : orders) {
+    for (Order* order : *orders) {
         order = nullptr;
         delete order;
     }
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
-    for (Order* order : ordersList.orders) {
+    for (Order* order : *(ordersList.orders)) {
         os << *order << endl;
     }
     return os;
 }
 
 void OrdersList::remove(const unsigned int index) {
-    orders[index] = nullptr;
-    orders.erase(orders.begin() + index);
+    (*(orders))[index] = nullptr;
+    orders->erase(orders->begin() + index);
 }
 
 void OrdersList::move(const unsigned int prev, const unsigned int next) { }

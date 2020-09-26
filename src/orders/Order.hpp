@@ -71,8 +71,8 @@ class Negotiate : public Order {
  */
 class OrdersList {
 public:
-    // List of orders.
-    vector<Order*> orders{};
+    // Pointer to vector of Order objects.
+    vector<Order*>* orders = new vector<Order*>;
     /**
      * Default constructor.
      */
