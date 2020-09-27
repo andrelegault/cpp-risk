@@ -28,6 +28,10 @@ public:
     ~Order();
 
     /**
+     * Assignment operator overloading.
+     */
+    Order& operator=(const Order& other);
+    /**
      * Validates the order.
      * @return True if the order is valid.
      */

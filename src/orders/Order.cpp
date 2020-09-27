@@ -13,6 +13,10 @@ Order::Order() = default;
 
 Order::~Order() {}
 
+Order& Order::operator=(const Order & order) {
+    return *this;
+}
+
 bool Deploy::validate() { return true; }
 bool Deploy::execute(Player* player) { return true; }
 
