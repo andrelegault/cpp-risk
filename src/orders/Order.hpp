@@ -18,6 +18,11 @@ public:
     friend ostream& operator<<(ostream& os, const Order& order);
 
     /**
+     * Default constructor.
+     */
+    Order();
+
+    /**
      * Destructor.
      */
     ~Order();
