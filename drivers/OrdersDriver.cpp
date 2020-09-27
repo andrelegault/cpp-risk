@@ -13,9 +13,13 @@ int main() {
     OrdersList ordersList;
     Deploy deploy;
     Advance advance;
+    Advance advOther = advance;
+
+    assert(&advOther != &advance);
 
     ordersList.orders->push_back(&deploy);
     ordersList.orders->push_back(&advance);
+    OrdersList ordersList2 = OrdersList(ordersList);
     assert(ordersList.orders->size() == 2);
     ordersList.remove(0);
     assert(ordersList.orders->size() == 1);
