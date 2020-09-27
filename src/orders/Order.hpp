@@ -28,9 +28,15 @@ public:
     ~Order();
 
     /**
+     * Copy constructor.
+     */
+    Order(const Order& order);
+
+    /**
      * Assignment operator overloading.
      */
     Order& operator=(const Order& other);
+
     /**
      * Validates the order.
      * @return True if the order is valid.
@@ -86,6 +92,11 @@ public:
      * Default constructor.
      */
     OrdersList() = default;
+
+    /**
+     * Copy constructor.
+     */
+    OrdersList(const OrdersList& old);
 
     /**
      * Parameter constructor.
