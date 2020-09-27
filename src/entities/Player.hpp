@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <Player.fwd.hpp>
+#include <Territory.fwd.hpp>
 #include <Territory.hpp>
 #include <Hand.hpp>
 #include <Order.hpp>

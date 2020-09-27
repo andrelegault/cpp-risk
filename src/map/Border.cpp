@@ -2,12 +2,6 @@
 
 #include <iostream>
 
-ostream& operator<<(ostream& stream, const Border* border) {
-    stream << border->n1 << " <-> " << border->n2;
-
-    return stream;
-}
-
 Border::Border(MapNode* n1, MapNode* n2) {
     this->n1 = n1;
     this->n2 = n2;
@@ -24,6 +18,12 @@ Border::Border(Border* border) {
 Border::~Border() {
     if (this->n1) this->n1->remove(this);
     if (this->n2) this->n2->remove(this);
+}
+
+ostream& operator<<(ostream& stream, const Border* border) {
+    stream << border->n1 << " <-> " << border->n2;
+
+    return stream;
 }
 
 MapNode* Border::getOther(MapNode* n) {

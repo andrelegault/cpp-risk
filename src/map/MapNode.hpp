@@ -29,7 +29,7 @@ public:
      *
      * @param border Border to attach to self.
      */
-    void add(Border* border);
+    void connect(Border* border);
 
     /**
      * Removes the Border edge reference.

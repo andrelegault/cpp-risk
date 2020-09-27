@@ -2,20 +2,42 @@
 
 #include <algorithm>
 
-ostream& operator<<(ostream& stream, const Continent* continent) {
-    stream << continent->name;
-
-    return stream;
-}
-
 Continent::Continent(string name) : MapNode(name) {}
 
-void Continent::add(Territory* territory) {
+// TODO: Deep clone?
+Continent::Continent(Continent* continent) : MapNode(continent) {}
+
+Continent::~Continent() {
+    this->map->remove(this);
+
+    while(!this->territories.empty()) delete this->territories.back();
+}
+
+// TODO: Better print.
+ostream& operator<<(ostream& stream, const Continent* continent) {
+    stream << continent->name << endl;
+
+    for(auto border : continent->borders) {
+        stream << "-> " << border->getOther((Continent*)continent)->getName() << endl;
+    }
+
+    return stream << endl;
+}
+
+void Continent::connect(Map* map) {
+    this->map = map;
+}
+
+void Continent::connect(Territory* territory) {
+    territory->connect(this);
+
     this->territories.push_back(territory);
 }
 
 void Continent::remove(Territory* territory) {
+    auto p = find(this->territories.begin(), this->territories.end(), territory);
 
+    if(p != this->territories.end()) this->territories.erase(p);
 }
 
 bool Continent::validate() {
@@ -26,7 +48,7 @@ bool Continent::validate() {
     return true;
 }
 
-// TODO: COPY INSTEAD!
+// TODO: Copy?
 vector<Territory*> Continent::getTerritories() {
     return this->territories;
 }

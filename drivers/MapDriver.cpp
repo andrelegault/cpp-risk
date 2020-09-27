@@ -1,5 +1,7 @@
 #include <iostream>
+#include <string>
 #include <Map.hpp>
+#include <MapLoader.hpp>
 
 using namespace std;
 
@@ -8,11 +10,11 @@ using namespace std;
  * Checks whether they are valid or not.
  */
 int main() {
-    Map m;
+    // TODO - Read input for file name.
+    Map m = MapLoader::load("file");
 
-    Continent continent("Contient");
-
-    cout << continent.getName();
+    // TODO - Better output for maps.
+    // cout << &m;
 
     return 0;
 }

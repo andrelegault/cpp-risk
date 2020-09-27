@@ -1,11 +1,13 @@
 #pragma once
 
-#include <Continent.fwd.hpp>
 #include <vector>
 #include <string>
+#include <Continent.fwd.hpp>
+#include <Map.fwd.hpp>
 #include <Territory.hpp>
 #include <Border.hpp>
 #include <MapNode.hpp>
+#include <Map.hpp>
 
 using namespace std;
 
@@ -16,10 +18,13 @@ class Continent : public MapNode {
 private:
     // Territories inside continent subgroup.
     vector<Territory*> territories;
+    // Map that Continent is part of.
+    Map* map;
 
 public:
     Continent(string name);
     Continent(Continent* continent);
+    ~Continent();
 
     friend ostream& operator<<(ostream& stream, const Continent* continent);
 
@@ -29,7 +34,14 @@ public:
      *
      * @param territory Territory to add.
      */
-    void add(Territory* territory);
+    void connect(Territory* territory);
+
+    /**
+     * Sets parent map.
+     * 
+     * @param map Parent to set to.
+     */
+    void connect(Map* map);
 
     /**
      * Removes Territory from territories.

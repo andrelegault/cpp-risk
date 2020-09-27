@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include <Continent.hpp>
 #include <Territory.hpp>
@@ -16,8 +17,12 @@ private:
     // Collection of continents.
     vector<Continent*> continents;
 
+    // Map name.
+    string name;
+
 public:
-    Map();
+    Map(string name);
+    Map(Map* map);
     ~Map();
 
     friend ostream& operator<<(ostream& stream, const Map* map);
@@ -26,13 +31,23 @@ public:
      * Adds a continent to the map.
      * @param continent Continent to insert.
      */
-    void add(Continent* continent);
+    void connect(Continent* continent);
 
     /**
      * Removes a continent to the map.
      * @param continent Continent to remove.
      */
     void remove(Continent* continent);
+
+    /**
+     * Returns list of all Continents.
+     */
+    vector<Continent*> getContinents();
+
+    /**
+     * Returns list of all Territories.
+     */
+    vector<Territory*> getTerritories();
 
     /**
      * Method that checks if:

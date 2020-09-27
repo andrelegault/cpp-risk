@@ -3,14 +3,37 @@
 #include<set>
 #include<algorithm>
 
-Map::Map() {}
-
-Map::~Map() {
-    for (auto continent : this->continents) delete continent;
+Map::Map(string name) {
+    this->name = name;
 }
 
-void Map::add(Continent* continent) {
+// TODO: Deep clone?
+Map::Map(Map* map) {}
+
+Map::~Map() {
+    while(!this->continents.empty()) delete this->continents.back();
+}
+
+// TODO: Better print.
+ostream& operator<<(ostream& stream, const Map* m) {
+    stream << m->name << endl << endl;
+
+    for (auto continent : m->continents) {
+        stream << continent;
+    }
+
+    return stream;
+}
+
+void Map::connect(Continent* continent) {
+    continent->connect(this);
     this->continents.push_back(continent);
+}
+
+void Map::remove(Continent* continent) {
+    auto p = find(this->continents.begin(), this->continents.end(), continent);
+
+    if(p != this->continents.end()) this->continents.erase(p);
 }
 
 bool Map::validate() {
@@ -29,10 +52,19 @@ bool Map::validate() {
     return true;
 }
 
-ostream& operator<<(ostream& stream, const Map* m) {
-    for (auto continent : m->continents) {
-        stream << continent;
+// TODO: Copy?
+vector<Continent*> Map::getContinents() {
+    return this->continents;
+}
+
+vector<Territory*> Map::getTerritories() {
+    vector<Territory*> territories;
+
+    for(auto continent : this->continents) {
+        vector<Territory*> temp = continent->getTerritories();
+
+        territories.insert(territories.end(), temp.begin(), temp.end());
     }
 
-    return stream;
+    return territories;
 }

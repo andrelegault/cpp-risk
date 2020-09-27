@@ -6,22 +6,22 @@ MapNode::MapNode(string name) {
     this->name = name;
 }
 
+// TODO: Deep clone.
 MapNode::MapNode(MapNode* mapNode) {
     this->name = mapNode->name;
 }
 
 MapNode::~MapNode() {
-    for (auto border : this->borders) {
-        delete border;
-    }
+    while(!this->borders.empty()) delete this->borders.back();
 }
 
-string MapNode::getName() { return this->name; }
+string MapNode::getName() { 
+    return this->name; 
+}
 
-void MapNode::add(Border* border) {
+void MapNode::connect(Border* border) {
     this->borders.push_back(border);
 }
-
 
 void MapNode::remove(Border* border) {
     auto it = find(this->borders.begin(), this->borders.end(), border);
@@ -30,7 +30,7 @@ void MapNode::remove(Border* border) {
 }
 
 void MapNode::connect(MapNode* node) {
-    Border border(this, node);
-    this->add(&border);
-    node->add(&border);
+    Border* border = new Border(this, node);
+    this->connect(border);
+    node->connect(border);
 }
