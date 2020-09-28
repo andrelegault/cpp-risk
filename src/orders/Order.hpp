@@ -120,7 +120,7 @@ public:
      * Deletes an order from the list
      * @param index Index containing element to be deleted.
      */
-    void remove(const unsigned int index);
+    void remove(Order* order);
 
     /**
      * Moves an order to the provided index.

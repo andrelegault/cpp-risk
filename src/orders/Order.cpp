@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <Order.hpp>
 
 using std::endl;
@@ -57,9 +58,11 @@ ostream& operator<<(ostream & os, const OrdersList & ordersList) {
     return os;
 }
 
-void OrdersList::remove(const unsigned int index) {
-    (*(orders))[index] = nullptr;
-    orders->erase(orders->begin() + index);
+
+
+void OrdersList::remove(Order* order) {
+    auto o = find(orders->begin(), orders->end(), order);
+    orders->erase(o);
 }
 
 void OrdersList::move(const unsigned int prev, const unsigned int next) { }

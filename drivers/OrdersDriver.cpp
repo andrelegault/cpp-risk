@@ -21,9 +21,9 @@ int main() {
     ordersList.orders->push_back(&advance);
     OrdersList ordersList2 = OrdersList(ordersList);
     assert(ordersList.orders->size() == 2);
-    ordersList.remove(0);
+    ordersList.remove(&deploy);
     assert(ordersList.orders->size() == 1);
-    ordersList.remove(0);
+    ordersList.remove(&advance);
     assert(ordersList.orders->size() == 0);
     return 0;
 }
