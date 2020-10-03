@@ -15,13 +15,32 @@ using namespace std;
  */
 class Player {
 private:
+
     // The territories owned by the players.
     vector<Territory*> territories;
+    /*
     // The card collection for the Player.
     Hand hand;
+    */
     // Orders to apply.
     OrdersList* orders;
+    
+    int num;
+    string name;
+
 public:
+    //default constructor
+    Player();
+    ~Player();
+    string getName();
+    int getNum();
+    
+
+    
+
+
+
+
     /**
      * @return A list of territories to defended.
      */
