@@ -1,4 +1,5 @@
 #include <iostream>
+#include <MapLoader.hpp>
 
 using namespace std;
 
@@ -7,6 +8,11 @@ using namespace std;
  * Rejects invalid map files of different kinds. 
  */
 int main() {
-    cout << "Hello World!";
+    // TODO - Read input for file name.
+    Map m = MapLoader::load("file");
+
+    // TODO - Better output for maps.
+    // cout << &m;
+
     return 0;
 }
