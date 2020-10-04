@@ -15,7 +15,7 @@ using namespace std;
 class Territory : public MapNode {
 private:
     // Current player that owns this country.
-    //Player* playerOwner;
+    Player* playerOwner;
 
     // Parent Continent.
     Continent* continent;
@@ -36,7 +36,7 @@ public:
      *
      * @param player Player to make owner of.
      */
-    //void set(Player* player);
+    void set(Player* player);
 
     /**
      * Sets parent Continent.

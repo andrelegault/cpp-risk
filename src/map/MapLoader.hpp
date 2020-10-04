@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Map.hpp>
+#include <MapNode.hpp>
 
 using namespace std;
 

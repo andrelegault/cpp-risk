@@ -26,14 +26,14 @@ void Territory::connect(Continent* continent) {
     this->continent = continent;
 }
 
-/* void Territory::set(Player* player) {
+void Territory::set(Player* player) {
     if(this->playerOwner) this->playerOwner->removeTerritory(this);
 
     player->addTerritory(this);
 
     this->playerOwner = player;
-} */
+}
 
 bool Territory::validate() {
-    return this->borders.size() == 0;
+    return this->borders.size() > 0;
 }
