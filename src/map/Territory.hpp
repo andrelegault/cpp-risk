@@ -29,6 +29,8 @@ public:
 
     friend ostream& operator<<(ostream& stream, const Territory* territory);
 
+    void operator=(const Territory* territory);
+
     /**
      * Changes the ownership of the country to a certain Player.
      * We expect the country to be removed from the previous Player's list

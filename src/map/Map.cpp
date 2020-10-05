@@ -8,7 +8,10 @@ Map::Map(string name) {
 }
 
 // TODO: Deep clone?
-Map::Map(Map* map) {}
+Map::Map(Map* map) {
+    this->name = map->name;
+    this->continents = map->continents;
+}
 
 Map::~Map() {
     while(!this->continents.empty()) delete this->continents.back();
@@ -23,6 +26,12 @@ ostream& operator<<(ostream& stream, const Map* m) {
     }
 
     return stream;
+}
+
+void Map::operator=(const Map* map) {
+    this->~Map();
+    this->name = map->name;
+    this->continents = map->continents;
 }
 
 void Map::connect(Continent* continent) {

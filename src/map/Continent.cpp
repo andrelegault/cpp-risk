@@ -5,7 +5,10 @@
 Continent::Continent(string name) : MapNode(name) {}
 
 // TODO: Deep clone?
-Continent::Continent(Continent* continent) : MapNode(continent) {}
+Continent::Continent(Continent* continent) : MapNode(continent) {
+    this->territories = continent->territories;
+    this->map = continent->map;
+}
 
 Continent::~Continent() {
     this->map->remove(this);
@@ -22,6 +25,14 @@ ostream& operator<<(ostream& stream, const Continent* continent) {
     }
 
     return stream << endl;
+}
+
+void Continent::operator=(const Continent* continent) {
+    this->~Continent();
+    this->name = continent->name;
+    this->borders = continent->borders;
+    this->map = continent->map;
+    this->territories = continent->territories;
 }
 
 void Continent::connect(Map* map) {

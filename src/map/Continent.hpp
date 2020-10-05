@@ -28,6 +28,8 @@ public:
 
     friend ostream& operator<<(ostream& stream, const Continent* continent);
 
+    void operator=(const Continent* continent);
+
     /**
      * Adds a territory to the territories list.
      * We expect the territory to stay in self for the duration of the game.

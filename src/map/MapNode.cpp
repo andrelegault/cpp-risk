@@ -9,6 +9,7 @@ MapNode::MapNode(string name) {
 // TODO: Deep clone.
 MapNode::MapNode(MapNode* mapNode) {
     this->name = mapNode->name;
+    this->borders = mapNode->borders;
 }
 
 MapNode::~MapNode() {

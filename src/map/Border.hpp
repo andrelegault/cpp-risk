@@ -23,6 +23,8 @@ public:
 
     friend ostream& operator<<(ostream& stream, const Border* border);
 
+    void operator=(const Border* border);
+
     /**
      * Fetches the other MapNode from the current node.
      *

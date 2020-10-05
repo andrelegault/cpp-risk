@@ -27,6 +27,8 @@ public:
 
     friend ostream& operator<<(ostream& stream, const Map* map);
 
+    void operator=(const Map* map);
+
     /**
      * Adds a continent to the map.
      * @param continent Continent to insert.
