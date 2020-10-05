@@ -12,11 +12,11 @@ MapNode::MapNode(MapNode* mapNode) {
 }
 
 MapNode::~MapNode() {
-    while(!this->borders.empty()) delete this->borders.back();
+    while (!this->borders.empty()) delete this->borders.back();
 }
 
-string MapNode::getName() { 
-    return this->name; 
+string MapNode::getName() {
+    return this->name;
 }
 
 void MapNode::connect(Border* border) {
