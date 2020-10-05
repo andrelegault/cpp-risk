@@ -1,12 +1,14 @@
-#include <iostream>
-#include <algorithm>
 #include <Order.hpp>
+#include <algorithm>
 
 using std::endl;
 using std::ostream;
 
+
+// Order
+
 ostream& operator<<(ostream& os, const Order& order) {
-    os << &order << endl;
+    os << &order;
     return os;
 }
 
@@ -20,21 +22,28 @@ Order& Order::operator=(const Order& order) {
     return *this;
 }
 
+
+// Deploy
 bool Deploy::validate() { return true; }
 bool Deploy::execute(Player* player) { return true; }
 
+// Advance
 bool Advance::validate() { return true; }
 bool Advance::execute(Player* player) { return true; }
 
+// Bomb
 bool Bomb::validate() { return true; }
 bool Bomb::execute(Player* player) { return true; }
 
+// Blockade
 bool Blockade::validate() { return true; }
 bool Blockade::execute(Player* player) { return true; }
 
+// Airlift
 bool Airlift::validate() { return true; }
 bool Airlift::execute(Player* player) { return true; }
 
+// Negotiate
 bool Negotiate::validate() { return true; }
 bool Negotiate::execute(Player* player) { return true; }
 
@@ -43,17 +52,23 @@ bool Negotiate::execute(Player* player) { return true; }
 
 OrdersList::OrdersList() { }
 
-OrdersList::OrdersList(const OrdersList& other) : orders(other.orders) { }
+// TODO: implement copy constructor
+OrdersList::OrdersList(const OrdersList& other) { }
 
 OrdersList::~OrdersList() {
-    orders = nullptr;
-    delete orders;
+    for (Order* order : orders) {
+        delete order;
+        order = nullptr;
+    }
+    orders.clear();
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
-    for (Order* order : *(ordersList.orders)) {
-        os << *order << endl;
+    os << "[ ";
+    for (Order* order : ordersList.orders) {
+        os << *order << ", ";
     }
+    os << "]" << endl;
     return os;
 }
 
@@ -66,11 +81,30 @@ void OrdersList::addOrder(Order* what) {
 }
 
 void OrdersList::remove(Order* order) {
-vector<Order*>::const_iterator OrdersList::findOrder(Order* order) const {
+    auto o = findOrder(order);
+    orders.erase(o);
+    delete order;
+    order = nullptr;
+}
+
+vector<Order*>::iterator OrdersList::findOrder(Order* order) {
     return find(orders.begin(), orders.end(), order);
 }
 
-void OrdersList::move(const unsigned int prev, const unsigned int next) { }
+void OrdersList::move(Order* first, Order* second) {
+    auto firstIt = findOrder(first);
+    auto secondIt = findOrder(second);
+    iter_swap(firstIt, secondIt);
+}
+
+Order* OrdersList::getAtIndex(const unsigned int index) {
+    if (index < this->getLength()) {
+        return orders[index];
+    }
+    else {
+        return nullptr;
+    }
+}
 
 int OrdersList::getLength() const {
     return orders.size();

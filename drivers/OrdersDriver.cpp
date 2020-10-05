@@ -11,18 +11,26 @@ using std::endl;
  */
 int main() {
     OrdersList ordersList;
-    Deploy deploy;
-    Advance advance;
-    Advance advOther = advance;
+    Deploy* deploy = new Deploy;
+    Advance* advance = new Advance;
+    Bomb* bomb = new Bomb;
 
-    ordersList.addOrder(&deploy);
-    ordersList.addOrder(&advance);
+    ordersList.addOrder(bomb);
+    ordersList.addOrder(deploy);
+    ordersList.addOrder(advance);
 
-    OrdersList ordersList2 = OrdersList(ordersList);
+    ordersList.move(bomb, advance);
+    assert(advance == ordersList.getAtIndex(0));
+    assert(deploy == ordersList.getAtIndex(1));
+    assert(bomb == ordersList.getAtIndex(2));
+
+    // OrdersList ordersList2 = OrdersList(ordersList);
+    assert(ordersList.getLength() == 3);
+    ordersList.remove(deploy);
     assert(ordersList.getLength() == 2);
-    ordersList.remove(&deploy);
+    ordersList.remove(bomb);
     assert(ordersList.getLength() == 1);
-    ordersList.remove(&advance);
+    ordersList.remove(advance);
     assert(ordersList.getLength() == 0);
     return 0;
 }

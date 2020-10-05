@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Order.fwd.hpp>
-#include <iostream>
 #include <Player.hpp>
+#include <iostream>
 
 using namespace std;
 
@@ -87,12 +87,15 @@ class Negotiate : public Order {
  */
 class OrdersList {
 private:
+    // Set of Order pointers.
+    vector<Order*> orders;
+
     /**
-     * Finds an order in the vector of Order pointers.
+     * Finds an order in orders.
      * @param order Order pointer to find.
      * @return orders.end() if not found
      */
-    vector<Order*>::const_iterator findOrder(Order* order) const;
+    vector<Order*>::iterator findOrder(Order* order);
 public:
     /**
      * Default constructor.
@@ -110,12 +113,12 @@ public:
     ~OrdersList();
 
     /**
-     * Adds an order to the vector
+     * Adds an order to orders.
      */
     void addOrder(Order* order);
 
     /**
-     * Gets the number of elements in the vector of Order pointers.
+     * Gets the number of elements in orders.
      * @return Number of elements orders.
      */
     int getLength() const;
@@ -140,5 +143,12 @@ public:
      */
     void remove(Order* order);
 
-    // TODO: implement move
+    /**
+     * Gets an Order pointer at a specific index.
+     * @param index Index of the desired object.
+     * @return Pointer to the Order object, or `nullptr` if not found.
+     */
+    Order* getAtIndex(const unsigned int index);
+
+    void move(Order* yes, Order* no);
 };

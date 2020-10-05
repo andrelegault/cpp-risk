@@ -80,11 +80,7 @@ void Player::issueOrder(){
         }
         break;
     } 
-    
-
-    //orders->orders->push_back(order);
-
-
+    orders->addOrder(order);
 }
 
 std::ostream& operator<<(std::ostream &strm, const Player &player){
