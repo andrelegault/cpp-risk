@@ -118,7 +118,7 @@ public:
 
     /**
      * Deletes an order from the list
-     * @param index Index containing element to be deleted.
+     * @param order Order to remove from the list.
      */
     void remove(Order* order);
 

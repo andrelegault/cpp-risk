@@ -45,10 +45,8 @@ OrdersList::OrdersList(const OrdersList& old) : orders(new vector<Order*>()) {
 }
 
 OrdersList::~OrdersList() {
-    for (Order* order : *orders) {
-        order = nullptr;
-        delete order;
-    }
+    orders = nullptr;
+    delete orders;
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
