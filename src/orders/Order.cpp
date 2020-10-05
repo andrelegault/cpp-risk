@@ -58,8 +58,9 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-void OrdersList::addOrder(Order* order) {
-    orders->push_back(order);
+void OrdersList::operator=(const OrdersList& other) {
+    this->orders = other.orders;
+}
 }
 
 void OrdersList::remove(Order* order) {

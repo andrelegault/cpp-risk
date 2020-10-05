@@ -125,6 +125,12 @@ public:
     friend ostream& operator<<(ostream& os, const OrdersList& ordersList);
 
     /**
+     * Assignment operator overload.
+     * @param other Other OrdersList used for assignment.
+     */
+    void operator=(const OrdersList& other);
+
+    /**
      * Deletes an order from the list
      * @param order Order to remove from the list.
      */
