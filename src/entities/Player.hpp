@@ -25,15 +25,15 @@ private:
     // Orders to apply.
     OrdersList* orders;
     
-    int num;
-    string name;
+    //int num;
+    //string name;
 
 public:
     //default constructor
     Player();
     ~Player();
-    string getName();
-    int getNum();
+    //string getName();
+    //int getNum();
     
 
     
