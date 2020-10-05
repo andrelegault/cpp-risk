@@ -38,9 +38,11 @@ bool Airlift::execute(Player* player) { return true; }
 bool Negotiate::validate() { return true; }
 bool Negotiate::execute(Player* player) { return true; }
 
+OrdersList::OrdersList() : orders(new vector<Order*>()) { }
+
 OrdersList::OrdersList(vector<Order*>* orders) : orders(orders) {}
 
-OrdersList::OrdersList(const OrdersList& old) : orders(new vector<Order*>()) {
+OrdersList::OrdersList(const OrdersList& old) : orders(old.orders) {
     // TODO: implement copy constructor
 }
 
@@ -56,7 +58,9 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-
+void OrdersList::addOrder(Order* order) {
+    orders->push_back(order);
+}
 
 void OrdersList::remove(Order* order) {
     auto o = find(orders->begin(), orders->end(), order);
@@ -64,3 +68,7 @@ void OrdersList::remove(Order* order) {
 }
 
 void OrdersList::move(const unsigned int prev, const unsigned int next) { }
+
+int OrdersList::getLength() {
+    return orders->size();
+}

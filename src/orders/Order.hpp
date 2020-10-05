@@ -85,13 +85,14 @@ class Negotiate : public Order {
  * Structure to hold orders and apply operations over.
  */
 class OrdersList {
-public:
+private:
     // Pointer to vector of Order objects.
-    vector<Order*>* orders = new vector<Order*>;
+    vector<Order*>* orders;
+public:
     /**
      * Default constructor.
      */
-    OrdersList() = default;
+    OrdersList();
 
     /**
      * Copy constructor.
@@ -107,6 +108,13 @@ public:
      * Desctuctor.
      */
     ~OrdersList();
+
+    /**
+     * Adds an order to the vector
+     */
+    void addOrder(Order* order);
+
+    int getLength();
 
     /**
      * Stream operator to describe ordersList in string format.
