@@ -42,14 +42,14 @@ public:
 
     /**
      * Sets parent Continent.
-     * 
+     *
      * @param continent Continent to add.
      */
     void connect(Continent* continent);
 
     /**
      * Validates that node is connected.
-     * 
+     *
      * @return Node is connected.
      */
     bool validate();

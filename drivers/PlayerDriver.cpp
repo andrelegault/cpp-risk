@@ -10,5 +10,20 @@ using namespace std;
  */
 int main(){
     Player p1;
-    cout << "num = " << p1.getNum() << ", name = " << p1.getName() << endl;
+    Territory *t1 = new Territory("t1");
+    Territory *t2 = new Territory("t2");
+    Territory *t3 = new Territory("t3");
+
+    p1.addTerritory(t1);
+    p1.addTerritory(t2);
+    p1.addTerritory(t3);
+    
+    //TODO print out the territory list
+
+    p1.removeTerritory(t1);
+    //print the list here
+
+    p1.issueOrder();
+
+   
 }

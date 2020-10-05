@@ -19,7 +19,7 @@ Territory::~Territory() {
 ostream& operator<<(ostream& stream, const Territory* territory) {
     stream << territory->name << " (" << territory->continent->getName() << ")" << endl;
 
-    for(auto border : territory->borders) {
+    for (auto border : territory->borders) {
         stream << "-> " << border->getOther((Territory*)territory)->getName() << endl;
     }
 
@@ -40,7 +40,7 @@ void Territory::connect(Continent* continent) {
 }
 
 void Territory::set(Player* player) {
-    if(this->playerOwner) this->playerOwner->removeTerritory(this);
+    if (this->playerOwner) this->playerOwner->removeTerritory(this);
 
     player->addTerritory(this);
 

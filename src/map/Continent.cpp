@@ -13,14 +13,14 @@ Continent::Continent(Continent* continent) : MapNode(continent) {
 Continent::~Continent() {
     this->map->remove(this);
 
-    while(!this->territories.empty()) delete this->territories.back();
+    while (!this->territories.empty()) delete this->territories.back();
 }
 
 // TODO: Better print.
 ostream& operator<<(ostream& stream, const Continent* continent) {
     stream << continent->name << endl;
 
-    for(auto border : continent->borders) {
+    for (auto border : continent->borders) {
         stream << "-> " << border->getOther((Continent*)continent)->getName() << endl;
     }
 
@@ -48,7 +48,7 @@ void Continent::connect(Territory* territory) {
 void Continent::remove(Territory* territory) {
     auto p = find(this->territories.begin(), this->territories.end(), territory);
 
-    if(p != this->territories.end()) this->territories.erase(p);
+    if (p != this->territories.end()) this->territories.erase(p);
 }
 
 bool Continent::validate() {

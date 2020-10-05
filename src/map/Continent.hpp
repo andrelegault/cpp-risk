@@ -40,7 +40,7 @@ public:
 
     /**
      * Sets parent map.
-     * 
+     *
      * @param map Parent to set to.
      */
     void connect(Map* map);

@@ -15,15 +15,14 @@ int main() {
     Advance advance;
     Advance advOther = advance;
 
-    assert(&advOther != &advance);
+    ordersList.addOrder(&deploy);
+    ordersList.addOrder(&advance);
 
-    ordersList.orders->push_back(&deploy);
-    ordersList.orders->push_back(&advance);
     OrdersList ordersList2 = OrdersList(ordersList);
-    assert(ordersList.orders->size() == 2);
+    assert(ordersList.getLength() == 2);
     ordersList.remove(&deploy);
-    assert(ordersList.orders->size() == 1);
+    assert(ordersList.getLength() == 1);
     ordersList.remove(&advance);
-    assert(ordersList.orders->size() == 0);
+    assert(ordersList.getLength() == 0);
     return 0;
 }

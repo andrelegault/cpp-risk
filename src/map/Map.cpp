@@ -14,7 +14,7 @@ Map::Map(Map* map) {
 }
 
 Map::~Map() {
-    while(!this->continents.empty()) delete this->continents.back();
+    while (!this->continents.empty()) delete this->continents.back();
 }
 
 // TODO: Better print.
@@ -42,7 +42,7 @@ void Map::connect(Continent* continent) {
 void Map::remove(Continent* continent) {
     auto p = find(this->continents.begin(), this->continents.end(), continent);
 
-    if(p != this->continents.end()) this->continents.erase(p);
+    if (p != this->continents.end()) this->continents.erase(p);
 }
 
 bool Map::validate() {
@@ -69,7 +69,7 @@ vector<Continent*> Map::getContinents() {
 vector<Territory*> Map::getTerritories() {
     vector<Territory*> territories;
 
-    for(auto continent : this->continents) {
+    for (auto continent : this->continents) {
         vector<Territory*> temp = continent->getTerritories();
 
         territories.insert(territories.end(), temp.begin(), temp.end());
