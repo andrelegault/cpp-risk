@@ -10,7 +10,7 @@ ostream& operator<<(ostream& os, const Order& order) {
     return os;
 }
 
-Order::Order() = default;
+Order::Order() { }
 
 Order::~Order() {}
 
