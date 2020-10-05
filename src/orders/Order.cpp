@@ -98,12 +98,7 @@ void OrdersList::move(Order* first, Order* second) {
 }
 
 Order* OrdersList::getAtIndex(const unsigned int index) {
-    if (index < this->getLength()) {
-        return orders[index];
-    }
-    else {
-        return nullptr;
-    }
+    return orders.at(index);
 }
 
 int OrdersList::getLength() const {
