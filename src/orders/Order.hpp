@@ -105,11 +105,6 @@ public:
     OrdersList(const OrdersList& old);
 
     /**
-     * Parameter constructor.
-     */
-    OrdersList(vector<Order*>* orders);
-
-    /**
      * Desctuctor.
      */
     ~OrdersList();

@@ -38,13 +38,12 @@ bool Airlift::execute(Player* player) { return true; }
 bool Negotiate::validate() { return true; }
 bool Negotiate::execute(Player* player) { return true; }
 
-OrdersList::OrdersList() : orders(new vector<Order*>()) { }
 
-OrdersList::OrdersList(vector<Order*>* orders) : orders(orders) {}
+// OrdersList
 
-OrdersList::OrdersList(const OrdersList& old) : orders(old.orders) {
-    // TODO: implement copy constructor
-}
+OrdersList::OrdersList() { }
+
+OrdersList::OrdersList(const OrdersList& other) : orders(other.orders) { }
 
 OrdersList::~OrdersList() {
     orders = nullptr;
