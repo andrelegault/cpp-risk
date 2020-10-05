@@ -25,7 +25,7 @@ private:
     // Orders to apply.
     OrdersList* orders;
 
-    //int num;
+    
     //string name;
 
 public:
@@ -33,7 +33,8 @@ public:
     Player();
     ~Player();
     //string getName();
-    //int getNum();
+   
+    void printTerritories();
 
     /**
      * @return A list of territories to defended.

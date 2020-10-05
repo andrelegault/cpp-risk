@@ -81,15 +81,18 @@ void Player::issueOrder() {
 }
 
 std::ostream& operator<<(std::ostream& strm, const Player& player) {
-    return strm << "PRINT name here??  what is even useful? list of territories? card deck?";
+    return strm << "Player object" ;
 }
+
+void Player::printTerritories(){
+    cout << "Player's territories are:" << endl;
+    for(int i=0; i<territories.size(); i++){
+       cout << territories.at(i)->getName() << endl;
+    }
+}
+
 
 /*
-//unrelated testing stuff
-int Player::getNum(){
-    return num;
-}
-
 string Player::getName(){
     return name;
 }
