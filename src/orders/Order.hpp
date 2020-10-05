@@ -87,8 +87,12 @@ class Negotiate : public Order {
  */
 class OrdersList {
 private:
-    // Pointer to vector of Order objects.
-    vector<Order*>* orders;
+    /**
+     * Finds an order in the vector of Order pointers.
+     * @param order Order pointer to find.
+     * @return orders.end() if not found
+     */
+    vector<Order*>::const_iterator findOrder(Order* order) const;
 public:
     /**
      * Default constructor.
@@ -115,7 +119,11 @@ public:
      */
     void addOrder(Order* order);
 
-    int getLength();
+    /**
+     * Gets the number of elements in the vector of Order pointers.
+     * @return Number of elements orders.
+     */
+    int getLength() const;
 
     /**
      * Stream operator to describe ordersList in string format.

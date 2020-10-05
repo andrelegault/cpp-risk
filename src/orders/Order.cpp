@@ -61,15 +61,18 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
 void OrdersList::operator=(const OrdersList& other) {
     this->orders = other.orders;
 }
+
+void OrdersList::addOrder(Order* what) {
+    orders.push_back(what);
 }
 
 void OrdersList::remove(Order* order) {
-    auto o = find(orders->begin(), orders->end(), order);
-    orders->erase(o);
+vector<Order*>::const_iterator OrdersList::findOrder(Order* order) const {
+    return find(orders.begin(), orders.end(), order);
 }
 
 void OrdersList::move(const unsigned int prev, const unsigned int next) { }
 
-int OrdersList::getLength() {
-    return orders->size();
+int OrdersList::getLength() const {
+    return orders.size();
 }
