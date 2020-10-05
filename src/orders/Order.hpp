@@ -33,7 +33,8 @@ public:
     Order(const Order& order);
 
     /**
-     * Assignment operator overloading.
+     * Assignment operator overload.
+     * @param other Reference used for assignment.
      */
     Order& operator=(const Order& other);
 
@@ -136,9 +137,5 @@ public:
      */
     void remove(Order* order);
 
-    /**
-     * Moves an order to the provided index.
-     * @param index Index to move the order to.
-     */
-    void move(const unsigned int prev, const unsigned int next);
+    // TODO: implement move
 };
