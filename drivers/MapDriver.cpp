@@ -18,6 +18,8 @@ int main() {
 
     // Connecting continents together (only one needs to be done).
     ((MapNode*) c1)->connect(c2);
+    // This should not do anything (because MapNode already connected).
+    ((MapNode*) c2)->connect(c1);
 
     // Make territory
     Territory* t1 = new Territory("Territory 1");

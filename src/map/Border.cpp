@@ -33,3 +33,7 @@ MapNode* Border::getOther(MapNode* n) {
     if (n == this->n1) return this->n2;
     else return this->n1;
 }
+
+bool Border::has(MapNode* node) {
+    return node == this->n1 || node == this->n2;
+}

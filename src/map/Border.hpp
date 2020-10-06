@@ -32,6 +32,14 @@ public:
      * @return Other MapNode.
      */
     MapNode* getOther(MapNode* self);
+
+    /**
+     * Checks if MapNode is in current border.
+     * 
+     * @param node MapNode to check.
+     * @return Is MapNode part of the border.
+     */
+    bool has(MapNode* node);
 };
 
 ostream& operator<<(ostream& stream, const Border* border);

@@ -32,6 +32,11 @@ void MapNode::remove(Border* border) {
 
 void MapNode::connect(MapNode* node) {
     Border* border = new Border(this, node);
+
+    for(auto b : this->borders) {
+        if(b->has(node)) return;
+    }
+
     this->connect(border);
     node->connect(border);
 }
