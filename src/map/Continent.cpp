@@ -11,7 +11,9 @@ Continent::Continent(Continent* continent) : MapNode(continent) {
 }
 
 Continent::~Continent() {
-    this->map->remove(this);
+    if (this->map != NULL) {
+        this->map->remove(this);
+    }
 
     while (!this->territories.empty()) delete this->territories.back();
 }

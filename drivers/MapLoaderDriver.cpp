@@ -9,7 +9,11 @@ using namespace std;
  */
 int main() {
     // TODO - Read input for file name.
-    Map m = MapLoader::load("file");
+    Map m1 = MapLoader::load("../maps/ameroki.map");
+
+    Map m2 = MapLoader::load("../maps/risk.map");
+
+    Map m3 = MapLoader::load("../maps/world.map");
 
     // TODO - Better output for maps.
     // cout << &m;

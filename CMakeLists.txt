@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.2)
+cmake_minimum_required(VERSION 3.17.3)
 
 project(WarZone
     VERSION 0.0.1
@@ -9,3 +9,5 @@ project(WarZone
 add_subdirectory(src)
 
 add_subdirectory(drivers)
+
+file(COPY maps DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
