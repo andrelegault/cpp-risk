@@ -8,6 +8,9 @@ using namespace std;
  * Plays the cards from hand.
  */
 int main() {
+    // TODO: Create Deck
+    // TODO: Create Hand using Deck
+    // TODO: Call play on all cards in Hand
     cout << "Hello World!";
     return 0;
 }
