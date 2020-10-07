@@ -53,31 +53,37 @@ public:
 };
 
 class Deploy : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
 
 class Advance : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
 
 class Bomb : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
 
 class Blockade : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
 
 class Airlift : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
 
 class Negotiate : public Order {
+public:
     bool validate();
     bool execute(Player* player);
 };
@@ -150,5 +156,10 @@ public:
      */
     Order* getAtIndex(const unsigned int index);
 
-    void move(Order* yes, Order* no);
+    /**
+     * Swaps two orders' position in the list.
+     * @param first First order.
+     * @param second Second order.
+     */
+    void move(Order* first, Order* second);
 };
