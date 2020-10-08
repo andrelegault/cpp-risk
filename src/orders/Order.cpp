@@ -36,6 +36,9 @@ bool Deploy::execute(Player* player) {
         return false;
     }
 }
+Deploy* Deploy::clone() const {
+    return new Deploy(*this);
+}
 
 // Advance
 bool Advance::validate() { return true; }
@@ -47,6 +50,9 @@ bool Advance::execute(Player* player) {
     else {
         return false;
     }
+}
+Advance* Advance::clone() const {
+    return new Advance(*this);
 }
 
 // Bomb
@@ -60,6 +66,9 @@ bool Bomb::execute(Player* player) {
         return false;
     }
 }
+Bomb* Bomb::clone() const {
+    return new Bomb(*this);
+}
 
 // Blockade
 bool Blockade::validate() { return true; }
@@ -71,6 +80,9 @@ bool Blockade::execute(Player* player) {
     else {
         return false;
     }
+}
+Blockade* Blockade::clone() const {
+    return new Blockade(*this);
 }
 
 // Airlift
@@ -84,6 +96,9 @@ bool Airlift::execute(Player* player) {
         return false;
     }
 }
+Airlift* Airlift::clone() const {
+    return new Airlift(*this);
+}
 
 // Negotiate
 bool Negotiate::validate() { return true; }
@@ -96,6 +111,9 @@ bool Negotiate::execute(Player* player) {
         return false;
     }
 }
+Negotiate* Negotiate::clone() const {
+    return new Negotiate(*this);
+}
 
 
 // OrdersList
@@ -103,17 +121,20 @@ bool Negotiate::execute(Player* player) {
 OrdersList::OrdersList() { }
 
 // TODO: implement copy constructor
-OrdersList::OrdersList(const OrdersList& other) { 
-    for(auto o : other.orders) {
-        Order* temp;
+OrdersList::OrdersList(const OrdersList& other) {
+    for (auto o : other.orders) {
+        Order* temp = o->clone();
+        orders.push_back(temp);
     }
 }
 
-OrdersList::OrdersList(const OrdersList* other) { 
-    for(auto o : other->orders) {
-        Order* temp;
+OrdersList::OrdersList(const OrdersList* other) {
+    for (auto o : other->orders) {
+        Order* temp = o->clone();
+        orders.push_back(temp);
     }
 }
+
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;

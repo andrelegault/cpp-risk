@@ -34,6 +34,11 @@ public:
     Order(const Order& order);
 
     /**
+     * Clone constructor.
+     */
+    virtual Order* clone() const = 0;
+
+    /**
      * Assignment operator overload.
      * @param other Reference used for assignment.
      */
@@ -55,36 +60,42 @@ public:
 
 class Deploy : public Order {
 public:
+    Deploy* clone() const;
     bool validate();
     bool execute(Player* player);
 };
 
 class Advance : public Order {
 public:
+    Advance* clone() const;
     bool validate();
     bool execute(Player* player);
 };
 
 class Bomb : public Order {
 public:
+    Bomb* clone() const;
     bool validate();
     bool execute(Player* player);
 };
 
 class Blockade : public Order {
 public:
+    Blockade* clone() const;
     bool validate();
     bool execute(Player* player);
 };
 
 class Airlift : public Order {
 public:
+    Airlift* clone() const;
     bool validate();
     bool execute(Player* player);
 };
 
 class Negotiate : public Order {
 public:
+    Negotiate* clone() const;
     bool validate();
     bool execute(Player* player);
 };
