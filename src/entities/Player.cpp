@@ -9,9 +9,37 @@ Player::Player() {
 
 }
 
-//TODO look more into destructor
+//TODO wait for ALL OTHER CLASSES used to have their deep copy constructors implemented
+
+Player::Player(const Player& player){
+    this->orders = new OrdersList(player->orders);
+
+    vector<Territory*> newTerList;
+    for(int i = 0; i< this->territories.size(); i++){
+        Territory* newTer = new Territory(this->territories);
+        newTerList.push_back(newTer);
+    }
+    this->territories = newTerList;
+
+    
+    //this->hand = new Hand(player->hand);
+}
+
+//TODO delete hand when implemented
 Player::~Player() {
     cout << "Player is being deleted" << endl;
+    delete orders;
+    orders = NULL;
+
+    for(int i = 0; i< territories.size(); i++){
+        delete territories.at(i);
+        territories.at(i) = NULL;
+    }
+
+    /*
+    delete hand;
+    hand = NULL;
+    */
 }
 
 //TODO get the name of the territory??
