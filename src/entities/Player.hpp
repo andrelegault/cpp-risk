@@ -35,9 +35,9 @@ public:
     Player(const Player& other);
 
     ~Player();
-    
+
     string getName();
-   
+
     void printTerritories();
 
     /**

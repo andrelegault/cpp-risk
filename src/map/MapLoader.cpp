@@ -12,7 +12,7 @@ string trim(string& line)
 }
 
 string trim_first_word(const string& str, const string& delim = " \t") {
-    return str.substr(str.find_first_of(delim)+1);
+    return str.substr(str.find_first_of(delim) + 1);
 }
 
 vector<string> split(const string& str, const string& delim = " ")
@@ -22,15 +22,15 @@ vector<string> split(const string& str, const string& delim = " ")
     size_t found = str.find(delim);
     size_t startIndex = 0;
 
-    while(found != string::npos)
+    while (found != string::npos)
     {
-        string temp(str.begin()+startIndex, str.begin()+found);
+        string temp(str.begin() + startIndex, str.begin() + found);
         result.push_back(temp);
         startIndex = found + delim.size();
         found = str.find(delim, startIndex);
     }
-    if(startIndex != str.size())
-        result.push_back(string(str.begin()+startIndex, str.end()));
+    if (startIndex != str.size())
+        result.push_back(string(str.begin() + startIndex, str.end()));
     return result;
 }
 
@@ -62,7 +62,7 @@ Map MapLoader::load(string file_name) {
 
         // Find the name of the map
         if (line.rfind("name", 0) == 0) {
-            mapName = line.substr(line.find_first_of(" \t")+1);
+            mapName = line.substr(line.find_first_of(" \t") + 1);
         }
 
         // Find related files save to 2d vector for now...

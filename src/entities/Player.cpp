@@ -7,16 +7,14 @@ using namespace std;
 int Player::count = 0;
 
 Player::Player() {
-   
-    
     name = "p" + to_string(count++);
     orders = new OrdersList();
-    cout << "Player " <<  name << " created" << endl;
+    cout << "Player " << name << " created" << endl;
 
 }
 
 //TODO wait for other classes used to have their deep copy constructors implemented
-Player::Player(const Player& player){
+Player::Player(const Player& player) {
     /*
     name = "p" + to_string(count++);
     this->orders = new OrdersList(player.orders);
@@ -28,21 +26,21 @@ Player::Player(const Player& player){
     }
     this->territories = newTerList;
     */
-    
+
     //this->hand = new Hand(player->hand);
-    
+
 }
 
 
 //TODO delete hand when implemented
 Player::~Player() {
-    
+
     cout << "Player is being deleted" << endl;
 
     delete orders;
     orders = NULL;
 
-    for(int i=0; i<territories.size(); i++){
+    for (int i = 0; i < territories.size(); i++) {
         delete territories.at(i);
         territories.at(i) = NULL;
     }
@@ -89,8 +87,8 @@ vector<Territory*> Player::toDefend() {
     }
     */
 
-   for(int i=0; i<toDefend.size(); i++){
-       cout << toDefend.at(i)->getName() << endl;
+    for (int i = 0; i < toDefend.size(); i++) {
+        cout << toDefend.at(i)->getName() << endl;
     }
 
     return toDefend;
@@ -112,9 +110,9 @@ vector<Territory*> Player::toAttack() {
     toAttack.push_back(t4);
 
     cout << "List of territories to Attack:" << endl;
-    
-   for(int i=0; i<toAttack.size(); i++){
-       cout << toAttack.at(i)->getName() << endl;
+
+    for (int i = 0; i < toAttack.size(); i++) {
+        cout << toAttack.at(i)->getName() << endl;
     }
 
     return toAttack;
@@ -164,18 +162,18 @@ void Player::issueOrder() {
 
 //TODO add actual usful info to this
 std::ostream& operator<<(std::ostream& strm, const Player& player) {
-    return strm << "Player object" ;
+    return strm << "Player object";
 }
 
-void Player::printTerritories(){
+void Player::printTerritories() {
     cout << "Player's territories are:" << endl;
-    for(int i=0; i<territories.size(); i++){
-       cout << territories.at(i)->getName() << endl;
+    for (int i = 0; i < territories.size(); i++) {
+        cout << territories.at(i)->getName() << endl;
     }
 }
 
 
-string Player::getName(){
+string Player::getName() {
     return name;
 }
 

@@ -36,7 +36,7 @@ public:
 
     /**
      * Checks if MapNode is in current border.
-     * 
+     *
      * @param node MapNode to check.
      * @return Is MapNode part of the border.
      */
