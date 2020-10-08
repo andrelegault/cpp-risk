@@ -11,23 +11,25 @@ Player::Player() {
     
     name = "p" + to_string(count++);
     orders = new OrdersList();
-    cout << "Player " <<  name << " created" << endl;
+    cout << "Player " <<  name << " created\n" << endl;
 
 }
 
 //TODO wait for other classes used to have their deep copy constructors implemented
 Player::Player(const Player& player){
-    /*
+    
     name = "p" + to_string(count++);
+    cout << "Player " <<  name << " created\n" << endl;
     this->orders = new OrdersList(player.orders);
 
+    
     vector<Territory*> newTerList;
     for(int i = 0; i< this->territories.size(); i++){
         Territory* newTer = new Territory(player.territories[i]);
         newTerList.push_back(newTer);
     }
     this->territories = newTerList;
-    */
+    
     
     //this->hand = new Hand(player->hand);
     
@@ -58,14 +60,14 @@ Player::~Player() {
 
 void Player::addTerritory(Territory* territory) {
     territories.push_back(territory);
-    cout << "Added territory " << territory->getName() << " to the list" << endl;
+    cout << "\nPlayer " << name << ": Added territory " << territory->getName() << " to the Territory List" << endl;
 }
 
 
 void Player::removeTerritory(Territory* territory) {
-    auto t = find(this->territories.begin(), this->territories.end(), territory);
-    if (t != this->territories.end()) this->territories.erase(t);
-    cout << "Territory " << territory->getName() << " deleted" << endl;
+    auto t = find(territories.begin(), territories.end(), territory);
+    territories.erase(t);
+    cout << "\nPlayer " << name << ": Removed territory " << territory->getName() << " from the Territory List " << name << endl;
 }
 
 
@@ -82,7 +84,7 @@ vector<Territory*> Player::toDefend() {
     toDefend.push_back(t3);
     toDefend.push_back(t4);
 
-    cout << "List of territories to defend:" << endl;
+    cout << "\nPlayer " << name << ":List of territories to defend:" << endl;
     /*
     for(Territory* t : toDefend){
        cout << t->getName() << endl;
@@ -94,7 +96,6 @@ vector<Territory*> Player::toDefend() {
     }
 
     return toDefend;
-
 }
 
 
@@ -111,7 +112,7 @@ vector<Territory*> Player::toAttack() {
     toAttack.push_back(t3);
     toAttack.push_back(t4);
 
-    cout << "List of territories to Attack:" << endl;
+    cout << "\nPlayer " << name << ": List of territories to Attack:" << endl;
     
    for(int i=0; i<toAttack.size(); i++){
        cout << toAttack.at(i)->getName() << endl;
@@ -129,42 +130,58 @@ void Player::issueOrder() {
         cout << " 1. Deploy\n 2. Advance\n 3. Bomb\n 4. Blockade\n 5. Airlift\n 6. Negotiate" << endl;
         cin >> num;
         if (num < 1 || num > 6) {
-            cout << "Not a valid choice" << endl;
+            cout << "Not a valid choice\n" << endl;
             continue;
         }
         if (num == 1) {
             order = new Deploy();
-            cout << "Deploy order added to the Order List" << endl;
+            cout << "Deploy order added to the Order List\n" << endl;
         }
         else if (num == 2) {
             order = new Advance();
-            cout << "Advance order added to the Order List" << endl;
+            cout << "Advance order added to the Order List\n" << endl;
         }
         else if (num == 3) {
             order = new Bomb();
-            cout << "Advance order added to the Order List" << endl;
+            cout << "Advance order added to the Order List\n" << endl;
         }
         else if (num == 4) {
             order = new Blockade();
-            cout << "Blockade order added to the Order List" << endl;
+            cout << "Blockade order added to the Order List\n" << endl;
         }
         else if (num == 5) {
             order = new Airlift();
-            cout << "Airlift order added to the Order List" << endl;
+            cout << "Airlift order added to the Order List\n" << endl;
         }
         else if (num == 6) {
             order = new Negotiate();
-            cout << "Negotiate order added to the Order List" << endl;
+            cout << "Negotiate order added to the Order List\n" << endl;
         }
         break;
     }
     orders->addOrder(order);
-    cout << "order added to the Order List" << endl;
+    
 }
 
-//TODO add actual usful info to this
+//TODO maybe figure out how to add orders to this
 std::ostream& operator<<(std::ostream& strm, const Player& player) {
-    return strm << "Player object" ;
+    strm << "\nPlayer's name: " << player.name << ", Territories: [" ;
+    for(int i=0; i<player.territories.size(); i++){
+        if(i != player.territories.size()-1){
+            strm << player.territories.at(i)->getName() + ", ";
+        }
+        else strm << player.territories.at(i)->getName();
+    }
+    strm << "]\n";
+    return strm;
+}
+
+string Player::printTerritoriesStr(){
+    string toPrint = "Player's territories are:";
+    for(int i=0; i<territories.size(); i++){
+       toPrint = toPrint + territories.at(i)->getName() + "\n";
+    }
+    return toPrint;
 }
 
 void Player::printTerritories(){

@@ -27,6 +27,8 @@ private:
     static int count;
     string name;
 
+    friend std::ostream& operator<<(std::ostream&, const Player&);
+
 public:
     //default constructor
     Player();
@@ -39,6 +41,7 @@ public:
     string getName();
    
     void printTerritories();
+    string printTerritoriesStr();
 
     /**
      * @return A list of territories to defended.
