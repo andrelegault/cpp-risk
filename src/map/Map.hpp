@@ -186,7 +186,7 @@ public:
     void connect(Continent* continent);
 
     /**
-     * Removes a continent to the map.
+     * Removes a continent from the map.
      * @param continent Continent to remove.
      */
     void remove(Continent* continent);
@@ -206,6 +206,7 @@ public:
      * 1) The map is a connected graph
      * 2) Continents are connected subgraphs
      * 3) Each territory belongs to one contient.
+     * @return The Map is valid.
      */
     bool validate();
 };

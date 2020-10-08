@@ -1,4 +1,5 @@
 #include <iostream>
+#include <Cards.hpp>
 
 using namespace std;
 
@@ -9,8 +10,13 @@ using namespace std;
  */
 int main() {
     // TODO: Create Deck
+    Deck deck;
+
     // TODO: Create Hand using Deck
+    Hand* hand = new Hand(deck);
+
     // TODO: Call play on all cards in Hand
     cout << "Hello World!";
+
     return 0;
 }

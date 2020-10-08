@@ -6,11 +6,9 @@ using namespace std;
 
 int Player::count = 0;
 
-Player::Player() {
+Player::Player() : orders(new OrdersList()), hand(new Hand()) {
     name = "p" + to_string(count++);
-    orders = new OrdersList();
     cout << "Player " << name << " created\n" << endl;
-
 }
 
 //TODO wait for other classes used to have their deep copy constructors implemented
@@ -28,7 +26,6 @@ Player::Player(const Player& player) {
     }
     this->territories = newTerList;
 
-
     //this->hand = new Hand(player->hand);
 
 }
@@ -40,19 +37,17 @@ Player::~Player() {
     cout << "Player is being deleted" << endl;
 
     delete orders;
-    orders = NULL;
+    orders = nullptr;
 
-    for (int i = 0; i < territories.size(); i++) {
-        delete territories.at(i);
-        territories.at(i) = NULL;
+    for (Territory* territory : territories) {
+        delete territory;
+        territory = nullptr;
     }
+
     territories.clear();
 
-    /*
     delete hand;
-    hand = NULL;
-
-    */
+    hand = nullptr;
 }
 
 
@@ -119,7 +114,6 @@ vector<Territory*> Player::toAttack() {
     return toAttack;
 }
 
-
 void Player::issueOrder() {
     Order* order;
     while (true) {
@@ -182,7 +176,7 @@ string Player::printTerritoriesStr() {
     return toPrint;
 }
 
-void Player::printTerritories() {
+void Player::printTerritories() const {
     cout << "Player's territories are:" << endl;
     for (int i = 0; i < territories.size(); i++) {
         cout << territories.at(i)->getName() << endl;
@@ -190,11 +184,6 @@ void Player::printTerritories() {
 }
 
 
-string Player::getName() {
+string Player::getName() const {
     return name;
 }
-
-
-
-
-

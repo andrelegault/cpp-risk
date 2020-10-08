@@ -45,5 +45,8 @@ int main() {
     p1->issueOrder();
 
     delete p1;
-    p1 = NULL;
+    p1 = nullptr;
+
+    delete p2;
+    p2 = nullptr;
 }

@@ -11,7 +11,7 @@ using std::endl;
  * Demonstrates that the order/orderlist objects indeed have the mentioned features.
  */
 int main() {
-    OrdersList ordersList;
+    OrdersList orders;
     Deploy* deploy = new Deploy;
     Advance* advance = new Advance;
     Bomb* bomb = new Bomb;
@@ -29,42 +29,42 @@ int main() {
     assert(negotiate->validate() == true);
 
     // Testing OrdersList::addOrder
-    ordersList.addOrder(bomb);
-    ordersList.addOrder(deploy);
-    ordersList.addOrder(advance);
-    ordersList.addOrder(blockade);
-    ordersList.addOrder(airlift);
-    ordersList.addOrder(negotiate);
-    assert(bomb == ordersList.getAtIndex(0));
-    assert(deploy == ordersList.getAtIndex(1));
-    assert(advance == ordersList.getAtIndex(2));
+    orders.addOrder(bomb);
+    orders.addOrder(deploy);
+    orders.addOrder(advance);
+    orders.addOrder(blockade);
+    orders.addOrder(airlift);
+    orders.addOrder(negotiate);
+    assert(bomb == orders.getAtIndex(0));
+    assert(deploy == orders.getAtIndex(1));
+    assert(advance == orders.getAtIndex(2));
 
     // Testing the OrdersList copy constructor.
-    OrdersList ordersList2(ordersList);
-    Player* mockPlayer = new Player();
+    OrdersList orders2(orders);
+    Player mockPlayer;
 
-    ordersList.getAtIndex(0)->execute(mockPlayer);
-    ordersList2.getAtIndex(0)->execute(mockPlayer);
+    orders.getAtIndex(0)->execute(&mockPlayer);
+    orders2.getAtIndex(0)->execute(&mockPlayer);
 
-    ordersList.getAtIndex(5)->execute(mockPlayer);
-    ordersList2.getAtIndex(5)->execute(mockPlayer);
+    orders.getAtIndex(5)->execute(&mockPlayer);
+    orders2.getAtIndex(5)->execute(&mockPlayer);
 
     // Testing OrdersList::move
-    ordersList.move(bomb, advance);
-    assert(advance == ordersList.getAtIndex(0));
-    assert(deploy == ordersList.getAtIndex(1));
-    assert(bomb == ordersList.getAtIndex(2));
+    orders.move(bomb, advance);
+    assert(advance == orders.getAtIndex(0));
+    assert(deploy == orders.getAtIndex(1));
+    assert(bomb == orders.getAtIndex(2));
 
     // Testing OrdersList::remove
-    assert(ordersList.getLength() == 6);
-    ordersList.remove(deploy);
-    assert(ordersList.getLength() == 5);
-    ordersList.remove(bomb);
-    assert(ordersList.getLength() == 4);
-    ordersList.remove(advance);
-    assert(ordersList.getLength() == 3);
+    assert(orders.getLength() == 6);
+    orders.remove(deploy);
+    assert(orders.getLength() == 5);
+    orders.remove(bomb);
+    assert(orders.getLength() == 4);
+    orders.remove(advance);
+    assert(orders.getLength() == 3);
 
-    assert(ordersList2.getLength() == 6);
+    assert(orders2.getLength() == 6);
 
     return 0;
 }

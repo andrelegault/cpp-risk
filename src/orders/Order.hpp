@@ -149,7 +149,7 @@ public:
      * @param ordersList The object to convert to string.
      * @return Updates ostream&.
      */
-    friend ostream& operator<<(ostream& os, const OrdersList& ordersList);
+    friend ostream& operator<<(ostream& os, const OrdersList& other);
 
     /**
      * Assignment operator overload.

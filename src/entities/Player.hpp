@@ -17,10 +17,7 @@ private:
 
     // The territories owned by the players.
     vector<Territory*> territories;
-    /*
-    // The card collection for the Player.
-    Hand* hand;
-    */
+
     // Orders to apply.
     OrdersList* orders;
 
@@ -36,11 +33,15 @@ public:
     // Copy constructor
     Player(const Player& other);
 
+    // Desctructor.
     ~Player();
 
-    string getName();
+    string getName() const;
 
-    void printTerritories();
+    // The card collection for the Player.
+    Hand* hand;
+
+    void printTerritories() const ;
     string printTerritoriesStr();
 
     /**
@@ -52,6 +53,7 @@ public:
      * @return A list of territories to attack.
      */
     vector<Territory*> toAttack();
+
 
     /**
      * Creates an Order and adds it to the list of orders.

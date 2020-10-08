@@ -1,33 +1,42 @@
 #pragma once
 
+#include <Cards.fwd.hpp>
 #include <Player.hpp>
+#include <vector>
+#include <stdlib.h>
 
 using std::vector;
-
-class Card;
 
 /**
  * Enumerator for card types.
  */
 enum CardType {
+    BOMB,
     AIRLIFT,
     BLOCKADE,
-    BOMB,
     DIPLOMACY,
     REINFORCEMENT,
     SPY
 };
 
 
-const int MAX_DECK_SIZE = 52;
-
+/**
+ * Represents a deck containing cards.
+ */
 class Deck {
 private:
     vector<Card*> deck;
 public:
-    Deck();
+    Deck(int size = 20);
 
-    Card* draw(Player* player);
+    ~Deck();
+
+    /*
+     * 1. Takes a card at random from the deck
+     * 2. Places it in the player's hand.
+     * @param player Player whose hand will be modified to include the card drawn from the deck.
+     */
+    void draw(Player* player);
 };
 
 
@@ -38,13 +47,18 @@ public:
 class Card {
 private:
     // CardType for card.
-    CardType* cardType;
+    const CardType* cardType;
 public:
-    Card(const CardType& cardType);
+    // Destructor.
+    ~Card();
+
+    Card(const CardType* cardType);
+
     /**
-     * Performs the card action on the player.
-     * Removes card from player hand.
-     * Places card back in deck.
+     * 1. Creates an order
+     * 2. Adds it to the player's list of orders.
+     * 3. Removes card from player hand.
+     * 4. Places card back in deck.
      * @param player Player to perform card action on (and remove card from hand).
      * @param deck Deck to place card back into.
      */
@@ -53,13 +67,22 @@ public:
 
 
 
-const int MAX_HAND_SIZE = 5;
-
+/**
+ * Represents a hand, which is a subset of deck.
+ */
 class Hand {
 private:
-    Card cards[MAX_HAND_SIZE];
+    vector<Card*> hand;
 public:
+    // Default constructor.
+    Hand();
+
+    // Constructor
     Hand(const Deck& deck);
 
+    /**
+     * Adds a card to the hand.
+     * @param card Card to add to the hand.
+     */
     void addCard(Card* card);
 };
