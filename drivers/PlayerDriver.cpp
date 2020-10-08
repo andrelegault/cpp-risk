@@ -16,40 +16,33 @@ int main() {
     Territory* t3 = new Territory("t3");
     Territory* t4 = new Territory("t4");
 
-    //TODO test copy constructor
-    // Player* p2 = new Player(*p1);
+    Territory* t5 = new Territory("t5");
+    Territory* t6 = new Territory("t6");
 
-    
+    //TODO test copy constructor
+    Player* p2 = new Player(*p1);
 
     p1->addTerritory(t1);
     p1->addTerritory(t2);
     p1->addTerritory(t3);
     p1->addTerritory(t4);
 
-    
-    p1->printTerritories();
+    p2->addTerritory(t5);
+    p2->addTerritory(t6);
+
+    cout << *p1 << endl;   
+    cout << *p2 << endl; 
 
     //TODO toDefend() and toAttack()
-    //p1->toDefend();
-
-    /*
-    cout << "player 2" << endl;
-    p2->printTerritories();
-    */
+    p1->toDefend();
+    p1->toAttack();
 
     p1->removeTerritory(t1);
     
-
-    p1->printTerritories();
-
-    /*
-    cout << "player 2" << endl;
-    p2->printTerritories();
-    */
-
+    cout << *p1 << endl;   
+    cout << *p2 << endl;
+   
     p1->issueOrder();
-
-    p1->printTerritories();
 
     delete p1;
     p1 = NULL;
