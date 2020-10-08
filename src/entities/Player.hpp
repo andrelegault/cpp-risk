@@ -20,19 +20,23 @@ private:
     vector<Territory*> territories;
     /*
     // The card collection for the Player.
-    Hand hand;
+    Hand* hand;
     */
     // Orders to apply.
     OrdersList* orders;
 
-    
-    //string name;
+    static int count;
+    string name;
 
 public:
     //default constructor
     Player();
+    //copy constructor
+    Player(const Player&);
+
     ~Player();
-    //string getName();
+    
+    string getName();
    
     void printTerritories();
 
