@@ -2,6 +2,8 @@
 
 #include <Player.hpp>
 
+using std::vector;
+
 class Card;
 
 /**

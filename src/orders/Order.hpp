@@ -114,6 +114,8 @@ public:
      */
     OrdersList(const OrdersList& old);
 
+    OrdersList(const OrdersList* old);
+
     /**
      * Desctuctor.
      */

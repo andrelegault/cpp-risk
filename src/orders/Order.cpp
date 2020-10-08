@@ -103,8 +103,17 @@ bool Negotiate::execute(Player* player) {
 OrdersList::OrdersList() { }
 
 // TODO: implement copy constructor
-OrdersList::OrdersList(const OrdersList& other) { }
+OrdersList::OrdersList(const OrdersList& other) { 
+    for(auto o : other.orders) {
+        Order* temp;
+    }
+}
 
+OrdersList::OrdersList(const OrdersList* other) { 
+    for(auto o : other->orders) {
+        Order* temp;
+    }
+}
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;

@@ -3,8 +3,7 @@
 #include <vector>
 
 #include <Player.fwd.hpp>
-#include <Territory.fwd.hpp>
-#include <Territory.hpp>
+#include <Map.hpp>
 #include <Cards.hpp>
 #include <Order.hpp>
 
@@ -31,6 +30,10 @@ private:
 public:
     //default constructor
     Player();
+
+    // Copy constructor
+    Player(const Player& other);
+
     ~Player();
     //string getName();
    

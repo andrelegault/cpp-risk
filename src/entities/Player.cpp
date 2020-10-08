@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include <Player.hpp>
 #include <iostream>
 #include <algorithm>
 
@@ -16,7 +16,7 @@ Player::Player(const Player& player){
 
     vector<Territory*> newTerList;
     for(int i = 0; i< this->territories.size(); i++){
-        Territory* newTer = new Territory(player.territories);
+        Territory* newTer = new Territory(player.territories[i]);
         newTerList.push_back(newTer);
     }
     this->territories = newTerList;
