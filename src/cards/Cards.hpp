@@ -27,8 +27,15 @@ class Deck {
 private:
     vector<Card*> deck;
 public:
+    /**
+     * Default parameterized constructor.
+     * @param size Number of cards to add to the deck.
+     */
     Deck(int size = 20);
 
+    /**
+     * Destructor.
+     */
     ~Deck();
 
     /*
@@ -52,6 +59,10 @@ public:
     // Destructor.
     ~Card();
 
+    /**
+     * Pamaraterized constructor.
+     * @param cardType Type of card.
+     */
     Card(const CardType* cardType);
 
     /**
@@ -72,6 +83,7 @@ public:
  */
 class Hand {
 private:
+    // Holds the card pointers.
     vector<Card*> hand;
 public:
     // Default constructor.
