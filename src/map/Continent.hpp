@@ -2,11 +2,11 @@
 
 #include <vector>
 #include <string>
+
 #include <Continent.fwd.hpp>
 #include <Map.fwd.hpp>
 #include <Territory.hpp>
 #include <Border.hpp>
-#include <MapNode.hpp>
 #include <Map.hpp>
 
 using namespace std;

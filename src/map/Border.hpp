@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Border.fwd.hpp>
 #include <iostream>
-#include <MapNode.hpp>
+
+#include <Border.fwd.hpp>
+#include <Map.hpp>
 
 using namespace std;
 
