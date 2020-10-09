@@ -19,7 +19,7 @@ Deck::Deck(int size) {
     srand(time(NULL));
 
     for (unsigned int i = 0; i < size; ++i) {
-        int type{ rand() % 6 };
+        int type = rand() % 6;
         CardType* cardType;
         switch (type) {
         case 0: cardType = new CardType(BOMB); break;
@@ -49,7 +49,7 @@ ostream& operator<<(ostream& stream, const Deck& deck) {
 
 void Deck::draw(Player& player) {
     // Generate random number between 0 and deck size.
-    int index{ rand() % static_cast<int>(cards.size()) };
+    int index = rand() % static_cast<int>(cards.size());
 
     // cout << "REMOVING FROM INDEX: " << index << " @ " << cards[index] << endl;
 

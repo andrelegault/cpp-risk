@@ -108,7 +108,7 @@ class Hand {
 private:
     // Holds the card pointers.
     vector<Card*> hand;
-    const int MAX_HAND_SIZE{ 5 };
+    const int MAX_HAND_SIZE = 5;
 public:
     // Default constructor.
     Hand();
