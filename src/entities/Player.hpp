@@ -4,8 +4,8 @@
 
 #include <Player.fwd.hpp>
 #include <Map.hpp>
-#include <Cards.hpp>
 #include <Order.hpp>
+#include <Cards.hpp>
 
 using namespace std;
 
@@ -18,8 +18,6 @@ private:
     // The territories owned by the players.
     vector<Territory*> territories;
 
-    // Orders to apply.
-    OrdersList* orders;
 
     static int count;
     string name;
@@ -30,18 +28,24 @@ public:
     //default constructor
     Player();
 
+    Player(Deck& deck);
+
     // Copy constructor
     Player(const Player& other);
 
     // Desctructor.
     ~Player();
 
+    // Orders to apply.
+    OrdersList* orders;
+
     string getName() const;
 
     // The card collection for the Player.
     Hand* hand;
 
-    void printTerritories() const ;
+    void printTerritories() const;
+
     string printTerritoriesStr();
 
     /**
@@ -59,6 +63,12 @@ public:
      * Creates an Order and adds it to the list of orders.
      */
     void issueOrder();
+
+    /**
+     * Adds an order to the player's list of orders.
+     * @param order Order to add.
+     */
+    void addOrder(Order* order);
 
     /**
      * Add territory to territories.

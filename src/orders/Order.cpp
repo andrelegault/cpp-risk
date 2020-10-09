@@ -173,7 +173,7 @@ vector<Order*>::iterator OrdersList::findOrder(Order* order) {
     return find(orders.begin(), orders.end(), order);
 }
 
-Order* OrdersList::getAtIndex(const unsigned int index) {
+Order* OrdersList::getAtIndex(const unsigned int index) const {
     return orders.at(index);
 }
 

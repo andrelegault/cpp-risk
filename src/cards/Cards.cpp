@@ -4,12 +4,14 @@
 
 using std::cout;
 
+
 Deck::~Deck() {
-    for (Card* card : deck) {
+    for (Card* card : cards) {
         delete card;
         card = nullptr;
     }
-    deck.clear();
+    cards.clear();
+    cout << "Deck deleted!" << endl;
 }
 
 Deck::Deck(int size) {
@@ -27,21 +29,43 @@ Deck::Deck(int size) {
         case 4: cardType = new CardType(REINFORCEMENT); break;
         case 5: cardType = new CardType(SPY); break;
         }
-        deck.push_back(new Card(cardType));
+        cards.push_back(new Card(cardType));
     }
 
-    cout << "Created deck containing " << deck.size() << " cards!" << endl;
+    cout << "Created deck containing " << cards.size() << " cards!" << endl;
 }
 
-void Deck::draw(Player* player) {
+void Deck::addCard(Card* const card) {
+    cards.push_back(card);
+}
+
+ostream& operator<<(ostream& stream, const Deck& deck) {
+    stream << "Deck (" << deck.cards.size() << " cards)" << endl;
+    for (Card* card : deck.cards) {
+        stream << "\t" << *card << endl;
+    }
+    return stream;
+}
+
+void Deck::draw(Player& player) {
     // Generate random number between 0 and deck size.
-    int index{ rand() % static_cast<int>(deck.size()) };
+    int index{ rand() % static_cast<int>(cards.size()) };
 
+    // cout << "REMOVING FROM INDEX: " << index << " @ " << cards[index] << endl;
+
+    player.hand->addCard(cards[index]);
+
+    const auto o = find(cards.begin(), cards.end(), cards[index]);
     // Remove and get the card.
-    auto toRemove = deck.erase(deck.begin() + index);
+    cards.erase(o);
+}
 
-    // Add it to the player's hand.
-    player->hand->addCard(*toRemove);
+int Deck::getLength() const {
+    return cards.size();
+}
+
+Card* Deck::getAtIndex(int index) {
+    return cards.at(index);
 }
 
 Card::Card(const CardType* cardType) : cardType(cardType) { }
@@ -51,10 +75,80 @@ Card::~Card() {
     cardType = nullptr;
 }
 
+void Card::play(Player& player, Deck& deck) {
+    cout << "Playing card " << *this << endl;
+
+    Order* order;
+    switch (*(cardType)) {
+    case 0: order = new Bomb(); break;
+    case 1: order = new Airlift(); break;
+    case 2: order = new Blockade(); break;
+    case 3: order = new Negotiate(); break;
+    case 4: order = new Advance(); break;
+    case 5: order = new Deploy(); break;
+    }
+
+    player.addOrder(order);
+    player.hand->removeCard(this);
+    deck.addCard(this);
+}
+
+ostream& operator<<(ostream& stream, const Card& card) {
+    switch (*(card.cardType)) {
+    case 0: stream << "BOMB"; break;
+    case 1: stream << "AIRLIFT"; break;
+    case 2: stream << "BLOCKADE"; break;
+    case 3: stream << "DIPLOMACY"; break;
+    case 4: stream << "REINFORCEMENT"; break;
+    case 5: stream << "SPY"; break;
+    }
+    stream << " @ " << &card;
+    return stream;
+}
+
 Hand::Hand() { }
 
-Hand::Hand(const Deck& deck) { }
+Hand::~Hand() {
+    for (Card* c : hand) {
+        delete c;
+        c = nullptr;
+    }
+    hand.clear();
+    cout << "Deleted hand!" << endl;
+}
 
-void Hand::addCard(Card* card) {
+Hand::Hand(Deck& deck) {
+    for (int i = 0 ; i < deck.getLength() || i < 5; ++i) {
+        Card* card = deck.getAtIndex(i);
+        auto c = find(deck.cards.begin(), deck.cards.end(), card);
+        hand.push_back(card);
+        deck.cards.erase(c);
+    }
+}
+
+Card* Hand::getAtIndex(int index) const {
+    return hand.at(index);
+}
+
+ostream& operator<<(ostream& stream, const Hand& hand) {
+    stream << "Hand (" << hand.hand.size() << " cards)" << endl;
+    for (Card* card : hand.hand) {
+        stream << "\t" << *card << endl;
+    }
+    return stream;
+}
+
+int Hand::getLength() const {
+    return hand.size();
+}
+
+void Hand::addCard(Card* const card) {
     hand.push_back(card);
+}
+
+void Hand::removeCard(Card* card) {
+    const auto cardIt = find(hand.begin(), hand.end(), card);
+    if (cardIt != hand.end()) {
+        hand.erase(cardIt);
+    }
 }

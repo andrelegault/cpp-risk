@@ -168,7 +168,7 @@ public:
      * @param index Index of the desired object.
      * @return Pointer to the Order object, or `nullptr` if not found.
      */
-    Order* getAtIndex(const unsigned int index);
+    Order* getAtIndex(const unsigned int index) const;
 
     /**
      * Swaps two orders' position in the list.

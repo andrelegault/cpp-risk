@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 using std::vector;
+using std::ostream;
 
 /**
  * Enumerator for card types.
@@ -19,13 +20,12 @@ enum CardType {
     SPY
 };
 
-
 /**
  * Represents a deck containing cards.
  */
 class Deck {
 private:
-    vector<Card*> deck;
+    vector<Card*> cards;
 public:
     /**
      * Default parameterized constructor.
@@ -38,12 +38,33 @@ public:
      */
     ~Deck();
 
+    /// Used to make it have access to the private vector.
+    friend Hand;
+
+    friend Player;
+
+    friend ostream& operator<<(ostream& stream, const Deck& deck);
+
+    /**
+     * Adds a card to the deck.
+     * @param card Card to add to the deck.
+     */
+    void addCard(Card* const card);
+
+    Card* getAtIndex(int index);
+
+    /**
+     * Gets the number of cards in the deck.
+     * @return Number of cards in the deck.
+     */
+    int getLength() const;
+
     /*
      * 1. Takes a card at random from the deck
      * 2. Places it in the player's hand.
      * @param player Player whose hand will be modified to include the card drawn from the deck.
      */
-    void draw(Player* player);
+    void draw(Player& player);
 };
 
 
@@ -53,17 +74,19 @@ public:
  */
 class Card {
 private:
-    // CardType for card.
-    const CardType* cardType;
 public:
     // Destructor.
     ~Card();
+    // CardType for card.
+    const CardType* cardType;
 
     /**
      * Pamaraterized constructor.
      * @param cardType Type of card.
      */
     Card(const CardType* cardType);
+
+    friend ostream& operator<<(ostream& stream, const Card& card);
 
     /**
      * 1. Creates an order
@@ -73,7 +96,7 @@ public:
      * @param player Player to perform card action on (and remove card from hand).
      * @param deck Deck to place card back into.
      */
-    void play(Player* player, Deck* deck);
+    void play(Player& player, Deck& deck);
 };
 
 
@@ -85,16 +108,38 @@ class Hand {
 private:
     // Holds the card pointers.
     vector<Card*> hand;
+    const int MAX_HAND_SIZE{ 5 };
 public:
     // Default constructor.
     Hand();
+    // Destructor.
+    ~Hand();
 
-    // Constructor
-    Hand(const Deck& deck);
+    /**
+     * Parameterized constructor.
+     * @param deck Deck to draw cards from.
+     */
+    Hand(Deck& deck);
+
+    friend ostream& operator<<(ostream& stream, const Hand& hand);
+
+    Card* getAtIndex(int index) const;
+
+    /**
+     * Gets the number of cards in this hand.
+     * @return Number of cards.
+     */
+    int getLength() const;
 
     /**
      * Adds a card to the hand.
      * @param card Card to add to the hand.
      */
-    void addCard(Card* card);
+    void addCard(Card* const card);
+
+    /**
+     * Removes a card from the hand.
+     * @param card Card to remove.
+     */
+    void removeCard(Card* card);
 };

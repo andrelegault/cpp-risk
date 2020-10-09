@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Cards.hpp>
+#include <assert.h>
 
 using namespace std;
 
@@ -9,14 +10,21 @@ using namespace std;
  * Plays the cards from hand.
  */
 int main() {
-    // TODO: Create Deck
-    Deck deck;
+    Deck deck(10);
+    assert(deck.getLength() == 10);
 
-    // TODO: Create Hand using Deck
-    Hand* hand = new Hand(deck);
+    Player mockPlayer(deck);
 
-    // TODO: Call play on all cards in Hand
-    cout << "Hello World!";
+    const Hand* const hand = mockPlayer.hand;
+    assert(hand->getLength() == 5);
+
+    deck.draw(mockPlayer);
+    assert(deck.getLength() == 4);
+    assert(hand->getLength() == 6);
+
+    Card* card = hand->getAtIndex(0);
+    card->play(mockPlayer, deck);
+    assert(mockPlayer.orders->getLength() == 1);
 
     return 0;
 }

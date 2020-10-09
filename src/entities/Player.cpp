@@ -6,8 +6,7 @@ using namespace std;
 
 int Player::count = 0;
 
-Player::Player() : orders(new OrdersList()), hand(new Hand()) {
-    name = "p" + to_string(count++);
+Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()) {
     cout << "Player " << name << " created\n" << endl;
 }
 
@@ -48,6 +47,13 @@ Player::~Player() {
 
     delete hand;
     hand = nullptr;
+}
+
+Player::Player(Deck& deck) :
+    hand(new Hand(deck)),
+    name("p" + to_string(count++)),
+    orders(new OrdersList()) {
+
 }
 
 
@@ -153,6 +159,10 @@ void Player::issueOrder() {
     }
     orders->addOrder(order);
 
+}
+
+void Player::addOrder(Order* order) {
+    orders->addOrder(order);
 }
 
 //TODO maybe figure out how to add orders to this
