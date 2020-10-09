@@ -5,46 +5,66 @@
 
 using namespace std;
 
+/**
+ * Trim front and end of string of various whitespace characters by regex
+ * @param line input
+ * @return trimmed string
+ */
 string trim(string& line) {
     line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
     return line;
 }
 
-string trim_first_word(const string& str, const string& delim = " \t") {
-    return str.substr(str.find_first_of(delim) + 1);
+/**
+ * Remove the first word of a string based on a delimiter
+ * @param line
+ * @param delim
+ * @return modified string
+ */
+string trim_first_word(const string& line, const string& delim = " \t") {
+    return line.substr(line.find_first_of(delim) + 1);
 }
 
-vector<string> split(const string& str, const string& delim = " ") {
+/**
+ * Split a string into an array of words based on a delimiter
+ * @param line
+ * @param delim
+ * @return vector<string> words
+ */
+vector<string> split(const string& line, const string& delim = " ") {
     vector<string> result;
 
-    size_t found = str.find(delim);
+    size_t found = line.find(delim);
     size_t startIndex = 0;
 
     while (found != string::npos)
     {
-        string temp(str.begin() + startIndex, str.begin() + found);
+        string temp(line.begin() + startIndex, line.begin() + found);
         result.push_back(temp);
         startIndex = found + delim.size();
-        found = str.find(delim, startIndex);
+        found = line.find(delim, startIndex);
     }
-    if (startIndex != str.size())
-        result.push_back(string(str.begin() + startIndex, str.end()));
+    if (startIndex != line.size())
+        result.push_back(string(line.begin() + startIndex, line.end()));
     return result;
 }
 
-// TODO - @throw errors instead of exit
-// TODO - Check map file has all 3 file components
-Map MapLoader::load(const string fileName) {
-    ifstream file(fileName);
+/**
+ * Loads a Conquest Map file into a Map graph.
+ *
+ * @param file_name Conquest Map file to load.
+ * @return Map Object
+ * @throw If the file does not exist or the file is invalid.
+ */
+Map MapLoader::load(const string file_name) {
+    ifstream file(file_name);
     if (!file) {
-        cerr << "Unable to open file :" + fileName;
-        exit(1);
-        //return false;
+        throw logic_error("Unable to open file at " + file_name);
     }
 
     string line;
 
-    string mapName;
+    string map_name;
     vector<vector<string> > files;
     vector<Continent*> continents;
     vector<Territory*> countries;
@@ -60,7 +80,7 @@ Map MapLoader::load(const string fileName) {
 
         // Find the name of the map
         if (line.rfind("name", 0) == 0) {
-            mapName = line.substr(line.find_first_of(" \t") + 1);
+            map_name = line.substr(line.find_first_of(" \t") + 1);
         }
 
         // Find related files save to 2d vector for now...
@@ -79,8 +99,7 @@ Map MapLoader::load(const string fileName) {
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
                 vector<string> words = split(trim(line));
                 if (!(words.size() == 3 || words.empty())) {
-                    std::cout << "Invalid Continent Format" << std::endl;
-                    exit(1);
+                    throw logic_error("Invalid Continent Format");
                 }
                 // 0 - name
                 // 1 - army value
@@ -97,8 +116,7 @@ Map MapLoader::load(const string fileName) {
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
                 vector<string> words = split(trim(line));
                 if (!(words.size() == 5 || words.empty())) {
-                    std::cout << "Invalid Country Format" << std::endl;
-                    exit(1);
+                    throw logic_error("Invalid Country Format");
                 }
                 // 0 - country #
                 // 1 - name
@@ -121,8 +139,7 @@ Map MapLoader::load(const string fileName) {
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
                 vector<string> words = split(trim(line));
                 if (words.size() < 2) {
-                    std::cout << "Invalid Border Format" << std::endl;
-                    exit(1);
+                    throw logic_error("Invalid Border Format");
                 }
                 // 0  - parent country #
                 // 1+ - adjacent country #
@@ -139,7 +156,7 @@ Map MapLoader::load(const string fileName) {
     }
 
     // Create a new map
-    Map map(mapName);
+    Map map(map_name);
 
     // Connect Continent instances to Map instance.
     for (Continent* continent : continents) {
