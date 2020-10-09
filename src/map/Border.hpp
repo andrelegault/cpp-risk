@@ -14,16 +14,40 @@ class Border {
 private:
     // MapNode connected to Border edge.
     MapNode* n1;
-    // MapNode node connected to Border edge.
+    // MapNode connected to Border edge.
     MapNode* n2;
 
 public:
+    /**
+     * Primary constructor.
+     * @param n1 MapNode connected to Border edge.
+     * @param n2 MapNode connected to Border edge.
+     */
     Border(MapNode* n1, MapNode* n2);
+
+    /**
+     * Copy constructor.
+     * @param border Border to copy.
+     */
     Border(Border* border);
+
+    /**
+     * Destructor.
+     */
     ~Border();
 
+    /**
+     * Stream operator to describe Border in string format.
+     * @param os The stream to output to.
+     * @param border The object to convert to string.
+     * @return Updates ostream&.
+     */
     friend ostream& operator<<(ostream& stream, const Border* border);
 
+    /**
+     * Assignment operator overload.
+     * @param other Other Border used for assignment.
+     */
     void operator=(const Border* border);
 
     /**

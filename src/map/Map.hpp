@@ -7,7 +7,6 @@
 #include <Border.hpp>
 #include <Player.hpp>
 
-
 using namespace std;
 
 /**
@@ -20,10 +19,26 @@ protected:
     // Collection of Border edges.
     vector<Border*> borders;
 public:
+    /**
+     * Primary constructor.
+     * @param name Name of MapNode.
+     */
     MapNode(string name);
+
+    /**
+     * Copy constructor.
+     * @param mapNode MapNode to copy.
+     */
     MapNode(MapNode* mapNode);
+
+    /**
+     * Destructor.
+     */
     ~MapNode();
 
+    /**
+     * Name getter.
+     */
     string getName();
 
     /**
@@ -60,12 +75,35 @@ private:
     Map* map;
 
 public:
+    /**
+     * Primary constructor.
+     * @param name Name of Continent.
+     */
     Continent(string name);
+
+    /**
+     * Copy constructor.
+     * @param continent Continent to copy.
+     */
     Continent(Continent* continent);
+
+    /**
+     * Destructor.
+     */
     ~Continent();
 
+    /**
+     * Stream operator to describe Continent in string format.
+     * @param os The stream to output to.
+     * @param continent The object to convert to string.
+     * @return Updates ostream&.
+     */
     friend ostream& operator<<(ostream& stream, const Continent& continent);
 
+    /**
+     * Assignment operator overload.
+     * @param other Other Continent used for assignment.
+     */
     void operator=(const Continent* continent);
 
     /**
@@ -107,7 +145,6 @@ public:
 
 ostream& operator<<(ostream& stream, const Continent& continent);
 
-
 // Territory
 
 /**
@@ -124,12 +161,35 @@ public:
     // Counter for number of armies that current player owns in this country.
     int numberOfArmies;
 
+    /**
+     * Primary constructor.
+     * @param name Name of Territory.
+     */
     Territory(string name);
+
+    /**
+     * Copy constructor.
+     * @param mapNode Territory to copy.
+     */
     Territory(Territory* territory);
+
+    /**
+     * Destructor.
+     */
     ~Territory();
 
+    /**
+     * Stream operator to describe Territory in string format.
+     * @param os The stream to output to.
+     * @param territory The object to convert to string.
+     * @return Updates ostream&.
+     */
     friend ostream& operator<<(ostream& stream, const Territory& territory);
 
+    /**
+     * Assignment operator overload.
+     * @param other Other Territory used for assignment.
+     */
     void operator=(const Territory* territory);
 
     /**
@@ -156,6 +216,7 @@ public:
     bool validate();
 };
 
+ostream& operator<<(ostream& stream, const Territory& territory);
 
 /**
  * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
@@ -170,12 +231,35 @@ private:
     string name;
 
 public:
+    /**
+     * Primary constructor.
+     * @param name Name of Map.
+     */
     Map(string name);
+
+    /**
+     * Copy constructor.
+     * @param map Map to copy.
+     */
     Map(Map* map);
+
+    /**
+     * Destructor.
+     */
     ~Map();
 
+    /**
+     * Stream operator to describe Map in string format.
+     * @param os The stream to output to.
+     * @param map The object to convert to string.
+     * @return Updates ostream&.
+     */
     friend ostream& operator<<(ostream& stream, const Map& map);
 
+    /**
+     * Assignment operator overload.
+     * @param other Other Map used for assignment.
+     */
     void operator=(const Map* map);
 
     /**
@@ -209,3 +293,5 @@ public:
      */
     bool validate();
 };
+
+ostream& operator<<(ostream& stream, const Map& map);

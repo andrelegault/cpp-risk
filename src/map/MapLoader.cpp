@@ -49,13 +49,6 @@ vector<string> split(const string& line, const string& delim = " ") {
     return result;
 }
 
-/**
- * Loads a Conquest Map file into a Map graph.
- *
- * @param file_name Conquest Map file to load.
- * @return Map Object
- * @throw If the file does not exist or the file is invalid.
- */
 Map MapLoader::load(const string file_name) {
     ifstream file(file_name);
     if (!file) {
