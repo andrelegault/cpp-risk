@@ -1,2 +1,9 @@
 #pragma once
+class Order;
+class Deploy;
+class Advance;
+class Bomb;
+class Blockade;
+class Airlift;
+class Negotiate;
 class OrdersList;
