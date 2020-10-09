@@ -38,10 +38,12 @@ int main() {
 
     // Print continents
     for (auto continent : m.getContinents()) {
+        cout << *continent;
     }
 
     // Print territories
     for (auto territory : m.getTerritories()) {
+        cout << *territory;
     }
 
     // Or you can use the print map
@@ -49,6 +51,16 @@ int main() {
 
     // Validating map
     cout << "Map Valid: " << m.validate() << endl;
+
+    delete t1;
+    t1 = nullptr;
+    delete t2;
+    t2 = nullptr;
+
+    delete c1;
+    c1 = nullptr;
+    delete c2;
+    c2 = nullptr;
 
     return 0;
 }

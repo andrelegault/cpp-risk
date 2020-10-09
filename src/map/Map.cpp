@@ -60,11 +60,11 @@ Territory::~Territory() {
 }
 
 // TODO: Better print.
-ostream& operator<<(ostream& stream, const Territory* territory) {
-    stream << territory->name << " (" << territory->continent->getName() << ")" << endl;
+ostream& operator<<(ostream& stream, const Territory& territory) {
+    stream << territory.name << " (" << territory.continent->getName() << ")" << endl;
 
-    for (auto border : territory->borders) {
-        stream << "-> " << border->getOther((Territory*)territory)->getName() << endl;
+    for (auto border : territory.borders) {
+        stream << "-> " << border->getOther((Territory*)&territory)->getName() << endl;
     }
 
     return stream << endl;
@@ -114,11 +114,11 @@ Continent::~Continent() {
 }
 
 // TODO: Better print.
-ostream& operator<<(ostream& stream, const Continent* continent) {
-    stream << continent->name << endl;
+ostream& operator<<(ostream& stream, const Continent& continent) {
+    stream << continent.name << endl;
 
-    for (auto border : continent->borders) {
-        stream << "-> " << border->getOther((Continent*)continent)->getName() << endl;
+    for (auto border : continent.borders) {
+        stream << "-> " << border->getOther((Continent*)&continent)->getName() << endl;
     }
 
     return stream << endl;
@@ -177,10 +177,10 @@ Map::~Map() {
 }
 
 // TODO: Better print.
-ostream& operator<<(ostream& stream, const Map* m) {
-    stream << m->name << endl << endl;
+ostream& operator<<(ostream& stream, const Map& m) {
+    stream << m.name << endl << endl;
 
-    for (auto continent : m->continents) {
+    for (auto continent : m.continents) {
         stream << continent;
     }
 

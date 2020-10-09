@@ -64,7 +64,7 @@ public:
     Continent(Continent* continent);
     ~Continent();
 
-    friend ostream& operator<<(ostream& stream, const Continent* continent);
+    friend ostream& operator<<(ostream& stream, const Continent& continent);
 
     void operator=(const Continent* continent);
 
@@ -105,7 +105,7 @@ public:
     bool validate();
 };
 
-ostream& operator<<(ostream& stream, const Continent* continent);
+ostream& operator<<(ostream& stream, const Continent& continent);
 
 
 // Territory
@@ -128,7 +128,7 @@ public:
     Territory(Territory* territory);
     ~Territory();
 
-    friend ostream& operator<<(ostream& stream, const Territory* territory);
+    friend ostream& operator<<(ostream& stream, const Territory& territory);
 
     void operator=(const Territory* territory);
 
@@ -156,7 +156,6 @@ public:
     bool validate();
 };
 
-ostream& operator<<(ostream& stream, const Territory* territory);
 
 /**
  * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
@@ -175,7 +174,7 @@ public:
     Map(Map* map);
     ~Map();
 
-    friend ostream& operator<<(ostream& stream, const Map* map);
+    friend ostream& operator<<(ostream& stream, const Map& map);
 
     void operator=(const Map* map);
 
@@ -210,5 +209,3 @@ public:
      */
     bool validate();
 };
-
-ostream& operator<<(ostream& stream, const Map* map);
