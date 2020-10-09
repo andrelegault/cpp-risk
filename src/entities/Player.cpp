@@ -178,14 +178,6 @@ std::ostream& operator<<(std::ostream& strm, const Player& player) {
     return strm;
 }
 
-string Player::printTerritoriesStr() {
-    string toPrint = "Player's territories are:";
-    for (int i = 0; i < territories.size(); i++) {
-        toPrint = toPrint + territories.at(i)->getName() + "\n";
-    }
-    return toPrint;
-}
-
 void Player::printTerritories() const {
     cout << "Player's territories are:" << endl;
     for (int i = 0; i < territories.size(); i++) {

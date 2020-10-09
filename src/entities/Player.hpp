@@ -18,7 +18,6 @@ private:
     // The territories owned by the players.
     vector<Territory*> territories;
 
-
     static int count;
     string name;
 
@@ -45,8 +44,6 @@ public:
     Hand* hand;
 
     void printTerritories() const;
-
-    string printTerritoriesStr();
 
     /**
      * @return A list of territories to defended.

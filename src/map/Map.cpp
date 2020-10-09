@@ -181,7 +181,7 @@ ostream& operator<<(ostream& stream, const Map& m) {
     stream << m.name << endl << endl;
 
     for (auto continent : m.continents) {
-        stream << continent;
+        stream << *continent;
     }
 
     return stream;
