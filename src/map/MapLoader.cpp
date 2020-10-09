@@ -5,8 +5,7 @@
 
 using namespace std;
 
-string trim(string& line)
-{
+string trim(string& line) {
     line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
     return line;
 }
@@ -15,8 +14,7 @@ string trim_first_word(const string& str, const string& delim = " \t") {
     return str.substr(str.find_first_of(delim) + 1);
 }
 
-vector<string> split(const string& str, const string& delim = " ")
-{
+vector<string> split(const string& str, const string& delim = " ") {
     vector<string> result;
 
     size_t found = str.find(delim);
@@ -36,10 +34,10 @@ vector<string> split(const string& str, const string& delim = " ")
 
 // TODO - @throw errors instead of exit
 // TODO - Check map file has all 3 file components
-Map MapLoader::load(string file_name) {
-    ifstream file(file_name);
+Map MapLoader::load(const string fileName) {
+    ifstream file(fileName);
     if (!file) {
-        cerr << "Unable to open file :" + file_name;
+        cerr << "Unable to open file :" + fileName;
         exit(1);
         //return false;
     }

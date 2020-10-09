@@ -221,11 +221,11 @@ bool Map::validate() {
 }
 
 // TODO: Copy?
-vector<Continent*> Map::getContinents() {
+vector<Continent*> Map::getContinents() const {
     return this->continents;
 }
 
-vector<Territory*> Map::getTerritories() {
+vector<Territory*> Map::getTerritories() const {
     vector<Territory*> territories;
 
     for (auto continent : this->continents) {

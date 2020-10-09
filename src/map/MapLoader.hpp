@@ -18,5 +18,5 @@ public:
      * @return A Map graph represenation of the Conquest Map file.
      * @throw If the file does not exist or the file is invalid.
      */
-    static Map load(string file_name);
+    static Map load(const string fileName);
 };

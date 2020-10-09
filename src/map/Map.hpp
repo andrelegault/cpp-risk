@@ -160,7 +160,7 @@ ostream& operator<<(ostream& stream, const Territory* territory);
 
 /**
  * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
- * We can discuss if borders and territories should be handle by the subgroups.
+ * We can discuss if borders and territories should be handled by the subgroups.
  */
 class Map {
 private:
@@ -194,12 +194,12 @@ public:
     /**
      * Returns list of all Continents.
      */
-    vector<Continent*> getContinents();
+    vector<Continent*> getContinents() const;
 
     /**
      * Returns list of all Territories.
      */
-    vector<Territory*> getTerritories();
+    vector<Territory*> getTerritories() const;
 
     /**
      * Method that checks if:
