@@ -77,6 +77,7 @@ private:
 public:
     // Destructor.
     ~Card();
+
     // CardType for card.
     const CardType* cardType;
 

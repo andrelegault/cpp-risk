@@ -56,7 +56,9 @@ Territory::Territory(Territory* territory) : MapNode(territory) {
 }
 
 Territory::~Territory() {
-    this->continent->remove(this);
+    if (continent != nullptr) {
+        this->continent->remove(this);
+    }
 }
 
 // TODO: Better print.
