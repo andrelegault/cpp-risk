@@ -11,7 +11,6 @@ MapNode::MapNode(string name) {
 // TODO: Deep clone.
 MapNode::MapNode(MapNode* mapNode) {
     this->name = mapNode->name;
-    this->borders = mapNode->borders;
 }
 
 MapNode::~MapNode() {
@@ -43,16 +42,27 @@ void MapNode::connect(MapNode* node) {
     node->connect(border);
 }
 
+vector<Border*> MapNode::getBorders() const {
+    return this->borders;
+}
+
+bool operator== (const MapNode& m1, const MapNode& m2) {
+    return m1.name == m2.name;
+}
+
 // Territory
 
 
 Territory::Territory(string name) : MapNode(name) {}
 
-// TODO: Deep clone?
 Territory::Territory(Territory* territory) : MapNode(territory) {
-    this->playerOwner = territory->playerOwner;
-    this->numberOfArmies = territory->numberOfArmies;
-    this->continent = territory->continent;
+    Map* m = new Map(territory->getMap());
+    Territory* territoryCopy = m->get(territory);
+
+    this->playerOwner = territoryCopy->playerOwner;
+    this->numberOfArmies = territoryCopy->numberOfArmies;
+    this->continent = territoryCopy->continent;
+    this->borders = territoryCopy->borders;
 }
 
 Territory::~Territory() {
@@ -79,6 +89,10 @@ void Territory::operator=(const Territory* territory) {
     this->continent = territory->continent;
 }
 
+bool operator==(const Territory& t1, const Territory& t2) {
+    return t1.name == t2.name;
+}
+
 void Territory::connect(Continent* continent) {
     this->continent = continent;
 }
@@ -95,14 +109,20 @@ bool Territory::validate() {
     return this->borders.size() > 0;
 }
 
+Map* Territory::getMap() const {
+    return this->continent->getMap();
+}
+
 // Continent
 
 Continent::Continent(string name) : MapNode(name) {}
 
-// TODO: Deep clone?
 Continent::Continent(Continent* continent) : MapNode(continent) {
-    this->territories = continent->territories;
-    this->map = continent->map;
+    Map* m = new Map(continent->getMap());
+    Continent* continentCopy = m->get(continent);
+
+    this->territories = continentCopy->territories;
+    this->map = continentCopy->map;
 }
 
 Continent::~Continent() {
@@ -132,6 +152,10 @@ void Continent::operator=(const Continent* continent) {
     this->territories = continent->territories;
 }
 
+bool operator== (const Continent& c1, const Continent& c2) {
+    return c1.name == c2.name;
+}
+
 void Continent::connect(Map* map) {
     this->map = map;
 }
@@ -156,9 +180,12 @@ bool Continent::validate() {
     return true;
 }
 
-// TODO: Copy?
-vector<Territory*> Continent::getTerritories() {
+vector<Territory*> Continent::getTerritories() const {
     return this->territories;
+}
+
+Map* Continent::getMap() const {
+    return this->map;
 }
 
 // Map
@@ -166,10 +193,49 @@ Map::Map(string name) {
     this->name = name;
 }
 
-// TODO: Deep clone?
-Map::Map(Map* map) {
-    this->name = map->name;
-    this->continents = map->continents;
+Map::Map(Map* m) {
+    this->name = m->name;
+
+    // Used for mapping name to object.
+    map<string, Continent*> continentMap;
+    map<string, Territory*> territoryMap;
+    // Used for mapping border name to name.
+    vector<pair<string, string>> continentBorders;
+    vector<pair<string, string>> territoryBorders;
+
+    for (auto continent : m->continents) {
+        string continentName = continent->getName();
+
+        Continent* continentClone = new Continent(continentName);
+        this->connect(continentClone);
+
+        continentMap.insert({ continentName, continentClone });
+
+        for (auto border : continent->getBorders()) {
+            continentBorders.push_back({ continentName, border->getOther(continent)->getName() });
+        }
+
+        for (auto territory : continent->getTerritories()) {
+            string territoryName = territory->getName();
+
+            Territory* territoryClone = new Territory(territoryName);
+            continentClone->connect(territoryClone);
+
+            territoryMap.insert({ territoryName, territoryClone });
+
+            for (auto border : territory->getBorders()) {
+                territoryBorders.push_back({ territoryName, border->getOther(territory)->getName() });
+            }
+        }
+    }
+
+    for (auto border : continentBorders) {
+        ((MapNode*)continentMap[border.first])->connect(continentMap[border.second]);
+    }
+
+    for (auto border : territoryBorders) {
+        ((MapNode*)territoryMap[border.first])->connect(territoryMap[border.second]);
+    }
 }
 
 Map::~Map() {
@@ -180,8 +246,16 @@ Map::~Map() {
 ostream& operator<<(ostream& stream, const Map& m) {
     stream << m.name << endl << endl;
 
+    stream << "-----------------" << endl << endl;
+
     for (auto continent : m.continents) {
         stream << *continent;
+    }
+
+    stream << "-----------------" << endl << endl;
+
+    for (auto territory : m.getTerritories()) {
+        stream << *territory;
     }
 
     return stream;
@@ -220,7 +294,6 @@ bool Map::validate() {
     return true;
 }
 
-// TODO: Copy?
 vector<Continent*> Map::getContinents() const {
     return this->continents;
 }
@@ -235,4 +308,46 @@ vector<Territory*> Map::getTerritories() const {
     }
 
     return territories;
+}
+
+vector<Border*> Map::getBorders() const {
+    vector<Border*> borders;
+
+    for (auto territory : this->getTerritories()) {
+        vector<Border*> temp = territory->getBorders();
+
+        borders.insert(borders.end(), temp.begin(), temp.end());
+    }
+
+    return borders;
+}
+
+Continent* Map::get(Continent* continent) {
+    for(auto c : this->continents) {
+        if(*c == *continent) {
+            return c;
+        }
+    }
+
+    return NULL;
+}
+
+Territory* Map::get(Territory* territory) {
+    for(auto t : this->getTerritories()) {
+        if(*t == *territory) {
+            return t;
+        }
+    }
+
+    return NULL;
+}
+
+Border* Map::get(Border* border) {
+    for(auto b : this->getBorders()) {
+        if(*b == *border) {
+            return b;
+        }
+    }
+
+    return NULL;
 }

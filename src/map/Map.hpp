@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <Map.fwd.hpp>
 #include <Border.hpp>
@@ -62,7 +63,33 @@ public:
      * @param node Node to connect
      */
     void connect(MapNode* node);
+
+    /**
+     * Equality operator overload.
+     * @param m1 MapNode to check.
+     * @param m2 MapNode to compare against.
+     * @return MapNodes are the same?
+     */
+    friend bool operator== (const MapNode& m1, const MapNode& m2);
+
+    /**
+     * Gets map object relative to this object.
+     * @return Map.
+     */
+    virtual Map* getMap() const { 
+        cout << "getMap not implemented." << endl;
+        return NULL; 
+    };
+
+    /**
+     * Gets raw Borders.
+     * 
+     * @return Borders.
+     */
+    vector<Border *> getBorders() const;
 };
+
+bool operator== (const MapNode& m1, const MapNode& m2);
 
 /**
  * A Node Subgroup for the Map graph.
@@ -107,6 +134,14 @@ public:
     void operator=(const Continent* continent);
 
     /**
+     * Equality operator overload.
+     * @param c1 Continent to check.
+     * @param c2 Continent to compare against.
+     * @return Continents are the same?
+     */
+    friend bool operator== (const Continent& c1, const Continent& c2);
+
+    /**
      * Adds a territory to the territories list.
      * We expect the territory to stay in self for the duration of the game.
      *
@@ -133,7 +168,13 @@ public:
      *
      * @return Territories.
      */
-    vector<Territory*> getTerritories();
+    vector<Territory*> getTerritories() const;
+
+    /**
+     * Gets map object relative to this object.
+     * @return Map.
+     */
+    Map* getMap() const override;
 
     /**
      * Checks if containing territories are connected.
@@ -143,6 +184,7 @@ public:
     bool validate();
 };
 
+bool operator== (const Continent& c1, const Continent& c2);
 ostream& operator<<(ostream& stream, const Continent& continent);
 
 // Territory
@@ -193,6 +235,14 @@ public:
     void operator=(const Territory* territory);
 
     /**
+     * Equality operator overload.
+     * @param t1 Territory to check.
+     * @param t2 Territory to compare against.
+     * @return Territories are the same?
+     */
+    friend bool operator== (const Territory& t1, const Territory& t2);
+
+    /**
      * Changes the ownership of the country to a certain Player.
      * We expect the country to be removed from the previous Player's list
      * and added to the current Player's list.
@@ -209,6 +259,12 @@ public:
     void connect(Continent* continent);
 
     /**
+     * Gets map object relative to this object.
+     * @return Map.
+     */
+    Map* getMap() const override;
+
+    /**
      * Validates that node is connected.
      *
      * @return Node is connected.
@@ -216,6 +272,7 @@ public:
     bool validate();
 };
 
+bool operator==(const Territory& t1, const Territory& t2);
 ostream& operator<<(ostream& stream, const Territory& territory);
 
 /**
@@ -269,6 +326,30 @@ public:
     void connect(Continent* continent);
 
     /**
+     * Finds equivalent Continent in Map (used for deep copy).
+     * 
+     * @param continent Continent to find.
+     * @return Equivalent Continent.
+     */
+    Continent* get(Continent* continent);
+
+    /**
+     * Finds equivalent Territory in Map (used for deep copy).
+     * 
+     * @param territory Territory to find.
+     * @return Equivalent Territory.
+     */
+    Territory* get(Territory* territory);
+
+    /**
+     * Finds equivalent Border in Map (used for deep copy).
+     * 
+     * @param border Border to find.
+     * @return Equivalent Border.
+     */
+    Border* get(Border* border);
+
+    /**
      * Removes a continent from the map.
      * @param continent Continent to remove.
      */
@@ -283,6 +364,11 @@ public:
      * Returns list of all Territories.
      */
     vector<Territory*> getTerritories() const;
+
+    /**
+     * Returns list of all Borders.
+     */
+    vector<Border*> getBorders() const;
 
     /**
      * Method that checks if:

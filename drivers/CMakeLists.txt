@@ -1,5 +1,5 @@
 file(GLOB_RECURSE FILES 
-    "*.cpp"
+    "*Driver.cpp"
 )
 
 message(STATUS "${FILES}")

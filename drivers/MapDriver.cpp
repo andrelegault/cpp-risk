@@ -9,8 +9,12 @@ using namespace std;
  * Checks whether they are valid or not.
  */
 int main() {
+    cout << "++++++++++++++" << endl;
+    cout << "+ Simple Map +" << endl;
+    cout << "++++++++++++++" << endl << endl;
+
     // Make map.
-    Map m("Map");
+    Map* m = new Map("Map");
 
     // Make continent
     Continent* c1 = new Continent("Continent 1");
@@ -33,34 +37,50 @@ int main() {
     c2->connect(t2);
 
     // Connecting continent to map (needs to be done for all continents).
-    m.connect(c1);
-    m.connect(c2);
+    m->connect(c1);
+    m->connect(c2);
 
-    // Print continents
-    for (auto continent : m.getContinents()) {
-        cout << *continent;
-    }
-
-    // Print territories
-    for (auto territory : m.getTerritories()) {
-        cout << *territory;
-    }
-
-    // Or you can use the print map
-    // cout << &m;
+    // Prints simple map.
+    cout << *m;
 
     // Validating map
-    cout << "Map Valid: " << m.validate() << endl;
+    cout << "Map Valid: " << m->validate() << endl << endl;
 
+    cout << "+++++++++++++++++" << endl;
+    cout << "+ Map Deep Copy +" << endl;
+    cout << "+++++++++++++++++" << endl << endl;
+
+    // Deep copy of Map.
+    Map* m2 = new Map(m);
+
+    // Removing element from copy (if shallow copy, should show up in map).
+    m2->remove(m2->getContinents()[0]);
+
+    // Printing maps with address.
+    cout << m << " " << *m;
+    cout << m2 << " " << *m2;
+
+    delete m2;
+
+    cout << "+++++++++++++++++++++++++" << endl;
+    cout << "+ Map Element Deep Copy +" << endl;
+    cout << "+++++++++++++++++++++++++" << endl << endl;
+
+    // Taking copy of first contient.
+    Continent* cc = new Continent(c1);
+    // Removing first territory (if shallow copy, should show up in map).
+    cc->remove(cc->getTerritories()[0]);
+
+    cout << *m;
+
+    delete cc;
+
+    // Removing map.
     delete t1;
-    t1 = nullptr;
     delete t2;
-    t2 = nullptr;
-
     delete c1;
-    c1 = nullptr;
     delete c2;
-    c2 = nullptr;
+    delete m;
 
     return 0;
 }

@@ -8,8 +8,11 @@ Border::Border(MapNode* n1, MapNode* n2) {
 }
 
 Border::Border(Border* border) {
-    this->n1 = border->n1;
-    this->n2 = border->n2;
+    Map* m = new Map(border->getMap());
+    Border* borderCopy = m->get(border);
+    
+    this->n1 = borderCopy->n1;
+    this->n2 = borderCopy->n2;
 }
 
 Border::~Border() {
@@ -21,6 +24,10 @@ ostream& operator<<(ostream& stream, const Border* border) {
     stream << border->n1 << " <-> " << border->n2;
 
     return stream;
+}
+
+bool operator== (const Border& b1, const Border& b2) {
+    return *b1.n1 == *b2.n1 && *b1.n2 == *b2.n2;
 }
 
 void Border::operator=(const Border* border) {
@@ -36,4 +43,8 @@ MapNode* Border::getOther(MapNode* n) {
 
 bool Border::has(MapNode* node) {
     return node == this->n1 || node == this->n2;
+}
+
+Map* Border::getMap() const {
+    return this->n1->getMap();
 }

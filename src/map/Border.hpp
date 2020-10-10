@@ -45,6 +45,14 @@ public:
     friend ostream& operator<<(ostream& stream, const Border* border);
 
     /**
+     * Equality operator overload.
+     * @param b1 Border to check.
+     * @param b2 Border to compare against.
+     * @return Borders are the same?
+     */
+    friend bool operator== (const Border& b1, const Border& b2);
+
+    /**
      * Assignment operator overload.
      * @param other Other Border used for assignment.
      */
@@ -65,6 +73,14 @@ public:
      * @return Is MapNode part of the border.
      */
     bool has(MapNode* node);
+
+    /**
+     * Gets map object relative to this object.
+     * @return Map.
+     */
+    Map* getMap() const;
 };
+
+bool operator== (const Border& b1, const Border& b2);
 
 ostream& operator<<(ostream& stream, const Border* border);
