@@ -53,10 +53,7 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 // Territory
 
 
-Territory::Territory(string name) : MapNode(name) {
-    this->continent = nullptr;
-    this->playerOwner = nullptr;
-}
+Territory::Territory(string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
 
 Territory::Territory(Territory* territory) : MapNode(territory) {
     Map* m = new Map(territory->getMap());
@@ -338,8 +335,8 @@ vector<Border*> Map::getBorders() const {
 }
 
 Continent* Map::get(Continent* continent) {
-    for(auto c : this->continents) {
-        if(*c == *continent) {
+    for (auto c : this->continents) {
+        if (*c == *continent) {
             return c;
         }
     }
@@ -348,8 +345,8 @@ Continent* Map::get(Continent* continent) {
 }
 
 Territory* Map::get(Territory* territory) {
-    for(auto t : this->getTerritories()) {
-        if(*t == *territory) {
+    for (auto t : this->getTerritories()) {
+        if (*t == *territory) {
             return t;
         }
     }
@@ -358,8 +355,8 @@ Territory* Map::get(Territory* territory) {
 }
 
 Border* Map::get(Border* border) {
-    for(auto b : this->getBorders()) {
-        if(*b == *border) {
+    for (auto b : this->getBorders()) {
+        if (*b == *border) {
             return b;
         }
     }

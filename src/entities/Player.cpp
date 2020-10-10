@@ -121,7 +121,7 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Order* order;
+    Order* order = nullptr;
     while (true) {
         int num;
         cout << "What type of Order would you like to create?" << endl;

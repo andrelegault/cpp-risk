@@ -20,7 +20,7 @@ Deck::Deck(int size) {
 
     for (unsigned int i = 0; i < size; ++i) {
         int type = rand() % 6;
-        CardType* cardType;
+        CardType* cardType = nullptr;
         switch (type) {
         case 0: cardType = new CardType(BOMB); break;
         case 1: cardType = new CardType(AIRLIFT); break;
@@ -78,7 +78,7 @@ Card::~Card() {
 void Card::play(Player& player, Deck& deck) {
     cout << "Playing card " << *this << endl;
 
-    Order* order;
+    Order* order = nullptr;
     switch (*(cardType)) {
     case 0: order = new Bomb(); break;
     case 1: order = new Airlift(); break;
@@ -118,7 +118,7 @@ Hand::~Hand() {
 }
 
 Hand::Hand(Deck& deck) {
-    for (int i = 0 ; i < deck.getLength() || i < 5; ++i) {
+    for (int i = 0; i < deck.getLength() || i < 5; ++i) {
         Card* card = deck.getAtIndex(i);
         auto c = find(deck.cards.begin(), deck.cards.end(), card);
         hand.push_back(card);
