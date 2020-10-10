@@ -4,6 +4,8 @@
 #include<Map.hpp>
 
 // MapNode
+MapNode::MapNode(): MapNode("") {}
+
 MapNode::MapNode(string name) {
     this->name = name;
 }
@@ -51,7 +53,7 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 }
 
 // Territory
-
+Territory::Territory(): Territory("") {}
 
 Territory::Territory(string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
 
@@ -116,6 +118,7 @@ Map* Territory::getMap() const {
 }
 
 // Continent
+Continent::Continent() : Continent("") {}
 
 Continent::Continent(string name) : MapNode(name) {
     this->map = nullptr;
@@ -193,6 +196,8 @@ Map* Continent::getMap() const {
 }
 
 // Map
+Map::Map() : Map("") {}
+
 Map::Map(string name) {
     this->name = name;
 }

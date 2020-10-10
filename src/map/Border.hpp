@@ -19,6 +19,11 @@ private:
 
 public:
     /**
+     * Default constructor.
+     */
+    Border();
+
+    /**
      * Primary constructor.
      * @param n1 MapNode connected to Border edge.
      * @param n2 MapNode connected to Border edge.
