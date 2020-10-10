@@ -43,7 +43,8 @@ public:
     // The card collection for the Player.
     Hand* hand;
 
-    void printTerritories() const;
+    // Number of territories owned by the player.
+    int getNumTerritories() const;
 
     /**
      * @return A list of territories to defended.

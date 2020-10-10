@@ -25,7 +25,8 @@ void inputTest() {
     try {
         Map m = MapLoader::load(path);
         cout << m << endl << endl;
-    } catch (logic_error& error) {
+    }
+    catch (logic_error& error) {
         cerr << "exception: " << error.what() << endl;
     }
 }
@@ -49,10 +50,10 @@ int main() {
 
         // do things
         switch (input) {
-            case 1: basicTest(); break;
-            case 2: inputTest(); break;
-            default: cout << "Invalid Input!!\n\n";
-            case 3: exit = true;
+        case 1: basicTest(); break;
+        case 2: inputTest(); break;
+        default: cout << "Invalid Input!!\n\n";
+        case 3: exit = true;
         }
     }
 

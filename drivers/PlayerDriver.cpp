@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Player.hpp>
 #include <Player.fwd.hpp>
+#include <assert.h>
 
 using namespace std;
 
@@ -29,6 +30,8 @@ int main() {
     p1->addTerritory(t5);
     p1->addTerritory(t6);
 
+    assert(p0->getNumTerritories() == 4);
+
     cout << *p0 << endl;
     cout << *p1 << endl;
 
@@ -36,6 +39,8 @@ int main() {
     p0->toAttack();
 
     p0->removeTerritory(t1);
+
+    assert(p0->getNumTerritories()== 3);
 
     cout << *p0 << endl;
     cout << *p1 << endl;

@@ -77,6 +77,9 @@ vector<Territory*> Player::toDefend() {
     return toDefend;
 }
 
+int Player::getNumTerritories() const {
+    return territories.size();
+}
 
 vector<Territory*> Player::toAttack() {
     auto last = territories.begin() + (rand() % territories.size());
@@ -152,14 +155,6 @@ std::ostream& operator<<(std::ostream& strm, const Player& player) {
     }
     strm << "]" << endl;
     return strm;
-}
-
-
-void Player::printTerritories() const {
-    cout << "Player's territories are:" << endl;
-    for (int i = 0; i < territories.size(); i++) {
-        cout << territories.at(i)->getName() << endl;
-    }
 }
 
 

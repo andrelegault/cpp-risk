@@ -10,7 +10,7 @@ Border::Border(MapNode* n1, MapNode* n2) {
 Border::Border(Border* border) {
     Map* m = new Map(border->getMap());
     Border* borderCopy = m->get(border);
-    
+
     this->n1 = borderCopy->n1;
     this->n2 = borderCopy->n2;
 }

@@ -76,17 +76,17 @@ public:
      * Gets map object relative to this object.
      * @return Map.
      */
-    virtual Map* getMap() const { 
+    virtual Map* getMap() const {
         cout << "getMap not implemented." << endl;
-        return NULL; 
+        return NULL;
     };
 
     /**
      * Gets raw Borders.
-     * 
+     *
      * @return Borders.
      */
-    vector<Border *> getBorders() const;
+    vector<Border*> getBorders() const;
 };
 
 bool operator== (const MapNode& m1, const MapNode& m2);
@@ -327,7 +327,7 @@ public:
 
     /**
      * Finds equivalent Continent in Map (used for deep copy).
-     * 
+     *
      * @param continent Continent to find.
      * @return Equivalent Continent.
      */
@@ -335,7 +335,7 @@ public:
 
     /**
      * Finds equivalent Territory in Map (used for deep copy).
-     * 
+     *
      * @param territory Territory to find.
      * @return Equivalent Territory.
      */
@@ -343,7 +343,7 @@ public:
 
     /**
      * Finds equivalent Border in Map (used for deep copy).
-     * 
+     *
      * @param border Border to find.
      * @return Equivalent Border.
      */
