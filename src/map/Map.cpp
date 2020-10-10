@@ -8,7 +8,7 @@ MapNode::MapNode(string name) {
     this->name = name;
 }
 
-// TODO: Deep clone.
+// Decided to make MapNode shallow clone. Deep clone done in child class.
 MapNode::MapNode(MapNode* mapNode) {
     this->name = mapNode->name;
 }
@@ -53,7 +53,10 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 // Territory
 
 
-Territory::Territory(string name) : MapNode(name) {}
+Territory::Territory(string name) : MapNode(name) {
+    this->continent = nullptr;
+    this->playerOwner = nullptr;
+}
 
 Territory::Territory(Territory* territory) : MapNode(territory) {
     Map* m = new Map(territory->getMap());
@@ -117,7 +120,9 @@ Map* Territory::getMap() const {
 
 // Continent
 
-Continent::Continent(string name) : MapNode(name) {}
+Continent::Continent(string name) : MapNode(name) {
+    this->map = nullptr;
+}
 
 Continent::Continent(Continent* continent) : MapNode(continent) {
     Map* m = new Map(continent->getMap());
@@ -208,11 +213,14 @@ Map::Map(Map* m) {
     for (auto continent : m->continents) {
         string continentName = continent->getName();
 
+        // Making copy of the Continent and attaching to parent Map.
         Continent* continentClone = new Continent(continentName);
         this->connect(continentClone);
 
+        // Mapping name to object.
         continentMap.insert({ continentName, continentClone });
 
+        // Getting all borders (cannot connect automatically because the continent object could not exist).
         for (auto border : continent->getBorders()) {
             continentBorders.push_back({ continentName, border->getOther(continent)->getName() });
         }
@@ -220,21 +228,26 @@ Map::Map(Map* m) {
         for (auto territory : continent->getTerritories()) {
             string territoryName = territory->getName();
 
+            // Making copy of the Territory and attaching to parent cContinent.
             Territory* territoryClone = new Territory(territoryName);
             continentClone->connect(territoryClone);
 
+            // Mapping name to object.
             territoryMap.insert({ territoryName, territoryClone });
 
+            // Getting all borders (cannot connect automatically because the continent object could not exist).
             for (auto border : territory->getBorders()) {
                 territoryBorders.push_back({ territoryName, border->getOther(territory)->getName() });
             }
         }
     }
 
+    // Connecting Continents according to border (we know all objects must exist at this point).
     for (auto border : continentBorders) {
         ((MapNode*)continentMap[border.first])->connect(continentMap[border.second]);
     }
 
+    // Connecting Borders according to border (we know all objects must exist at this point).
     for (auto border : territoryBorders) {
         ((MapNode*)territoryMap[border.first])->connect(territoryMap[border.second]);
     }
