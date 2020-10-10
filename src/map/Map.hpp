@@ -21,6 +21,11 @@ protected:
     vector<Border*> borders;
 public:
     /**
+     * Default constructor.
+     */
+    MapNode();
+
+    /**
      * Primary constructor.
      * @param name Name of MapNode.
      */
@@ -102,6 +107,11 @@ private:
     Map* map;
 
 public:
+    /**
+     * Default constructor.
+     */
+    Continent();
+
     /**
      * Primary constructor.
      * @param name Name of Continent.
@@ -204,6 +214,11 @@ public:
     int numberOfArmies;
 
     /**
+     * Default constructor.
+     */
+    Territory();
+
+    /**
      * Primary constructor.
      * @param name Name of Territory.
      */
@@ -288,6 +303,11 @@ private:
     string name;
 
 public:
+    /**
+     * Default constructor.
+     */
+    Map();
+
     /**
      * Primary constructor.
      * @param name Name of Map.
