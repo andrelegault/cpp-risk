@@ -35,6 +35,23 @@ Deck::Deck(int size) {
     cout << "Created deck containing " << cards.size() << " cards!" << endl;
 }
 
+Deck::Deck(const Deck& other) {
+    vector<Card*> cards;
+    for (Card* card : cards) {
+        Card* temp = new Card(*card);
+        cards.push_back(temp);
+    }
+}
+
+Deck& Deck::operator=(const Deck& other) {
+    if (&other == this) {
+        return *this;
+    } else {
+        cards = other.cards;
+        return *this;
+    }
+}
+
 void Deck::addCard(Card* const card) {
     cards.push_back(card);
 }
@@ -73,6 +90,18 @@ Card::Card(const CardType* cardType) : cardType(cardType) { }
 Card::~Card() {
     delete cardType;
     cardType = nullptr;
+}
+
+Card::Card(const Card& other) : cardType(new CardType(*(other.cardType))) { }
+
+Card& Card::operator=(const Card& other) {
+    if (&other == this) {
+        return *this;
+    }
+    else {
+        cardType = other.cardType;
+        return *this;
+    }
 }
 
 void Card::play(Player& player, Deck& deck) {
@@ -123,6 +152,24 @@ Hand::Hand(Deck& deck) {
         auto c = find(deck.cards.begin(), deck.cards.end(), card);
         hand.push_back(card);
         deck.cards.erase(c);
+    }
+}
+
+Hand::Hand(const Hand& other) {
+    vector<Card*> hand;
+    for (Card* card : other.hand) {
+        Card* temp = new Card(*card);
+        hand.push_back(temp);
+    }
+}
+
+Hand& Hand::operator=(const Hand& other) {
+    if (&other == this) {
+        return *this;
+    }
+    else {
+        hand = other.hand;
+        return *this;
     }
 }
 
