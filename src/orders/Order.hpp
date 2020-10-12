@@ -123,7 +123,7 @@ public:
     /**
      * Copy constructor.
      */
-    OrdersList(const OrdersList& old);
+    OrdersList(const OrdersList& other);
 
     OrdersList(const OrdersList* old);
 
@@ -154,8 +154,9 @@ public:
     /**
      * Assignment operator overload.
      * @param other Other OrdersList used for assignment.
+     * @return Copied reference to OrdersList.
      */
-    void operator=(const OrdersList& other);
+    OrdersList& operator=(const OrdersList& other);
 
     /**
      * Deletes an order from the list

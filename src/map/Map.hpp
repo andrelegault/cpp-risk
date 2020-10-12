@@ -95,10 +95,10 @@ public:
      * Gets map object relative to this object.
      * @return Map.
      */
-    virtual Map* getMap() const {
-        cout << "getMap not implemented." << endl;
-        return NULL;
-    };
+    virtual Map* getMap() const;
+    //     std::cout << "getMap not implemented." << std::endl;
+    //     return NULL;
+    // };
 
     /**
      * Gets raw Borders.
@@ -119,7 +119,6 @@ private:
     vector<Territory*> territories;
     // Map that Continent is part of.
     Map* map;
-
 public:
     /**
      * Default constructor.
@@ -155,7 +154,7 @@ public:
      * Assignment operator overload.
      * @param other Other Continent used for assignment.
      */
-    void operator=(const Continent* continent);
+    Continent& operator=(const Continent& continent);
 
     /**
      * Equality operator overload.
@@ -261,7 +260,7 @@ public:
      * Assignment operator overload.
      * @param other Other Territory used for assignment.
      */
-    void operator=(const Territory* territory);
+    Territory& operator=(const Territory* territory);
 
     /**
      * Equality operator overload.
@@ -303,6 +302,9 @@ public:
 
 bool operator==(const Territory& t1, const Territory& t2);
 ostream& operator<<(ostream& stream, const Territory& territory);
+
+
+// Map
 
 /**
  * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
@@ -351,7 +353,7 @@ public:
      * Assignment operator overload.
      * @param other Other Map used for assignment.
      */
-    void operator=(const Map* map);
+    Map& operator=(const Map& map);
 
     /**
      * Adds a continent to the map.

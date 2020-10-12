@@ -4,7 +4,7 @@
 #include<Map.hpp>
 
 // MapNode
-MapNode::MapNode(): MapNode("") {}
+MapNode::MapNode() : MapNode("") {}
 
 MapNode::MapNode(string name) {
     this->name = name;
@@ -69,7 +69,7 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 }
 
 // Territory
-Territory::Territory(): Territory("") {}
+Territory::Territory() : Territory("") {}
 
 Territory::Territory(string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
 
@@ -97,16 +97,21 @@ ostream& operator<<(ostream& stream, const Territory& territory) {
         stream << "-> " << border->getOther((Territory*)&territory)->getName() << endl;
     }
 
-    return stream << endl;
+    stream << endl;
+
+    return stream;
 }
 
-void Territory::operator=(const Territory* territory) {
-    this->~Territory();
-    this->name = territory->name;
-    this->borders = territory->borders;
-    this->numberOfArmies = territory->numberOfArmies;
-    this->playerOwner = territory->playerOwner;
-    this->continent = territory->continent;
+Territory& Territory::operator=(const Territory& other) {
+    if (&other != this) {
+        this->~Territory();
+        this->name = other.name;
+        this->borders = other.borders;
+        this->numberOfArmies = other.numberOfArmies;
+        this->playerOwner = other.playerOwner;
+        this->continent = other.continent;
+    }
+    return *this;
 }
 
 bool operator==(const Territory& t1, const Territory& t2) {
@@ -167,12 +172,15 @@ ostream& operator<<(ostream& stream, const Continent& continent) {
     return stream << endl;
 }
 
-void Continent::operator=(const Continent* continent) {
-    this->~Continent();
-    this->name = continent->name;
-    this->borders = continent->borders;
-    this->map = continent->map;
-    this->territories = continent->territories;
+Continent& Continent::operator=(const Continent& other) {
+    if (&other != this) {
+        this->~Continent();
+        this->name = other.name;
+        this->borders = other.borders;
+        this->map = other.map;
+        this->territories = other.territories;
+    }
+    return *this;
 }
 
 bool operator== (const Continent& c1, const Continent& c2) {
@@ -294,10 +302,13 @@ ostream& operator<<(ostream& stream, const Map& m) {
     return stream;
 }
 
-void Map::operator=(const Map* map) {
-    this->~Map();
-    this->name = map->name;
-    this->continents = map->continents;
+Map& Map::operator=(const Map& other) {
+    if (&other != this) {
+        this->~Map();
+        this->name = other.name;
+        this->continents = other.continents;
+    }
+    return *this;
 }
 
 void Map::connect(Continent* continent) {
