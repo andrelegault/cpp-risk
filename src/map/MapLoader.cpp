@@ -14,28 +14,17 @@ MapLoader& MapLoader::operator=(const MapLoader& other) { }
 ostream& operator<<(ostream& stream, const MapLoader& maploader) {
     stream << "MapLoader @ " << &maploader << endl;
 }
+
 string trim(string& line) {
     line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
     return line;
 }
 
-/**
- * Remove the first word of a string based on a delimiter
- * @param line
- * @param delim
- * @return modified string
- */
-string trim_first_word(const string& line, const string& delim = " \t") {
+string trim_first_word(const string& line, const string& delim) {
     return line.substr(line.find_first_of(delim) + 1);
 }
 
-/**
- * Split a string into an array of words based on a delimiter
- * @param line
- * @param delim
- * @return vector<string> words
- */
-vector<string> split(const string& line, const string& delim = " ") {
+vector<string> split(const string& line, const string& delim) {
     vector<string> result;
 
     size_t found = line.find(delim);
