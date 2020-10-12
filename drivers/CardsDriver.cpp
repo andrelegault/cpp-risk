@@ -18,6 +18,10 @@ int main() {
     const Hand* const hand = mockPlayer.hand;
     assert(hand->getLength() == 5);
 
+    Deck deck2(deck);
+
+    assert(deck2.getAtIndex(0) != deck.getAtIndex(0));
+
     deck.draw(mockPlayer);
     assert(deck.getLength() == 4);
     assert(hand->getLength() == 6);
