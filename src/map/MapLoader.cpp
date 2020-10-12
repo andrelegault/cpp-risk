@@ -9,10 +9,11 @@ MapLoader::MapLoader() { }
 
 MapLoader::MapLoader(const MapLoader& other) { }
 
-MapLoader& MapLoader::operator=(const MapLoader& other) { }
+MapLoader& MapLoader::operator=(const MapLoader& other) { return *this; }
 
 ostream& operator<<(ostream& stream, const MapLoader& maploader) {
     stream << "MapLoader @ " << &maploader << endl;
+    return stream;
 }
 
 string trim(string& line) {
