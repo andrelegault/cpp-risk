@@ -6,13 +6,13 @@
 // MapNode
 MapNode::MapNode() : MapNode("") {}
 
-MapNode::MapNode(string name) {
+MapNode::MapNode(const string name) {
     this->name = name;
 }
 
 // Decided to make MapNode shallow clone. Deep clone done in child class.
-MapNode::MapNode(MapNode* mapNode) {
-    this->name = mapNode->name;
+MapNode::MapNode(const MapNode& mapNode) {
+    this->name = mapNode.name;
 }
 
 MapNode::~MapNode() {
@@ -71,10 +71,10 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 // Territory
 Territory::Territory() : Territory("") {}
 
-Territory::Territory(string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
+Territory::Territory(const string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
 
-Territory::Territory(Territory* territory) : MapNode(territory) {
-    Map* m = new Map(territory->getMap());
+Territory::Territory(const Territory& territory) : MapNode(territory) {
+    Map* m = new Map(*(territory.getMap()));
     Territory* territoryCopy = m->get(territory);
 
     this->playerOwner = territoryCopy->playerOwner;
@@ -145,8 +145,8 @@ Continent::Continent(string name) : MapNode(name) {
     this->map = nullptr;
 }
 
-Continent::Continent(Continent* continent) : MapNode(continent) {
-    Map* m = new Map(continent->getMap());
+Continent::Continent(const Continent& continent) : MapNode(continent) {
+    Map* m = new Map(*(continent.getMap()));
     Continent* continentCopy = m->get(continent);
 
     this->territories = continentCopy->territories;
@@ -222,12 +222,12 @@ Map* Continent::getMap() const {
 // Map
 Map::Map() : Map("") {}
 
-Map::Map(string name) {
+Map::Map(const string name) {
     this->name = name;
 }
 
-Map::Map(Map* m) {
-    this->name = m->name;
+Map::Map(const Map& m) {
+    this->name = m.name;
 
     // Used for mapping name to object.
     map<string, Continent*> continentMap;
@@ -236,7 +236,7 @@ Map::Map(Map* m) {
     vector<pair<string, string>> continentBorders;
     vector<pair<string, string>> territoryBorders;
 
-    for (auto continent : m->continents) {
+    for (auto continent : m.continents) {
         string continentName = continent->getName();
 
         // Making copy of the Continent and attaching to parent Map.
@@ -366,9 +366,9 @@ vector<Border*> Map::getBorders() const {
     return borders;
 }
 
-Continent* Map::get(Continent* continent) {
+Continent* Map::get(const Continent& continent) {
     for (auto c : this->continents) {
-        if (*c == *continent) {
+        if (*c == continent) {
             return c;
         }
     }
@@ -376,9 +376,9 @@ Continent* Map::get(Continent* continent) {
     return NULL;
 }
 
-Territory* Map::get(Territory* territory) {
+Territory* Map::get(const Territory& territory) {
     for (auto t : this->getTerritories()) {
-        if (*t == *territory) {
+        if (*t == territory) {
             return t;
         }
     }
@@ -386,9 +386,9 @@ Territory* Map::get(Territory* territory) {
     return NULL;
 }
 
-Border* Map::get(Border* border) {
+Border* Map::get(const Border& border) {
     for (auto b : this->getBorders()) {
-        if (*b == *border) {
+        if (*b == border) {
             return b;
         }
     }
@@ -406,8 +406,8 @@ Border::Border(MapNode* n1, MapNode* n2) {
     this->n2 = n2;
 }
 
-Border::Border(Border* border) {
-    Map* m = new Map(border->getMap());
+Border::Border(const Border& border) {
+    Map* m = new Map(*(border.getMap()));
     Border* borderCopy = m->get(border);
 
     this->n1 = borderCopy->n1;

@@ -10,11 +10,11 @@ Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), han
 }
 
 
-Player::Player(const Player& player) : name("p" + to_string(count++)), orders(new OrdersList(player.orders)) {
+Player::Player(const Player& player) : name("p" + to_string(count++)), orders(new OrdersList(*(player.orders))) {
     cout << "Player " << name << " created (copy constructor)" << endl;
 
     for (Territory* t : player.territories) {
-        Territory* newTer = new Territory(t);
+        Territory* newTer = new Territory(*t);
         this->territories.push_back(newTer);
     }
 }

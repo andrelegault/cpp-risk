@@ -28,13 +28,13 @@ public:
      * Primary constructor.
      * @param name Name of MapNode.
      */
-    MapNode(string name);
+    MapNode(const string name);
 
     /**
      * Copy constructor.
      * @param mapNode MapNode to copy.
      */
-    MapNode(MapNode* mapNode);
+    MapNode(const MapNode& mapNode);
 
     /**
      * Destructor.
@@ -132,7 +132,7 @@ public:
      * Copy constructor.
      * @param continent Continent to copy.
      */
-    Continent(Continent* continent);
+    Continent(const Continent& continent);
 
     /**
      * Destructor.
@@ -232,13 +232,13 @@ public:
      * Primary constructor.
      * @param name Name of Territory.
      */
-    Territory(string name);
+    Territory(const string name);
 
     /**
      * Copy constructor.
      * @param mapNode Territory to copy.
      */
-    Territory(Territory* territory);
+    Territory(const Territory& territory);
 
     /**
      * Destructor.
@@ -325,13 +325,13 @@ public:
      * Primary constructor.
      * @param name Name of Map.
      */
-    Map(string name);
+    Map(const string name);
 
     /**
      * Copy constructor.
      * @param map Map to copy.
      */
-    Map(Map* map);
+    Map(const Map& map);
 
     /**
      * Destructor.
@@ -364,7 +364,7 @@ public:
      * @param continent Continent to find.
      * @return Equivalent Continent.
      */
-    Continent* get(Continent* continent);
+    Continent* get(const Continent& continent);
 
     /**
      * Finds equivalent Territory in Map (used for deep copy).
@@ -372,7 +372,7 @@ public:
      * @param territory Territory to find.
      * @return Equivalent Territory.
      */
-    Territory* get(Territory* territory);
+    Territory* get(const Territory& territory);
 
     /**
      * Finds equivalent Border in Map (used for deep copy).
@@ -380,7 +380,7 @@ public:
      * @param border Border to find.
      * @return Equivalent Border.
      */
-    Border* get(Border* border);
+    Border* get(const Border& border);
 
     /**
      * Removes a continent from the map.
@@ -445,7 +445,7 @@ public:
      * Copy constructor.
      * @param border Border to copy.
      */
-    Border(Border* border);
+    Border(const Border& border);
 
     /**
      * Destructor.
