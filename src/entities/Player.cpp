@@ -98,7 +98,7 @@ void Player::issueOrder() {
     while (true) {
         int num;
         cout << "What type of Order would you like to create?" << endl;
-        cout << "1. Deploy" << endl << "2. Advance" << "3. Bomb" << endl << "4. Blockade" << endl << "5. Airlift" << endl << "6. Negotiate" << endl;
+        cout << "1. Deploy" << endl << "2. Advance" << endl << "3. Bomb" << endl << "4. Blockade" << endl << "5. Airlift" << endl << "6. Negotiate" << endl;
         cin >> num;
         if (num < 1 || num > 6) {
             cout << "Not a valid choice" << endl;
@@ -155,7 +155,8 @@ ostream& operator<<(ostream& strm, const Player& player) {
 Player& Player::operator=(const Player& other) {
     if (&other == this) {
         return *this;
-    } else {
+    }
+    else {
         territories = other.territories;
         name = other.name;
         return *this;
