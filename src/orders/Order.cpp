@@ -128,14 +128,6 @@ OrdersList::OrdersList(const OrdersList& other) {
     }
 }
 
-OrdersList::OrdersList(const OrdersList* other) {
-    for (auto o : other->orders) {
-        // Uses clone method since temp isn't defined
-        Order* temp = o->clone();
-        orders.push_back(temp);
-    }
-}
-
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;

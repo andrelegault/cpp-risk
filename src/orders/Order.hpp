@@ -125,8 +125,6 @@ public:
      */
     OrdersList(const OrdersList& other);
 
-    OrdersList(const OrdersList* old);
-
     /**
      * Desctuctor.
      */
