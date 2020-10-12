@@ -280,7 +280,11 @@ Map::Map(const Map& m) {
 }
 
 Map::~Map() {
-    while (!this->continents.empty()) delete this->continents.back();
+    while (!this->continents.empty()) {
+        Continent* temp = this->continents.back();
+        delete temp;
+        temp = nullptr;
+    }
 }
 
 // TODO: Better print.
