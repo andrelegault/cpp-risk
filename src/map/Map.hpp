@@ -95,10 +95,7 @@ public:
      * Gets map object relative to this object.
      * @return Map.
      */
-    virtual Map* getMap() const;
-    //     std::cout << "getMap not implemented." << std::endl;
-    //     return NULL;
-    // };
+    virtual Map* getMap() const = 0;
 
     /**
      * Gets raw Borders.
@@ -197,7 +194,7 @@ public:
      * Gets map object relative to this object.
      * @return Map.
      */
-    Map* getMap() const override;
+    Map* getMap() const;
 
     /**
      * Checks if containing territories are connected.
@@ -290,7 +287,7 @@ public:
      * Gets map object relative to this object.
      * @return Map.
      */
-    Map* getMap() const override;
+    Map* getMap() const;
 
     /**
      * Validates that node is connected.
