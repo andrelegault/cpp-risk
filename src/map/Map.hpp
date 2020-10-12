@@ -260,7 +260,7 @@ public:
      * Assignment operator overload.
      * @param other Other Territory used for assignment.
      */
-    Territory& operator=(const Territory* territory);
+    Territory& operator=(const Territory& territory);
 
     /**
      * Equality operator overload.

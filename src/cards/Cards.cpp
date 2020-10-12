@@ -36,8 +36,7 @@ Deck::Deck(int size) {
 }
 
 Deck::Deck(const Deck& other) {
-    vector<Card*> cards;
-    for (Card* card : cards) {
+    for (Card* card : other.cards) {
         Card* temp = new Card(*card);
         cards.push_back(temp);
     }
@@ -46,7 +45,8 @@ Deck::Deck(const Deck& other) {
 Deck& Deck::operator=(const Deck& other) {
     if (&other == this) {
         return *this;
-    } else {
+    }
+    else {
         cards = other.cards;
         return *this;
     }
@@ -156,7 +156,6 @@ Hand::Hand(Deck& deck) {
 }
 
 Hand::Hand(const Hand& other) {
-    vector<Card*> hand;
     for (Card* card : other.hand) {
         Card* temp = new Card(*card);
         hand.push_back(temp);
