@@ -4,7 +4,7 @@
 #include<Map.hpp>
 
 // MapNode
-MapNode::MapNode(): MapNode("") {}
+MapNode::MapNode() : MapNode("") {}
 
 MapNode::MapNode(string name) {
     this->name = name;
@@ -17,6 +17,22 @@ MapNode::MapNode(MapNode* mapNode) {
 
 MapNode::~MapNode() {
     while (!this->borders.empty()) delete this->borders.back();
+}
+
+MapNode& MapNode::operator=(const MapNode& other) {
+    if (&other != this) {
+        borders = other.borders;
+        name = other.name;
+    }
+    return *this;
+}
+
+ostream& operator<<(ostream& stream, const MapNode& node) {
+    stream << "MapNode with name: " << node.name << endl;
+    for (Border* border : node.borders) {
+        stream << "\t" << border << endl;
+    }
+    return stream;
 }
 
 string MapNode::getName() {
@@ -53,7 +69,7 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 }
 
 // Territory
-Territory::Territory(): Territory("") {}
+Territory::Territory() : Territory("") {}
 
 Territory::Territory(string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
 
@@ -81,16 +97,21 @@ ostream& operator<<(ostream& stream, const Territory& territory) {
         stream << "-> " << border->getOther((Territory*)&territory)->getName() << endl;
     }
 
-    return stream << endl;
+    stream << endl;
+
+    return stream;
 }
 
-void Territory::operator=(const Territory* territory) {
-    this->~Territory();
-    this->name = territory->name;
-    this->borders = territory->borders;
-    this->numberOfArmies = territory->numberOfArmies;
-    this->playerOwner = territory->playerOwner;
-    this->continent = territory->continent;
+Territory& Territory::operator=(const Territory& other) {
+    if (&other != this) {
+        this->~Territory();
+        this->name = other.name;
+        this->borders = other.borders;
+        this->numberOfArmies = other.numberOfArmies;
+        this->playerOwner = other.playerOwner;
+        this->continent = other.continent;
+    }
+    return *this;
 }
 
 bool operator==(const Territory& t1, const Territory& t2) {
@@ -151,12 +172,15 @@ ostream& operator<<(ostream& stream, const Continent& continent) {
     return stream << endl;
 }
 
-void Continent::operator=(const Continent* continent) {
-    this->~Continent();
-    this->name = continent->name;
-    this->borders = continent->borders;
-    this->map = continent->map;
-    this->territories = continent->territories;
+Continent& Continent::operator=(const Continent& other) {
+    if (&other != this) {
+        this->~Continent();
+        this->name = other.name;
+        this->borders = other.borders;
+        this->map = other.map;
+        this->territories = other.territories;
+    }
+    return *this;
 }
 
 bool operator== (const Continent& c1, const Continent& c2) {
@@ -278,10 +302,13 @@ ostream& operator<<(ostream& stream, const Map& m) {
     return stream;
 }
 
-void Map::operator=(const Map* map) {
-    this->~Map();
-    this->name = map->name;
-    this->continents = map->continents;
+Map& Map::operator=(const Map& other) {
+    if (&other != this) {
+        this->~Map();
+        this->name = other.name;
+        this->continents = other.continents;
+    }
+    return *this;
 }
 
 void Map::connect(Continent* continent) {
@@ -367,4 +394,59 @@ Border* Map::get(Border* border) {
     }
 
     return NULL;
+}
+
+
+// Border
+
+Border::Border() : Border(nullptr, nullptr) {}
+
+Border::Border(MapNode* n1, MapNode* n2) {
+    this->n1 = n1;
+    this->n2 = n2;
+}
+
+Border::Border(Border* border) {
+    Map* m = new Map(border->getMap());
+    Border* borderCopy = m->get(border);
+
+    this->n1 = borderCopy->n1;
+    this->n2 = borderCopy->n2;
+}
+
+Border::~Border() {
+    if (this->n1) this->n1->remove(this);
+    if (this->n2) this->n2->remove(this);
+}
+
+ostream& operator<<(ostream& stream, const Border* border) {
+    stream << border->n1 << " <-> " << border->n2;
+
+    return stream;
+}
+
+bool operator== (const Border& b1, const Border& b2) {
+    return *b1.n1 == *b2.n1 && *b1.n2 == *b2.n2;
+}
+
+Border& Border::operator=(const Border& other) {
+    if (&other != this) {
+        this->~Border();
+        this->n1 = other.n1;
+        this->n2 = other.n2;
+    }
+    return *this;
+}
+
+MapNode* Border::getOther(MapNode* n) {
+    if (n == this->n1) return this->n2;
+    else return this->n1;
+}
+
+bool Border::has(MapNode* node) {
+    return node == this->n1 || node == this->n2;
+}
+
+Map* Border::getMap() const {
+    return this->n1->getMap();
 }

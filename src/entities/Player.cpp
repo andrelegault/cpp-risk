@@ -2,8 +2,6 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace std;
-
 int Player::count = 0;
 
 
@@ -43,9 +41,7 @@ Player::~Player() {
 Player::Player(Deck& deck) :
     hand(new Hand(deck)),
     name("p" + to_string(count++)),
-    orders(new OrdersList()) {
-
-}
+    orders(new OrdersList()) { }
 
 
 void Player::addTerritory(Territory* territory) {
@@ -144,8 +140,7 @@ void Player::addOrder(Order* order) {
 }
 
 
-//TODO maybe figure out how to add orders to this
-std::ostream& operator<<(std::ostream& strm, const Player& player) {
+ostream& operator<<(ostream& strm, const Player& player) {
     strm << "Player's name: " << player.name << ", Territories: [";
     for (int i = 0; i < player.territories.size(); i++) {
         if (i != player.territories.size() - 1) {
@@ -155,6 +150,16 @@ std::ostream& operator<<(std::ostream& strm, const Player& player) {
     }
     strm << "]" << endl;
     return strm;
+}
+
+Player& Player::operator=(const Player& other) {
+    if (&other == this) {
+        return *this;
+    } else {
+        territories = other.territories;
+        name = other.name;
+        return *this;
+    }
 }
 
 

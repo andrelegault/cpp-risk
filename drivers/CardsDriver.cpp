@@ -15,8 +15,15 @@ int main() {
 
     Player mockPlayer(deck);
 
-    const Hand* const hand = mockPlayer.hand;
+    const Hand* hand = mockPlayer.hand;
     assert(hand->getLength() == 5);
+    assert(deck.getLength() == 5);
+
+    Deck deck2(deck);
+
+    cout << deck2.getLength() << endl;
+
+    assert(deck2.getAtIndex(0) != deck.getAtIndex(0));
 
     deck.draw(mockPlayer);
     assert(deck.getLength() == 4);

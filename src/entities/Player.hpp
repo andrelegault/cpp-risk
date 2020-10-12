@@ -7,7 +7,9 @@
 #include <Order.hpp>
 #include <Cards.hpp>
 
-using namespace std;
+using std::cout;
+using std::ostream;
+using std::endl;
 
 /**
  * A Risk player.
@@ -21,7 +23,6 @@ private:
     static int count;
     string name;
 
-    friend std::ostream& operator<<(std::ostream&, const Player&);
 
 public:
     //default constructor
@@ -45,6 +46,19 @@ public:
 
     // Number of territories owned by the player.
     int getNumTerritories() const;
+
+    /**
+     * Stream insertion operator.
+     * @param stream Stream to output to.
+     * @param player Reference to object to output.
+     */
+    friend ostream& operator<<(ostream& stream, const Player& player);
+
+    /**
+     * Assignment operator.
+     * @param other Reference to object used for assignment.
+     */
+    Player& operator=(const Player& other);
 
     /**
      * @return A list of territories to defended.

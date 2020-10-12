@@ -38,11 +38,29 @@ public:
      */
     ~Deck();
 
-    /// Used to make it have access to the private vector.
+    /**
+     * Copy constructor.
+     * @param other Reference to object to copy.
+     */
+    Deck(const Deck& other);
+
+    /// Used to make it have access to cards.
     friend Hand;
 
+    /// Used to make it have access to cards.
     friend Player;
 
+    /**
+     * Assignment operator.
+     * @param other Reference to deck object used for assignment.
+     */
+    Deck& operator=(const Deck& other);
+
+    /**
+     * Stream insertion operator.
+     * @param stream Stream object to output to.
+     * @param deck Deck object to represent.
+     */
     friend ostream& operator<<(ostream& stream, const Deck& deck);
 
     /**
@@ -51,6 +69,11 @@ public:
      */
     void addCard(Card* const card);
 
+    /**
+     * Gets a card at the specified index.
+     * @param index Index of the card.
+     * @return Pointer to card object at specified index.
+     */
     Card* getAtIndex(int index);
 
     /**
@@ -87,6 +110,23 @@ public:
      */
     Card(const CardType* cardType);
 
+    /**
+     * Copy constructor.
+     * @param other Card object to copy.
+     */
+    Card(const Card& other);
+
+    /**
+     * Assignment operator.
+     * @param other Reference to Card object to assign to.
+     */
+    Card& operator=(const Card& other);
+
+    /**
+     * Stream insertion operator.
+     * @param stream Stream object to output to.
+     * @param card Card object to represent.
+     */
     friend ostream& operator<<(ostream& stream, const Card& card);
 
     /**
@@ -122,8 +162,30 @@ public:
      */
     Hand(Deck& deck);
 
+    /**
+     * Copy constructor.
+     * @param other Hand object to copy.
+     */
+    Hand(const Hand& other);
+
+    /**
+     * Stream insertion operator.
+     * @param stream Stream object to output to.
+     * @param card hand object to represent.
+     */
     friend ostream& operator<<(ostream& stream, const Hand& hand);
 
+    /**
+     * Assignment operator.
+     * @param other Reference to Hand object to assign to.
+     */
+    Hand& operator=(const Hand& other);
+
+    /**
+     * Gets a card at an index in the hand.
+     * @param index Which card to return.
+     * @return Pointer to card object at specified index.
+     */
     Card* getAtIndex(int index) const;
 
     /**

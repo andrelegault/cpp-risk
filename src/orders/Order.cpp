@@ -130,7 +130,7 @@ OrdersList::OrdersList(const OrdersList& other) {
 
 OrdersList::OrdersList(const OrdersList* other) {
     for (auto o : other->orders) {
-        // Uses copy constructor since temp isn't defined
+        // Uses clone method since temp isn't defined
         Order* temp = o->clone();
         orders.push_back(temp);
     }
@@ -154,8 +154,11 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-void OrdersList::operator=(const OrdersList& other) {
-    this->orders = other.orders;
+OrdersList& OrdersList::operator=(const OrdersList& other) {
+    if (&other != this) {
+        orders = other.orders;
+    }
+    return *this;
 }
 
 void OrdersList::addOrder(Order* what) {
