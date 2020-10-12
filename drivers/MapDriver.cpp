@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <Map.hpp>
+#include <assert.h>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ int main() {
     cout << "++++++++++++++" << endl << endl;
 
     // Make map.
-    Map* m = new Map("Map");
+    Map m("Map");
 
     // Make continent
     Continent* c1 = new Continent("Continent 1");
@@ -37,41 +38,48 @@ int main() {
     c2->connect(t2);
 
     // Connecting continent to map (needs to be done for all continents).
-    m->connect(c1);
-    m->connect(c2);
+    m.connect(c1);
+    m.connect(c2);
 
     // Prints simple map.
-    cout << *m;
+    cout << m;
 
     // Validating map
-    cout << "Map Valid: " << m->validate() << endl << endl;
+    assert(m.validate());
+
+    cout << "Map Valid: " << m.validate() << endl << endl;
 
     cout << "+++++++++++++++++" << endl;
     cout << "+ Map Deep Copy +" << endl;
     cout << "+++++++++++++++++" << endl << endl;
 
     // Deep copy of Map.
-    Map* m2 = new Map(m);
+    Map m2 = Map(m);
 
     // Removing element from copy (if shallow copy, should show up in map).
-    m2->remove(m2->getContinents()[0]);
+    m2.remove(m2.getContinents()[0]);
+
+    assert(m->getContinents().size() == 2);
+    assert(m2.getContinents().size() == 1);
 
     // Printing maps with address.
-    cout << m << " " << *m;
-    cout << m2 << " " << *m2;
+    cout << &m << " " << m;
+    cout << &m2 << " " << m2;
 
-    delete m2;
 
     cout << "+++++++++++++++++++++++++" << endl;
     cout << "+ Map Element Deep Copy +" << endl;
     cout << "+++++++++++++++++++++++++" << endl << endl;
 
     // Taking copy of first contient.
-    Continent* cc = new Continent(c1);
+    Continent* cc = new Continent(*c1);
     // Removing first territory (if shallow copy, should show up in map).
     cc->remove(cc->getTerritories()[0]);
 
-    cout << *m;
+    assert(cc->getTerritories());
+    assert(m.getContinents()[0].getTerritories().size() == 1);
+
+    cout << m;
 
     delete cc;
 
@@ -80,7 +88,6 @@ int main() {
     delete t2;
     delete c1;
     delete c2;
-    delete m;
 
     return 0;
 }
