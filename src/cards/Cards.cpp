@@ -1,6 +1,7 @@
 #include <Cards.hpp>
 #include <algorithm>
 #include <iostream>
+#include <time.h>
 
 using std::cout;
 
