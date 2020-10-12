@@ -11,6 +11,32 @@ using namespace std;
  */
 class MapLoader {
 public:
+
+    /**
+     * Default constructor.
+     */
+    MapLoader();
+
+    /**
+     * Copy constructor.
+     * @param other Other maploader object.
+     */
+    MapLoader(const MapLoader& other);
+
+    /**
+     * Assignment operator overload.
+     * @param other Other object used for assignment.
+     * @return Reference to shallow copy.
+     */
+    MapLoader& operator=(const MapLoader& other);
+
+    /**
+     * Stream insertion operator.
+     * @param stream Stream to output to.
+     * @param maploader Object to output.
+     */
+    friend ostream& operator<<(ostream& stream, const MapLoader& maploader);
+
     /**
      * Loads a Conquest Map file into a Map graph.
      *

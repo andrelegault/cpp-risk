@@ -5,11 +5,15 @@
 
 using namespace std;
 
-/**
- * Trim front and end of string of various whitespace characters by regex
- * @param line input
- * @return trimmed string
- */
+MapLoader::MapLoader() { }
+
+MapLoader::MapLoader(const MapLoader& other) { }
+
+MapLoader& MapLoader::operator=(const MapLoader& other) { }
+
+ostream& operator<<(ostream& stream, const MapLoader& maploader) {
+    stream << "MapLoader @ " << &maploader << endl;
+}
 string trim(string& line) {
     line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
     return line;
