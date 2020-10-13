@@ -59,7 +59,7 @@ int main() {
     // Removing element from copy (if shallow copy, should show up in map).
     m2.remove(m2.getContinents()[0]);
 
-    assert(m->getContinents().size() == 2);
+    assert(m.getContinents().size() == 2);
     assert(m2.getContinents().size() == 1);
 
     // Printing maps with address.
@@ -76,8 +76,7 @@ int main() {
     // Removing first territory (if shallow copy, should show up in map).
     cc->remove(cc->getTerritories()[0]);
 
-    assert(cc->getTerritories());
-    assert(m.getContinents()[0].getTerritories().size() == 1);
+    assert(m.getContinents()[0]->getTerritories().size() == 1);
 
     cout << m;
 
