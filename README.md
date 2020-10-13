@@ -20,3 +20,14 @@ You should download [cmake](https://cmake.org/download/) and [MinGW](https://osd
 cmake -G "MinGW Makefiles" .
 mingw32-make
 ```
+
+## Cmake MacOS
+
+Install [Homebrew](https://brew.sh/) and run, `brew install cmake`
+
+Run this in the project root:
+
+```bash
+cmake .
+make
+```
