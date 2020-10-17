@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
 #include <Order.fwd.hpp>
 #include <Player.hpp>

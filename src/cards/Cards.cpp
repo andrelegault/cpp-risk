@@ -1,10 +1,6 @@
 #include <Cards.hpp>
-#include <algorithm>
-#include <iostream>
-#include <time.h>
 
 using std::cout;
-
 
 Deck::~Deck() {
     for (Card* card : cards) {

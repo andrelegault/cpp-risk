@@ -3,6 +3,9 @@
 #include <Cards.fwd.hpp>
 #include <Player.hpp>
 #include <vector>
+#include <algorithm>
+#include <iostream>
+#include <time.h>
 #include <stdlib.h>
 
 using std::vector;

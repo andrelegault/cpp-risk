@@ -1,6 +1,4 @@
 #include <Player.hpp>
-#include <iostream>
-#include <algorithm>
 
 int Player::count = 0;
 
@@ -95,43 +93,35 @@ vector<Territory*> Player::toAttack() {
 
 void Player::issueOrder() {
     Order* order = nullptr;
-    while (true) {
-        int num;
-        cout << "What type of Order would you like to create?" << endl;
-        cout << "1. Deploy" << endl << "2. Advance" << endl << "3. Bomb" << endl << "4. Blockade" << endl << "5. Airlift" << endl << "6. Negotiate" << endl;
-        cin >> num;
-        if (num < 1 || num > 6) {
-            cout << "Not a valid choice" << endl;
-            continue;
-        }
-        if (num == 1) {
+
+    switch(UI::ask("What type of Order would you like to create?", {"Deploy", "Advance", "Bomb", "Blockade", "Airlift", "Negotiate"})) {
+        case 1:
             order = new Deploy();
             cout << "Deploy order added to the Order List" << endl;
-        }
-        else if (num == 2) {
+            break;
+        case 2:
             order = new Advance();
             cout << "Advance order added to the Order List" << endl;
-        }
-        else if (num == 3) {
+            break;
+        case 3:
             order = new Bomb();
             cout << "Advance order added to the Order List" << endl;
-        }
-        else if (num == 4) {
+            break;
+        case 4:
             order = new Blockade();
             cout << "Blockade order added to the Order List" << endl;
-        }
-        else if (num == 5) {
+            break;
+        case 5:
             order = new Airlift();
             cout << "Airlift order added to the Order List" << endl;
-        }
-        else if (num == 6) {
+            break;
+        case 6:
             order = new Negotiate();
             cout << "Negotiate order added to the Order List" << endl;
-        }
-        break;
+            break;
     }
-    orders->addOrder(order);
 
+    orders->addOrder(order);
 }
 
 

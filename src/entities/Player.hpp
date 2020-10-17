@@ -6,6 +6,9 @@
 #include <Map.hpp>
 #include <Order.hpp>
 #include <Cards.hpp>
+#include <UI.hpp>
+#include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::ostream;

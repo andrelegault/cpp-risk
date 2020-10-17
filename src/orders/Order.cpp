@@ -1,9 +1,7 @@
 #include <Order.hpp>
-#include <algorithm>
 
 using std::endl;
 using std::ostream;
-
 
 // Order
 

@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
+#include <algorithm>
 
 #include <Map.fwd.hpp>
 #include <Player.hpp>
