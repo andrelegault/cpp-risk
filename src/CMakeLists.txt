@@ -20,4 +20,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/entities
         ${CMAKE_CURRENT_SOURCE_DIR}/map
         ${CMAKE_CURRENT_SOURCE_DIR}/orders
+        ${CMAKE_CURRENT_SOURCE_DIR}/ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/game
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils
 )

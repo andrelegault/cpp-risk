@@ -1,7 +1,10 @@
 #pragma once
 
 #include <string>
+#include <fstream>
+#include <sstream>
 
+#include <Utils.hpp>
 #include <Map.hpp>
 
 using namespace std;
@@ -46,26 +49,3 @@ public:
      */
     static Map load(const string fileName);
 };
-
-/**
- * Trim front and end of string of various whitespace characters by regex
- * @param line input
- * @return trimmed string
- */
-string trim(string& line);
-
-/**
- * Remove the first word of a string based on a delimiter
- * @param line
- * @param delim
- * @return modified string
- */
-string trim_first_word(const string& line, const string& delim = " \t");
-
-/**
- * Split a string into an array of words based on a delimiter
- * @param line
- * @param delim
- * @return vector<string> words
- */
-vector<string> split(const string& line, const string& delim = " ");

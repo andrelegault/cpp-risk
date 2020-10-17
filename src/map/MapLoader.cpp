@@ -1,7 +1,4 @@
 #include <MapLoader.hpp>
-#include <fstream>
-#include <sstream>
-#include <regex>
 
 using namespace std;
 
@@ -14,33 +11,6 @@ MapLoader& MapLoader::operator=(const MapLoader& other) { return *this; }
 ostream& operator<<(ostream& stream, const MapLoader& maploader) {
     stream << "MapLoader @ " << &maploader << endl;
     return stream;
-}
-
-string trim(string& line) {
-    line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
-    return line;
-}
-
-string trim_first_word(const string& line, const string& delim) {
-    return line.substr(line.find_first_of(delim) + 1);
-}
-
-vector<string> split(const string& line, const string& delim) {
-    vector<string> result;
-
-    size_t found = line.find(delim);
-    size_t startIndex = 0;
-
-    while (found != string::npos)
-    {
-        string temp(line.begin() + startIndex, line.begin() + found);
-        result.push_back(temp);
-        startIndex = found + delim.size();
-        found = line.find(delim, startIndex);
-    }
-    if (startIndex != line.size())
-        result.push_back(string(line.begin() + startIndex, line.end()));
-    return result;
 }
 
 Map MapLoader::load(const string file_name) {
