@@ -39,3 +39,19 @@ string string_center(const string s, const int w) {
         ss << " ";
     return ss.str();
 }
+
+string string_left(const string s, const int w) {
+    stringstream ss;
+
+    ss << s << string(w - s.length(), ' ');
+
+    return ss.str();
+}
+
+string string_right(const string s, const int w) {
+    stringstream ss;
+
+    ss << string(w - s.length(), ' ') << s;
+
+    return ss.str();
+}

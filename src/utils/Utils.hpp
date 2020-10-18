@@ -39,7 +39,11 @@ vector<string> split(const string& line, const string& delim = " ");
  * @param width Width to reach.
  * @return Centered string.
  */
-string string_center(string string, int width);
+string string_center(const string string, const int width);
+
+string string_left(const string s, const int w);
+
+string string_right(const string s, const int w);
 
 /**
  * Python-like range.

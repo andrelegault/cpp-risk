@@ -5,21 +5,79 @@ using namespace UI;
 /**
  * Style
  */
-struct UI::Style Style;
 
-/**
- * Component
- */
+ /**
+  * Component
+  */
+UI::Component::Component() : Component(Style{}) {};
+
+UI::Component::~Component() {};
+
 UI::Component::Component(Style style) : style(style) {};
+
+UI::Component::Component(const Component& component) : Component(component.style) {};
 
 ostream& operator<<(ostream& stream, const Component& component) {
     return component.print(stream);
 }
 
+void Component::update() {
+    if (this->parent == nullptr) {
+        UI::clear();
+
+        cout << *this;
+    }
+    else {
+        this->parent->update();
+    }
+}
+
 /**
  * Grid
  */
-UI::Grid::Grid(vector<vector<Component*>> components, Style style) : components(components), UI::Component(style) {};
+UI::Grid::Grid() : Grid({}, {}) {};
+
+UI::Grid::~Grid() {
+    while (!this->components.empty()) {
+        vector<Component*> row = this->components.back();
+
+        while (!row.empty()) {
+            auto component = row.back();
+
+            delete component;
+
+            row.pop_back();
+        }
+
+        this->components.pop_back();
+    }
+}
+
+UI::Grid::Grid(Component* component, Style style) : Grid({ {component} }, style) {};
+
+UI::Grid::Grid(vector<vector<Component*>> components, Style style) : components(components), Component(style) {
+    for (auto row : this->components) {
+        for (auto component : row) {
+            component->parent = this;
+        }
+    }
+};
+
+UI::Grid::Grid(const Grid& grid) {
+    vector<vector<Component*>> componentsClone;
+
+    for (auto row : grid.components) {
+        vector<Component*> cloneRow;
+
+        for (auto component : row) {
+            cloneRow.push_back(component->clone());
+        }
+
+        componentsClone.push_back(cloneRow);
+    }
+
+    Grid(componentsClone, grid.style);
+}
 
 ostream& operator<<(ostream& stream, const Grid& grid) {
     vector<vector<string>> data;
@@ -90,7 +148,18 @@ ostream& operator<<(ostream& stream, const Grid& grid) {
             for (auto [e, width] : zip2(row, columnWidths)) {
                 stream << (bordered ? "|" : "") << string(padding, ' ');
 
-                stream << string_center(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                switch(grid.style.align) {
+                    case CENTER:
+                        stream << string_center(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                        break;
+                    case RIGHT:
+                        stream << string_right(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                        break;
+                    default:
+                    case LEFT:
+                        stream << string_left(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                        break;
+                }
 
                 stream << string(padding, ' ');
             }
@@ -119,33 +188,49 @@ ostream& operator<<(ostream& stream, const Grid& grid) {
 }
 
 /**
- * Frame
- */
-UI::Frame::Frame(Component* component, Style style) : component(component), Component(style) {};
-
-ostream& operator<<(ostream& stream, const Frame& frame) {
-    stream << Grid({ {frame.component} }, frame.style);
-
-    return stream;
-}
-
-/**
  * List
  */
-UI::List::List(vector<Component*> components, Style style) : components(components), Component(style) {};
-UI::List::List(vector<string> strings, Style style) : components(to_text(strings)), Component(style) {};
+UI::List::List() : List(vector<string>{}, {}) {};
+
+UI::List::~List() {
+    cout << "List Destroy" << endl;
+
+    while (!this->components.empty()) delete this->components.back();
+};
+
+UI::List::List(vector<Component*> components, Style style) : components(components), Component(style) {
+    for (auto component : this->components) {
+        component->parent = this;
+    }
+};
+
+UI::List::List(vector<string> strings, Style style) : List(to_text(strings), style) {};
+
+UI::List::List(const List& list) {
+    vector<Component*> componentsClone;
+
+    for (auto component : list.components) {
+        componentsClone.push_back(component->clone());
+    }
+
+    List(componentsClone, list.style);
+}
 
 ostream& operator<<(ostream& stream, const List& list) {
+    stringstream ss;
+
     int c = 1;
 
     for (auto component : list.components) {
         if (list.style.enumerate) {
-            stream << c++ << ". " << *component << endl;
+            ss << c++ << ". " << *component << endl;
         }
         else {
-            stream << "- " << *component << endl;
+            ss << "- " << *component << endl;
         }
     }
+
+    stream << Grid(new Text(ss.str()), list.style);
 
     return stream;
 }
@@ -153,7 +238,13 @@ ostream& operator<<(ostream& stream, const List& list) {
 /**
  * Text
  */
-UI::Text::Text(string text, Style style) : text(text), Component(style) {};
+UI::Text::Text() : Text("", {}) {};
+
+UI::Text::~Text() {};
+
+UI::Text::Text(string text, const Style& style) : text(text), Component(style) {};
+
+UI::Text::Text(const Text& text) : Text(text.text, text.style) {};
 
 ostream& operator<<(ostream& stream, const Text& text) {
     stream << text.text;
@@ -164,7 +255,11 @@ ostream& operator<<(ostream& stream, const Text& text) {
 /**
  * Banner
  */
+UI::Banner::~Banner() {};
+
 UI::Banner::Banner(Style style) : Component(style) {};
+
+UI::Banner::Banner(const Banner& banner) : Banner(banner.style) {};
 
 ostream& operator<<(ostream& stream, const Banner& banner) {
     stream << " __    __   ____  ____   _____   ___   ____     ___ " << endl;
@@ -181,7 +276,19 @@ ostream& operator<<(ostream& stream, const Banner& banner) {
 /**
  * Viewport
  */
-UI::Viewport::Viewport(Component* component, Style style) : component(component), Component(style) {};
+UI::Viewport::Viewport() : Viewport(0, {}) {};
+
+UI::Viewport::~Viewport() {
+    if (this->component) {
+        delete this->component;
+    }
+};
+
+UI::Viewport::Viewport(Component* component, Style style) : component(component), Component(style) {
+    this->component->parent = this;
+};
+
+UI::Viewport::Viewport(const Viewport& viewport) : Viewport(viewport.component->clone(), viewport.style) {};
 
 ostream& operator<<(ostream& stream, const UI::Viewport& viewport) {
     stringstream ss;
@@ -190,13 +297,30 @@ ostream& operator<<(ostream& stream, const UI::Viewport& viewport) {
 
     vector<string> lines = split(ss.str(), "\n");
 
-    for(int i = viewport.style.y; i < viewport.style.y + viewport.style.height; i++) {
-        if(i >= lines.size() || i < 0) {
+    for (int i = viewport.style.y; i < viewport.style.y + viewport.style.height; i++) {
+        if (i >= lines.size() || i < 0) {
             stream << string(viewport.style.width, ' ') << endl;
-        } else {
-            string line = lines[i].substr(viewport.style.x, viewport.style.width);
+        }
+        else {
+            string line = lines[i];
 
-            stream << line << string(viewport.style.width - line.size(), ' ') << endl;
+            string frontPad = string(min(max(-viewport.style.x, 0), viewport.style.width), ' ');
+
+            line = line.substr(
+                min(
+                    max(viewport.style.x, 0),
+                    (int)line.size()
+                ),
+                max(viewport.style.width - max(-viewport.style.x, 0), 0)
+            );
+
+            string backPad = string(viewport.style.width - (int)frontPad.size() - (int)line.size(), ' ');
+
+            stream
+                << frontPad
+                << line
+                << backPad
+                << endl;
         }
     }
 
@@ -209,7 +333,7 @@ ostream& operator<<(ostream& stream, const UI::Viewport& viewport) {
 int UI::ask(const string& prompt, vector<string> options) {
     cout << Grid({
         {new Text(prompt)},
-        {new List(options, { .padding = 0, .border=false, .enumerate = true })}
+        {new List(options, {.padding = 0, .border = false, .enumerate = true })}
         });
 
     int res = UI::validate(1, options.size());
@@ -217,6 +341,14 @@ int UI::ask(const string& prompt, vector<string> options) {
     if (res >= 0) return res;
 
     return UI::ask(prompt, options);
+}
+
+int UI::ask(const Component& component, vector<string> options) {
+    stringstream ss;
+
+    ss << component;
+
+    return UI::ask(ss.str(), options);
 }
 
 int UI::validate(int min, int max) {
@@ -232,7 +364,7 @@ int UI::validate(int min, int max) {
 
     UI::clear();
 
-    cout << Frame(new Text("Please enter a valid option."));
+    cout << Grid(new Text("Please enter a valid option."), {});
 
     cout << endl;
 
@@ -247,7 +379,7 @@ int UI::range(string prompt, int min, int max) {
     cout << Grid({
         {new Text(prompt)},
         {new Text(ss.str())}
-    });
+        });
 
     int res = UI::validate(min, max);
 
