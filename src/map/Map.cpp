@@ -201,7 +201,7 @@ void Continent::remove(Territory* territory) {
 }
 
 bool Continent::validate() {
-    if (this->borders.size() == 0) return false;
+    //if (this->borders.size() == 0) return false;
 
     for (auto territory : this->territories) if (!territory->validate()) return false;
 
