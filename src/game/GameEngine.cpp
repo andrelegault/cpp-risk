@@ -1,8 +1,6 @@
-#include <GameEngine.hpp>
+#include "GameEngine.hpp"
 
 GameEngine::GameEngine() {
-    UI::clear();
-
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
         return;
@@ -46,18 +44,42 @@ GameEngine::GameEngine() {
 
     this->deck = new Deck();
 
-    UI::clear();
-
     int numberOfPlayers = range("Number of Players", 2, 5);
 
     for (int i = 0; i < numberOfPlayers; i++) {
         this->players.push_back(new Player(*this->deck));
     }
 
-    UI::clear();
+    vector<Component*> observers;
 
-    bool useObserver = !(ask("Observer?", { "Yes", "No" }) - 1);
+    if(!(ask("Phase Observer?", { "Yes", "No" }) - 1)) {
+        PhaseObserver* phaseObserver = new PhaseObserver(this);
+        observers.push_back(phaseObserver);
+
+        for(auto player : this->players) {
+            player->attach(phaseObserver);
+        }
+    }
+
+    if(!(ask("Game Statistics Observer?", { "Yes", "No" }) - 1)) {
+        GameStatisticsObserver* gameStatisticsObserver = new GameStatisticsObserver(this);
+        observers.push_back(gameStatisticsObserver);
+
+        for(auto player : this->players) {
+            player->attach(gameStatisticsObserver);
+        }
+    }
+
+    if(!observers.empty()) {
+        this->gameUI = new GameUI(observers);
+    } else {
+        this->gameUI = new GameUI();
+    }
+
+    this->gameUI->update();
 }
+
+GameEngine::~GameEngine() {}
 
 void GameEngine::startupPhase() {}
 

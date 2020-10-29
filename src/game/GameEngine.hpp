@@ -1,24 +1,23 @@
 #pragma once
 
-#include <UI.hpp>
-#include <Player.hpp>
-#include <Utils.hpp>
-#include <MapLoader.hpp>
-#include <Map.hpp>
-#include <Cards.hpp>
+#include "GameEngine.fwd.hpp"
+#include "UI.hpp"
+#include "Player.hpp"
+#include "Utils.hpp"
+#include "MapLoader.hpp"
+#include "Map.hpp"
+#include "Cards.hpp"
+#include "GameObservers.hpp"
 #include <filesystem>
 
 using namespace filesystem;
 using namespace UI;
 
 class GameEngine {
-private:
-    vector<Player*> players;
-    Map* map;
-    Deck* deck;
-
 public:
     GameEngine();
+
+    ~GameEngine();
 
     void startupPhase();
 
@@ -29,4 +28,12 @@ public:
     void issueOrdersPhase();
 
     void executeOrdersPhase();
+
+    friend class PhaseObserver;
+    friend class GameStatisticsObserver;
+private:
+    vector<Player*> players;
+    Map* map;
+    Deck* deck;
+    GameUI* gameUI;
 };
