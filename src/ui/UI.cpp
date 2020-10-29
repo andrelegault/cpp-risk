@@ -80,6 +80,8 @@ UI::Grid::Grid(const Grid& grid) {
 }
 
 ostream& operator<<(ostream& stream, const Grid& grid) {
+    if (grid.components.empty()) return stream;
+
     vector<vector<string>> data;
 
     for (auto row : grid.components) {
@@ -148,17 +150,17 @@ ostream& operator<<(ostream& stream, const Grid& grid) {
             for (auto [e, width] : zip2(row, columnWidths)) {
                 stream << (bordered ? "|" : "") << string(padding, ' ');
 
-                switch(grid.style.align) {
-                    case CENTER:
-                        stream << string_center(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
-                        break;
-                    case RIGHT:
-                        stream << string_right(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
-                        break;
-                    default:
-                    case LEFT:
-                        stream << string_left(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
-                        break;
+                switch (grid.style.align) {
+                case CENTER:
+                    stream << string_center(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                    break;
+                case RIGHT:
+                    stream << string_right(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                    break;
+                default:
+                case LEFT:
+                    stream << string_left(((i < e.size() && !e[i].empty()) ? e[i] : " "), width);
+                    break;
                 }
 
                 stream << string(padding, ' ');
@@ -204,7 +206,7 @@ UI::List::List(vector<Component*> components, Style style) : components(componen
     }
 };
 
-UI::List::List(vector<string> strings, Style style) : List(to_text(strings), style) {};
+UI::List::List(vector<string> strings, Style style) : List(toText(strings), style) {};
 
 UI::List::List(const List& list) {
     vector<Component*> componentsClone;
@@ -331,6 +333,8 @@ ostream& operator<<(ostream& stream, const UI::Viewport& viewport) {
  * Methods
  */
 int UI::ask(const string& prompt, vector<string> options) {
+    UI::clear();
+
     cout << Grid({
         {new Text(prompt)},
         {new List(options, {.padding = 0, .border = false, .enumerate = true })}
@@ -344,6 +348,8 @@ int UI::ask(const string& prompt, vector<string> options) {
 }
 
 int UI::ask(const Component& component, vector<string> options) {
+    UI::clear();
+
     stringstream ss;
 
     ss << component;
@@ -372,6 +378,8 @@ int UI::validate(int min, int max) {
 }
 
 int UI::range(string prompt, int min, int max) {
+    UI::clear();
+
     stringstream ss;
 
     ss << "(" << min << "," << max << ")";
@@ -392,7 +400,7 @@ void UI::clear() {
     cout << "\033[2J";
 }
 
-vector<Component*> UI::to_text(vector<string> strings) {
+vector<Component*> UI::toText(vector<string> strings) {
     vector<Component*> texts;
 
     for (auto string : strings) {

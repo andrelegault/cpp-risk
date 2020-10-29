@@ -1,12 +1,11 @@
 #pragma once
 
 #include <string>
-#include <curses.h>
 #include <iostream>
 #include <vector>
 #include <Utils.hpp>
 #include <algorithm>
-#include <UI.fwd.hpp>
+#include "UI.fwd.hpp"
 
 using namespace std;
 
@@ -18,29 +17,68 @@ ostream& operator<<(ostream& stream, const UI::Text& text);
 ostream& operator<<(ostream& stream, const UI::Banner& banner);
 ostream& operator<<(ostream& stream, const UI::Viewport& viewport);
 
+/**
+ * Namespace for UI components.
+ */
 namespace UI {
+    /**
+     * Alignment enum for Style.
+     */
     enum Alignment {
         CENTER,
         LEFT,
         RIGHT
     };
 
+    /**
+     * Generic style for UI Components (inspired by CSS rectangle model).
+     */
     struct Style {
+        /**
+         * Border padding.
+         */
         int padding = 1;
+        /**
+         * Is border visible?
+         */
         bool border = true;
+        /**
+         * Does the component use enumeration?
+         */
         bool enumerate = false;
+        /**
+         * Width of component.
+         */
         int width = 5;
+        /**
+         * Height of component.
+         */
         int height = 5;
+        /**
+         * X position of component.
+         */
         int x = 0;
+        /**
+         * Y position of component.
+         */
         int y = 0;
+        /**
+         * Alignment of component.
+         */
         Alignment align = LEFT;
     };
 
+    /**
+     * Generic UI Component.
+     */
     class Component {
     public:
+        /**
+         * The component style.
+         */
         Style style;
 
-        Component* parent = nullptr;
+        Component* parent = NULL;
 
         Component();
 
@@ -52,13 +90,25 @@ namespace UI {
 
         friend ostream& ::operator<<(ostream& stream, const Component& component);
 
-        virtual ostream& print(ostream& stream) const { stream << "Component"; return stream; };
+        /**
+         * Used for virtual operator<<.
+         */
+        virtual ostream& print(ostream& stream) const = 0;
 
-        virtual Component* clone() const { return new Component(*this); };
+        /**
+         * Used for virtual clone constructor.
+         */
+        virtual Component* clone() const = 0;
 
+        /**
+         * Updates the component (and it's parent hierachy).
+         */
         void update();
     };
 
+    /**
+     * A UI grid (alot like HTML table).
+     */
     class Grid : public Component {
     private:
         vector<vector<Component*>> components;
@@ -80,6 +130,9 @@ namespace UI {
         virtual Component* clone() const override { return new Grid(*this); };
     };
 
+    /**
+     * A UI list (alot like HTML ul/l).
+     */
     class List : public Component {
     private:
         vector<Component*> components;
@@ -101,6 +154,9 @@ namespace UI {
         virtual Component* clone() const override { return new List(*this); };
     };
 
+    /**
+     * A UI text (alot like HTML p, span, h1.., etc)
+     */
     class Text : public Component {
     public:
         string text;
@@ -120,6 +176,9 @@ namespace UI {
         virtual Component* clone() const override { return new Text(*this); };
     };
 
+    /**
+     * A UI component to display the game banner (could be generalized to create a large ASCII font).
+     */
     class Banner : public Component {
     public:
         ~Banner();
@@ -135,6 +194,9 @@ namespace UI {
         virtual Component* clone() const override { return new Banner(*this); };
     };
 
+    /**
+     * A UI viewing component (alot like HTML div).
+     */
     class Viewport : public Component {
     private:
         Component* component;
@@ -164,10 +226,17 @@ namespace UI {
      *
      * @param prompt Prompt to ask.
      * @param options Vector of answers for prompt.
-     * @return Index of answerostream&
+     * @return Index of answer.
      */
     int ask(const string& prompt, vector<string> options);
 
+    /**
+     * Overload of string ask. Uses component for input.
+     * 
+     * @param component Component to use to prompt.
+     * @param options Vector of answers for prompt.
+     * @return Index of answer.
+     */
     int ask(const Component& component, vector<string> options);
 
     /**
@@ -185,10 +254,14 @@ namespace UI {
      * @param strings Strings to convert.
      * @return List of Text object.
      */
-    vector<Component*> to_text(vector<string> strings);
+    vector<Component*> toText(vector<string> strings);
 
     /**
      * Prompt for user data in range.
+     * 
+     * @param min Min value of data (including).
+     * @param max Max vaue of data (including).
+     * @return Value between min and max (including).
      */
-    static int validate(int min, int max);
+    int validate(int min, int max);
 }
