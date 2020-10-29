@@ -9,6 +9,7 @@
 #include <UI.hpp>
 #include <iostream>
 #include <algorithm>
+#include "MVC.hpp"
 
 using std::cout;
 using std::ostream;
@@ -17,7 +18,7 @@ using std::endl;
 /**
  * A Risk player.
  */
-class Player {
+class Player : public Subject {
 private:
 
     // The territories owned by the players.
