@@ -32,9 +32,9 @@ int UI::ask(const UI::Component& component, std::vector<std::string> options) {
 int UI::validate(int min, int max) {
     int option = 0;
 
-    std::cout << endl << "> ";
+    std::cout << std::endl << "> ";
 
-    if (cin >> option) {
+    if (std::cin >> option) {
         if (option >= min && option <= max) {
             return option;
         }
@@ -44,7 +44,7 @@ int UI::validate(int min, int max) {
 
     std::cout << UI::Grid(new UI::Text("Please enter a valid option."), {});
 
-    std::cout << endl;
+    std::cout << std::endl;
 
     return -1;
 }

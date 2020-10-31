@@ -28,7 +28,7 @@ Map MapLoader::load(const string file_name) {
 
     while (getline(file, line)) {
         // trim leading and training whitespaces
-        line = trim(line);
+        line = Utils::trim(line);
 
         // When you read useless lines, skip them
         if (line.rfind(';', 0) == 0 || line.empty()) {
@@ -44,7 +44,7 @@ Map MapLoader::load(const string file_name) {
         if (line.find("[files]") == 0) {
             getline(file, line);
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
-                vector<string> words = split(trim(line));
+                vector<string> words = Utils::split(Utils::trim(line));
                 files.push_back(words);
                 getline(file, line);
             }
@@ -54,7 +54,7 @@ Map MapLoader::load(const string file_name) {
         if (line.find("[continents]") == 0) {
             getline(file, line);
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
-                vector<string> words = split(trim(line));
+                vector<string> words = Utils::split(Utils::trim(line));
                 if (!(words.size() == 3 || words.empty())) {
                     throw logic_error("Invalid Continent Format");
                 }
@@ -71,7 +71,7 @@ Map MapLoader::load(const string file_name) {
         if (line.find("[countries]") == 0) {
             getline(file, line);
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
-                vector<string> words = split(trim(line));
+                vector<string> words = Utils::split(Utils::trim(line));
                 if (!(words.size() == 5 || words.empty())) {
                     throw logic_error("Invalid Country Format");
                 }
@@ -94,7 +94,7 @@ Map MapLoader::load(const string file_name) {
         if (line.find("[borders]") == 0) {
             getline(file, line);
             while (line.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
-                vector<string> words = split(trim(line));
+                vector<string> words = Utils::split(Utils::trim(line));
                 if (words.size() < 2) {
                     throw logic_error("Invalid Border Format");
                 }
