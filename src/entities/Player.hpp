@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
-
-#include <Player.fwd.hpp>
-#include <Map.hpp>
-#include <Order.hpp>
-#include <Cards.hpp>
-#include <UI.hpp>
 #include <iostream>
 #include <algorithm>
+
+#include "Player.fwd.hpp"
+#include "Map.hpp"
+#include "Order.hpp"
+#include "Cards.hpp"
+#include "UI.hpp"
 #include "MVC.hpp"
 
 using std::cout;

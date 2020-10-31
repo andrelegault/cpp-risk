@@ -1,36 +1,36 @@
-#include <Utils.hpp>
+#include "Utils.hpp"
 
-string trim(string& line) {
-    line = (regex_replace(line, regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
+std::string Utils::trim(std::string& line) {
+    line = (std::regex_replace(line, std::regex("^(\\s|\\r)+|(\\s|\\r)+$"), ""));
     return line;
 }
 
-string trim_first_word(const string& line, const string& delim) {
+std::string Utils::trim_first_word(const std::string& line, const std::string& delim) {
     return line.substr(line.find_first_of(delim) + 1);
 }
 
-vector<string> split(const string& line, const string& delim) {
-    vector<string> result;
+std::vector<std::string> Utils::split(const std::string& line, const std::string& delim) {
+    std::vector<std::string> result;
 
     size_t found = line.find(delim);
     size_t startIndex = 0;
 
-    while (found != string::npos) {
-        string temp(line.begin() + startIndex, line.begin() + found);
+    while (found != std::string::npos) {
+        std::string temp(line.begin() + startIndex, line.begin() + found);
         result.push_back(temp);
         startIndex = found + delim.size();
         found = line.find(delim, startIndex);
     }
 
     if (startIndex != line.size()) {
-        result.push_back(string(line.begin() + startIndex, line.end()));
+        result.push_back(std::string(line.begin() + startIndex, line.end()));
     }
 
     return result;
 }
 
-string string_center(const string s, const int w) {
-    stringstream ss, spaces;
+std::string Utils::string_center(const std::string s, const int w) {
+    std::stringstream ss, spaces;
     int pad = w - s.size();
     for(int i=0; i<pad/2; ++i)
         spaces << " ";
@@ -40,18 +40,18 @@ string string_center(const string s, const int w) {
     return ss.str();
 }
 
-string string_left(const string s, const int w) {
-    stringstream ss;
+std::string Utils::string_left(const std::string s, const int w) {
+    std::stringstream ss;
 
-    ss << s << string(w - s.length(), ' ');
+    ss << s << std::string(w - s.length(), ' ');
 
     return ss.str();
 }
 
-string string_right(const string s, const int w) {
-    stringstream ss;
+std::string Utils::string_right(const std::string s, const int w) {
+    std::stringstream ss;
 
-    ss << string(w - s.length(), ' ') << s;
+    ss << std::string(w - s.length(), ' ') << s;
 
     return ss.str();
 }

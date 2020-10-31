@@ -13,11 +13,11 @@ GameEngine::GameEngine() {
     for (const auto& entry : directory_iterator(directory)) {
         string path = entry.path();
 
-        auto pathSplit = split(path, "/");
+        auto pathSplit = Utils::split(path, "/");
 
         string file = pathSplit[pathSplit.size() - 1];
 
-        auto fileSplit = split(file, ".");
+        auto fileSplit = Utils::split(file, ".");
 
         string mapName = fileSplit[0];
 
