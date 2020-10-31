@@ -1,4 +1,4 @@
-#include "MVC.hpp"
+#include "Subject.hpp"
 
 void Subject::attach(Observer* observer) {
     this->observers.push_back(observer);
