@@ -27,6 +27,8 @@ private:
     static int count;
     string name;
 
+    int armies;
+
 
 public:
     //default constructor
@@ -95,4 +97,8 @@ public:
      * Remove territory from territories.
      */
     void removeTerritory(Territory* territory);
+
+    void addArmies(int newArmies);
+
+    int getArmies()
 };

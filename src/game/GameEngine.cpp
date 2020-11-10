@@ -81,11 +81,56 @@ GameEngine::GameEngine() {
 
 GameEngine::~GameEngine() {}
 
-void GameEngine::startupPhase() {}
+void GameEngine::startupPhase() {
+
+    //shuffle the players in the list to get random order
+    std::random_shuffle(players.begin(), players.end());
+
+    //set number of armies based on number of players
+    switch(numberOfPlayers){
+        case 2:
+            for(auto player : this->players) {
+                player->addArmies(40);
+            }
+            break;
+        case 3:
+            for(auto player : this->players) {
+                player->addArmies(35);
+            }
+            break;
+        case 4:
+            for(auto player : this->players) {
+                player->addArmies(30);
+            }
+            break;
+        case 5:
+            for(auto player : this->players) {
+                player->addArmies(25);
+            }
+            break;
+    }
+
+    //TODO distribute territories between players
+
+    //TODO make sure that "all players have all the orders for playing in a turn"
+}
 
 void GameEngine::mainGameLoop() {}
 
-void GameEngine::reinforcementPhase() {}
+void GameEngine::reinforcementPhase() {
+
+    //TODO add armies based on continent control bonus
+    for(auto player : this->players) {
+        //make sure player gets at least 3 new armies
+        if (player.getNumTerritories()/3 < 3){
+            player->addArmies(3);
+        }
+        else{
+            player->addArmies(player.getNumTerritories()/3);
+        }
+    }
+
+}
 
 void GameEngine::issueOrdersPhase() {}
 

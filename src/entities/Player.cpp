@@ -2,8 +2,8 @@
 
 int Player::count = 0;
 
-
-Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()) {
+//set armies to 0 by default
+Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()), armies(0) {
     cout << "Player " << name << " created" << endl;
 }
 
@@ -156,4 +156,12 @@ Player& Player::operator=(const Player& other) {
 
 string Player::getName() const {
     return name;
+}
+
+void Player::addArmies(int newArmies){
+    armies += newArmies;
+}
+
+int Player::getArmies() const {
+    return armies;
 }
