@@ -7,6 +7,7 @@
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <iterator>
 
 using std::vector;
 using std::ostream;
@@ -15,13 +16,14 @@ using std::ostream;
  * Enumerator for card types.
  */
 enum CardType {
-    BOMB,
     AIRLIFT,
+    BOMB,
     BLOCKADE,
     DIPLOMACY,
-    REINFORCEMENT,
-    SPY
+    REINFORCEMENT
 };
+
+string cardTypeToString(CardType cardType);
 
 /**
  * Represents a deck containing cards.
@@ -208,4 +210,6 @@ public:
      * @param card Card to remove.
      */
     void removeCard(Card* card);
+
+    vector<Card*> getCards() const;
 };

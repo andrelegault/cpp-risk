@@ -2,6 +2,21 @@
 
 using std::cout;
 
+string cardTypeToString(CardType cardType) {
+    switch (cardType) {
+        case 0:
+            return "Airlift";
+        case 1:
+            return "Bomb";
+        case 2:
+            return "Blockade";
+        case 3:
+            return "Diplomacy";
+        case 4:
+            return "Reinforcement";
+    }
+}
+
 Deck::~Deck() {
     for (Card* card : cards) {
         delete card;
@@ -12,21 +27,12 @@ Deck::~Deck() {
 }
 
 Deck::Deck(int size) {
-    // set seed
     srand(time(NULL));
 
-    for (unsigned int i = 0; i < size; ++i) {
-        int type = rand() % 6;
-        CardType* cardType = nullptr;
-        switch (type) {
-        case 0: cardType = new CardType(BOMB); break;
-        case 1: cardType = new CardType(AIRLIFT); break;
-        case 2: cardType = new CardType(BLOCKADE); break;
-        case 3: cardType = new CardType(DIPLOMACY); break;
-        case 4: cardType = new CardType(REINFORCEMENT); break;
-        case 5: cardType = new CardType(SPY); break;
-        }
-        cards.push_back(new Card(cardType));
+    for (int i = 0; i < size; ++i) {
+        int type = rand() % 5;
+
+        cards.push_back(new Card(new CardType((CardType) type)));
     }
 
     cout << "Created deck containing " << cards.size() << " cards!" << endl;
@@ -120,14 +126,7 @@ void Card::play(Player& player, Deck& deck) {
 }
 
 ostream& operator<<(ostream& stream, const Card& card) {
-    switch (*(card.cardType)) {
-    case 0: stream << "BOMB"; break;
-    case 1: stream << "AIRLIFT"; break;
-    case 2: stream << "BLOCKADE"; break;
-    case 3: stream << "DIPLOMACY"; break;
-    case 4: stream << "REINFORCEMENT"; break;
-    case 5: stream << "SPY"; break;
-    }
+    stream << cardTypeToString(*(card.cardType));
     stream << " @ " << &card;
     return stream;
 }
@@ -194,4 +193,8 @@ void Hand::removeCard(Card* card) {
     if (cardIt != hand.end()) {
         hand.erase(cardIt);
     }
+}
+
+vector<Card*> Hand::getCards() const {
+    return this->hand;
 }
