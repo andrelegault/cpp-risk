@@ -29,6 +29,10 @@ public:
 
     void executeOrdersPhase();
 
+    int getPlayerArmyCount(int numberOfPlayers);
+
+    Player* getWinningPlayer();
+
     friend class PhaseObserver;
     friend class GameStatisticsObserver;
 private:

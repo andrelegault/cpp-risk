@@ -20,7 +20,6 @@ using std::endl;
  */
 class Player : public Subject {
 private:
-
     // The territories owned by the players.
     vector<Territory*> territories;
 
@@ -52,6 +51,8 @@ public:
 
     // Number of territories owned by the player.
     int getNumTerritories() const;
+
+    vector<Territory *> getTerritories() const;
 
     /**
      * Stream insertion operator.
@@ -100,5 +101,5 @@ public:
 
     void addArmies(int newArmies);
 
-    int getArmies()
+    int getArmies();
 };

@@ -56,19 +56,7 @@ void Player::removeTerritory(Territory* territory) {
 
 
 vector<Territory*> Player::toDefend() {
-    auto last = territories.begin() + (rand() % territories.size());
-
-    cout << "Player " << name << "'s list of territories to defend: [";
-
-    vector<Territory*> toDefend(territories.begin(), last);
-
-    for (Territory* t : toDefend) {
-        cout << t->getName() << ", ";
-    }
-
-    cout << "]" << endl;
-
-    return toDefend;
+    return this->getTerritories();
 }
 
 int Player::getNumTerritories() const {
@@ -76,59 +64,90 @@ int Player::getNumTerritories() const {
 }
 
 vector<Territory*> Player::toAttack() {
-    auto last = territories.begin() + (rand() % territories.size());
+    vector<Territory*> enemyTerritories;
 
-    cout << "Player " << name << "'s list of territories to attack: [";
+    for (auto territory : this->territories) {
+        for(auto border : territory->getBorders()) {
+            Territory* neighbor = (Territory*) border->getOther(territory);
 
-    vector<Territory*> toAttack(territories.begin(), last);
-
-    for (Territory* t : toAttack) {
-        cout << t->getName() << ", ";
+            if(std::find(this->territories.begin(), this->territories.end(), neighbor) != this->territories.end()) {
+                enemyTerritories.push_back(neighbor);
+            }
+        }
     }
 
-    cout << "]" << endl;
-
-    return toAttack;
+    return enemyTerritories;
 }
 
 void Player::issueOrder() {
-    Order* order = nullptr;
+    vector<string> territoriesToDefendStrings;
 
-    switch(UI::ask("What type of Order would you like to create?", {"Deploy", "Advance", "Bomb", "Blockade", "Airlift", "Negotiate"})) {
-        case 1:
-            order = new Deploy();
-            cout << "Deploy order added to the Order List" << endl;
-            break;
-        case 2:
-            order = new Advance();
-            cout << "Advance order added to the Order List" << endl;
-            break;
-        case 3:
-            order = new Bomb();
-            cout << "Advance order added to the Order List" << endl;
-            break;
-        case 4:
-            order = new Blockade();
-            cout << "Blockade order added to the Order List" << endl;
-            break;
-        case 5:
-            order = new Airlift();
-            cout << "Airlift order added to the Order List" << endl;
-            break;
-        case 6:
-            order = new Negotiate();
-            cout << "Negotiate order added to the Order List" << endl;
-            break;
+    for (auto territory : this->toDefend()) {
+        territoriesToDefendStrings.push_back(territory->getName());
     }
 
-    orders->addOrder(order);
-}
+    vector<string> territoriesToAttackStrings;
 
+    for (auto territory : this->toAttack()) {
+        territoriesToAttackStrings.push_back(territory->getName());
+    }
+
+    while (this->armies > 0) {
+        int territoryIndex = UI::ask("Select territory to deploy to.", territoriesToDefendStrings) - 1;
+
+        int numberOfArmies = UI::range("Enter number of armies.", 0, this->armies);
+
+        // TODO: The Deploy order should take the territory as parameter!
+        orders->addOrder(new Deploy());
+    }
+
+    while (true) {
+        switch(UI::ask("What you like to do?", {"Attack", "Defend", "End"})) {
+            case 1:
+                int territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
+
+                // TODO: The Advance should take the territory.
+                orders->addOrder(new Advance());
+
+                break;
+            case 2:
+                int territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
+
+                // TODO: The Advance should take the territory.
+                orders->addOrder(new Advance());
+
+                break;
+            default:
+                goto nextState;
+        }
+    }
+
+    nextState:;
+
+    map<CardType, Card*> cardTypeMap;
+
+    for (auto card : this->hand->getCards()) {
+        cardTypeMap[*(card->cardType)] = card;
+    } 
+
+    vector<CardType> cardTypeVector(cardTypeMap.begin(), cardTypeMap.end());
+    vector<string> cardTypeStrings;
+
+    for (auto cardType : cardTypeVector) {
+        cardTypeStrings.push_back(cardTypeToString(cardType));
+    }
+    
+    int cardIndex = UI::ask("Choose a card to play.", cardTypeStrings) - 1;
+
+    Card* card = cardTypeMap[cardTypeVector[cardIndex]];
+
+    // TODO: Find a way to map acces the GameEngine deck.
+    // card->play(*this, DECK);
+}
 
 void Player::addOrder(Order* order) {
     orders->addOrder(order);
 }
-
 
 ostream& operator<<(ostream& strm, const Player& player) {
     strm << "Player's name: " << player.name << ", Territories: [";
@@ -153,7 +172,6 @@ Player& Player::operator=(const Player& other) {
     }
 }
 
-
 string Player::getName() const {
     return name;
 }
@@ -162,6 +180,10 @@ void Player::addArmies(int newArmies){
     armies += newArmies;
 }
 
-int Player::getArmies() const {
+vector<Territory *> Player::getTerritories() const {
+    return this->territories;
+}
+
+int Player::getArmies() {
     return armies;
 }
