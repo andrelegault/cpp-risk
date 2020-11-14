@@ -4,16 +4,11 @@ using std::cout;
 
 string cardTypeToString(CardType cardType) {
     switch (cardType) {
-    case 0:
-        return "Airlift";
-    case 1:
-        return "Bomb";
-    case 2:
-        return "Blockade";
-    case 3:
-        return "Diplomacy";
-    case 4:
-        return "Reinforcement";
+    case 0: return "Airlift"; break;
+    case 1: return "Bomb"; break;
+    case 2: return "Blockade"; break;
+    case 3: return "Diplomacy"; break;
+    case 4: return "Reinforcement"; break;
     }
 }
 

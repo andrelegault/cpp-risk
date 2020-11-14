@@ -32,10 +32,10 @@ std::vector<std::string> Utils::split(const std::string& line, const std::string
 std::string Utils::string_center(const std::string s, const int w) {
     std::stringstream ss, spaces;
     int pad = w - s.size();
-    for(int i=0; i<pad/2; ++i)
+    for (int i = 0; i < pad / 2; ++i)
         spaces << " ";
     ss << spaces.str() << s << spaces.str();
-    if(pad>0 && pad%2!=0)
+    if (pad > 0 && pad % 2 != 0)
         ss << " ";
     return ss.str();
 }

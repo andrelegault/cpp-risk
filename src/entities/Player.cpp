@@ -176,9 +176,10 @@ string Player::getName() const {
     return name;
 }
 
-void Player::addArmies(int newArmies) {
+void Player::addArmies(const int newArmies) {
     armies += newArmies;
 }
+
 
 vector<Territory*> Player::getTerritories() const {
     return this->territories;

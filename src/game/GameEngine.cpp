@@ -6,7 +6,7 @@ GameEngine::GameEngine() {
         return;
     }
 
-    string directory = "maps/";
+    const string directory = "maps/";
 
     vector<string> maps;
 
@@ -32,11 +32,9 @@ GameEngine::GameEngine() {
 
     this->map = new Map(mapObj);
 
-    this->deck = new Deck();
-
     int numberOfPlayers = range("Number of Players", 2, 5);
 
-    for (int i = 0; i < numberOfPlayers; i++) {
+    for (int i = 0; i < numberOfPlayers; ++i) {
         this->players.push_back(new Player(*this->deck));
     }
 

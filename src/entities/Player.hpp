@@ -99,7 +99,7 @@ public:
      */
     void removeTerritory(Territory* territory);
 
-    void addArmies(int newArmies);
+    void addArmies(const int newArmies);
 
     int getArmies();
 };
