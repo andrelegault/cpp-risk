@@ -19,15 +19,17 @@ public:
      */
     friend ostream& operator<<(ostream& os, const Order& order);
 
+
     /**
-     * Default constructor.
+     * Parameter constructor.
+     * @param player Owner of the order.
      */
-    Order();
+    Order(Player* player);
 
     /**
      * Destructor.
      */
-    ~Order();
+    virtual ~Order() = 0;
 
     /**
      * Copy constructor.
@@ -49,56 +51,84 @@ public:
      * Validates the order.
      * @return True if the order is valid.
      */
-    virtual bool validate() = 0;
+    virtual bool validate() const = 0;
 
     /**
      * Validate then executes orders according to player's state and order definition.
      * @param player Player to execute orders on.
      * @return Whether the order was successfully executed.
      */
-    virtual bool execute(Player* player) = 0;
+    virtual bool execute() = 0;
+    Player* player;
 };
 
 class Deploy : public Order {
+private:
+    Territory* target;
 public:
+    Deploy(Player* player, Territory* target);
     Deploy* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    ~Deploy();
+    bool validate() const;
+    bool execute();
 };
 
 class Advance : public Order {
 public:
+    Advance(Player* player, Territory* source, Territory* target);
     Advance* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    ~Advance();
+    bool validate() const;
+    bool execute();
+    int getKilledUnits(int chance, int numAttacker, int numDefender) const;
+private:
+    Territory* source;
+    Territory* target;
 };
 
 class Bomb : public Order {
+private:
+    Territory* target;
 public:
+    Bomb(Player* player, Territory* target);
+    ~Bomb();
     Bomb* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    bool validate() const;
+    bool execute();
 };
 
 class Blockade : public Order {
+private:
+    Territory* target;
 public:
+    Blockade(Player* player, Territory* target);
+    ~Blockade();
+    Blockade(const Blockade& other);
     Blockade* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    bool validate() const;
+    bool execute();
 };
 
 class Airlift : public Order {
+private:
+    Territory* source;
+    Territory* target;
+    Deploy* deploy;
 public:
+    Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy);
+    ~Airlift();
     Airlift* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    bool validate() const;
+    bool execute();
 };
 
 class Negotiate : public Order {
 public:
+    Negotiate(Player* player);
+    ~Negotiate();
     Negotiate* clone() const;
-    bool validate();
-    bool execute(Player* player);
+    bool validate() const;
+    bool execute();
 };
 
 /**
