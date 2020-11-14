@@ -68,20 +68,20 @@ GameEngine::GameEngine() {
     this->gameUI->update();
 }
 
-GameEngine::~GameEngine() {}
+GameEngine::~GameEngine() {
+    delete this->deck;
+    delete this->map;
 
-int GameEngine::getPlayerArmyCount(int numberOfPlayers) {
-    switch (numberOfPlayers) {
-    case 2:
-        return 40;
-    case 3:
-        return 35;
-    case 4:
-        return 30;
-    default:
-    case 5:
-        return 25;
+    for (auto player : this->players) {
+        delete player;
     }
+
+    delete this->gameUI;
+}
+
+int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
+    // TODO: throw error if numberOfPlayers isn't within acceptable range
+    return 2 <= numberOfPlayers <= 5 ? 50 - (numberOfPlayers * 5) : -1;
 }
 
 void GameEngine::startupPhase() {

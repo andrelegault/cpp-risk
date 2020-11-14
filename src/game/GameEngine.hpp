@@ -29,7 +29,7 @@ public:
 
     void executeOrdersPhase();
 
-    int getPlayerArmyCount(int numberOfPlayers);
+    int getPlayerArmyCount(int numberOfPlayers) const;
 
     Player* getWinningPlayer();
 
