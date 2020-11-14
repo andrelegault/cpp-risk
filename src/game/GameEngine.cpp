@@ -11,20 +11,10 @@ GameEngine::GameEngine() {
     vector<string> maps;
 
     for (const auto& entry : directory_iterator(directory)) {
-        string path = entry.path();
+        const path mapPath = entry.path();
 
-        auto pathSplit = Utils::split(path, "/");
-
-        string file = pathSplit[pathSplit.size() - 1];
-
-        auto fileSplit = Utils::split(file, ".");
-
-        string mapName = fileSplit[0];
-
-        string fileExtension = fileSplit[fileSplit.size() - 1];
-
-        if (fileExtension == "map") {
-            maps.push_back(mapName);
+        if (mapPath.extension() == "map") {
+            maps.push_back(mapPath.stem());
         }
     }
 
