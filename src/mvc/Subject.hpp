@@ -18,7 +18,7 @@ class Subject {
         /**
          * Attaches many observer to subject.
          */
-        void attach(vector<Observer*> observers);
+        void attach(vector<Observer*> &observers);
 
         /**
          * Detaches an observer from subject.

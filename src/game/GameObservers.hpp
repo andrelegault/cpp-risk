@@ -55,10 +55,8 @@ public:
     virtual Component* clone() const override { return new GameStatisticsObserver(*this); };
 
 protected:
-    virtual void update() override {
-        this->_update();
-        Component::update();
-    }
+    // Defined in compilation unit; can't have inline functions.
+    virtual void update();
 
 private:
     void _update();

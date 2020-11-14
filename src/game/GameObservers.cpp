@@ -40,6 +40,11 @@ GameStatisticsObserver::~GameStatisticsObserver() {
     delete this->component;
 }
 
+void GameStatisticsObserver::update() {
+    this->_update();
+    Component::update();
+}
+
 void GameStatisticsObserver::_update() {
     cout << "GAME STATISTICS" << endl;
 

@@ -9,6 +9,7 @@
 #include "Cards.hpp"
 #include "GameObservers.hpp"
 #include <filesystem>
+#include <math.h>
 
 using namespace filesystem;
 using namespace UI;
@@ -35,6 +36,7 @@ public:
      * Assigns territories to players in a round-robin fashion.
      */
     void assignTerritories();
+
     Player* getWinningPlayer();
 
     friend class PhaseObserver;
