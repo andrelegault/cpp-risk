@@ -86,7 +86,7 @@ int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
 
 void GameEngine::startupPhase() {
     //shuffle the players in the list to get random order
-    std::random_shuffle(players.begin(), players.end());
+    std::random_shuffle(this->players.begin(), this->players.end());
 
     int armyCount = this->getPlayerArmyCount(this->players.size());
 
@@ -95,11 +95,35 @@ void GameEngine::startupPhase() {
         player->addArmies(armyCount);
     }
 
-    //TODO distribute territories between players
+    assignTerritories();
 
     //TODO make sure that "all players have all the orders for playing in a turn"
 }
 
+void GameEngine::assignTerritories() {
+    srand(time(NULL));
+    vector<Territory*> territories = this->map->getTerritories();
+    const int numTerritories = territories.size();
+    const int numPlayers = this->players.size();
+    // vector containing {0, 1, ..., numTerritories - 1}
+    vector<int> avail(numTerritories);
+    for (int i = 0; i < numTerritories; ++i) {
+        avail[i] = i;
+    }
+
+    int roundRobin = 0;
+    while (avail.size() > 0) {
+        // get a random index from any that are left
+        const int rIndex = rand() % avail.size();
+        const int tIndex = avail.at(rIndex);
+        // get the pointer using random value
+        Territory* rTerritory = territories.at(tIndex);
+        // add it to the player's territories
+        this->players.at(++roundRobin % numPlayers)->addTerritory(rTerritory);
+        // remove it from the list of available indexes
+        avail.erase(avail.begin() + rIndex);
+    }
+}
 Player* GameEngine::getWinningPlayer() {
     Player* lastPlayerWithTerritories = nullptr;
     int numberOfPlayersWithTerritories;

@@ -31,6 +31,10 @@ public:
 
     int getPlayerArmyCount(int numberOfPlayers) const;
 
+    /**
+     * Assigns territories to players in a round-robin fashion.
+     */
+    void assignTerritories();
     Player* getWinningPlayer();
 
     friend class PhaseObserver;
