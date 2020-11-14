@@ -7,8 +7,12 @@ project(WarZone
     LANGUAGES CXX
 )
 
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 add_subdirectory(src)
 
 add_subdirectory(drivers)
 
-file(COPY maps DESTINATION drivers)
+file(COPY maps DESTINATION bin)

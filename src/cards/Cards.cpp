@@ -4,11 +4,12 @@ using std::cout;
 
 string cardTypeToString(CardType cardType) {
     switch (cardType) {
-    case 0: return "Airlift"; break;
-    case 1: return "Bomb"; break;
-    case 2: return "Blockade"; break;
-    case 3: return "Diplomacy"; break;
-    case 4: return "Reinforcement"; break;
+    case 0: return "Airlift";
+    case 1: return "Bomb";
+    case 2: return "Blockade";
+    case 3: return "Diplomacy"; 
+    case 4: return "Reinforcement";
+    default: return "";
     }
 }
 
@@ -106,14 +107,14 @@ void Card::play(Player& player, Deck& deck) {
     cout << "Playing card " << *this << endl;
 
     Order* order = nullptr;
-    switch (*(cardType)) {
-    case 0: order = new Bomb(); break;
-    case 1: order = new Airlift(); break;
-    case 2: order = new Blockade(); break;
-    case 3: order = new Negotiate(); break;
-    case 4: order = new Advance(); break;
-    case 5: order = new Deploy(); break;
-    }
+    // switch (*(cardType)) {
+    // case 0: order = new Bomb(); break;
+    // case 1: order = new Airlift(); break;
+    // case 2: order = new Blockade(); break;
+    // case 3: order = new Negotiate(); break;
+    // case 4: order = new Advance(); break;
+    // case 5: order = new Deploy(); break;
+    // }
 
     player.addOrder(order);
     player.hand->removeCard(this);

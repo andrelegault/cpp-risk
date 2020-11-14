@@ -130,7 +130,7 @@ public:
      * @param name Name of Continent.
      * @param bonus Bonus for that continent.
      */
-    Continent(string name, int bonus);
+    Continent(string name, int bonus = 0);
 
     /**
      * Copy constructor.
@@ -286,7 +286,7 @@ public:
     /**
      * return the name of the player who owns the territory
      */
-    string Territory::getOwnerName();
+    string getOwnerName();
 
     /**
      * Sets parent Continent.

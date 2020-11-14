@@ -118,14 +118,14 @@ void Player::issueOrder() {
             territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            orders->addOrder(new Advance(this));
+            // orders->addOrder(new Advance(this));
 
             break;
         case 2:
             territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            orders->addOrder(new Advance(this));
+            // orders->addOrder(new Advance(this));
 
             break;
         default:
@@ -141,7 +141,9 @@ nextState:;
         cardTypeMap[*(card->cardType)] = card;
     }
 
-    vector<CardType> cardTypeVector(cardTypeMap.begin(), cardTypeMap.end());
+    vector<CardType> cardTypeVector;
+
+    std::transform(cardTypeMap.begin(), cardTypeMap.end(), std::back_inserter(cardTypeVector), [](auto& pair) { return pair.first; });
     vector<string> cardTypeStrings;
 
     for (auto cardType : cardTypeVector) {

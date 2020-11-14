@@ -1,11 +1,11 @@
 #include "GameEngine.hpp"
-#include <algorithm>
-#include <random>
 
 GameEngine::GameEngine() : deck(new Deck()) {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
         return;
+    default:
+        break;
     }
 
     const string directory = "maps/";

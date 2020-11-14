@@ -10,6 +10,8 @@
 #include "GameObservers.hpp"
 #include <filesystem>
 #include <math.h>
+#include <algorithm>
+#include <random>
 
 using namespace filesystem;
 using namespace UI;
@@ -40,7 +42,7 @@ public:
     /**
      * print territories with their owner names, grouped by continents
      */ 
-    void GameEngine::printTerritoryOwners();
+    void printTerritoryOwners();
 
     Player* getWinningPlayer();
 

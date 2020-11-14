@@ -53,5 +53,6 @@ Makefile
 !CMakeLists.txt
 
 # Build
-WarZone*
 build
+bin
+lib

@@ -12,12 +12,12 @@ using std::endl;
  */
 int main() {
     OrdersList orders;
-    Deploy* deploy = new Deploy;
-    Advance* advance = new Advance;
-    Bomb* bomb = new Bomb;
-    Blockade* blockade = new Blockade;
-    Airlift* airlift = new Airlift;
-    Negotiate* negotiate = new Negotiate;
+    Deploy* deploy = new Deploy(nullptr, nullptr);
+    Advance* advance = new Advance(nullptr, nullptr, nullptr);
+    Bomb* bomb = new Bomb(nullptr, nullptr);
+    Blockade* blockade = new Blockade(nullptr, nullptr);
+    Airlift* airlift = new Airlift(nullptr, nullptr, nullptr, nullptr);
+    Negotiate* negotiate = new Negotiate(nullptr);
 
 
     // Testing Order::execute
@@ -43,11 +43,11 @@ int main() {
     OrdersList orders2(orders);
     Player mockPlayer;
 
-    orders.getAtIndex(0)->execute(&mockPlayer);
-    orders2.getAtIndex(0)->execute(&mockPlayer);
+    orders.getAtIndex(0)->execute();
+    orders2.getAtIndex(0)->execute();
 
-    orders.getAtIndex(5)->execute(&mockPlayer);
-    orders2.getAtIndex(5)->execute(&mockPlayer);
+    orders.getAtIndex(5)->execute();
+    orders2.getAtIndex(5)->execute();
 
     // Testing OrdersList::move
     orders.move(bomb, advance);
