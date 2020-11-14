@@ -28,9 +28,6 @@ Order& Order::operator=(const Order& order) {
 }
 
 
-// TODO: create copy constructor for each derived class
-// TODO: override assignment operator for each derived class, see slide 58 in slide set 4
-
 // Deploy
 Deploy::Deploy(Player* player, Territory* target) : Order(player), target(target) {}
 
@@ -41,6 +38,16 @@ bool Deploy::validate() const {
     auto end = ownedTerritories.end();
     return find(ownedTerritories.begin(), end, this->target) != end;
 }
+
+Deploy::Deploy(const Deploy& order): Order(order), target(new Territory(*(order.target))){}
+
+Deploy& Deploy::operator=(const Deploy& other){
+    Order::operator=(other);
+    this->target = other.target;
+
+    return *this;
+}
+
 
 bool Deploy::execute() {
     if (validate()) {
@@ -67,6 +74,16 @@ bool Advance::validate() const {
     auto ownedTerritories = this->player->getTerritories();
     auto end = ownedTerritories.end();
     return find(ownedTerritories.begin(), end, this->source) != end;
+}
+
+Advance::Advance(const Advance& order): Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))){};
+
+Advance& Advance::operator=(const Advance& other){
+    Order::operator=(other);
+    this->source = other.source;
+    this->target = other.target;
+
+    return *this;
 }
 
 int Advance::getKilledUnits(int chance, int numAttacker, int numDefender) const {
@@ -113,6 +130,15 @@ Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
 
 Bomb::~Bomb() {}
 
+Bomb::Bomb(const Bomb& order): Order(order), target(new Territory(*(order.target))){}
+
+Bomb& Bomb::operator=(const Bomb& other){
+    Order::operator=(other);
+    this->target = other.target;
+
+    return *this;
+}
+
 bool Bomb::validate() const {
     return !this->player->hasTerritory(this->target);
 }
@@ -135,9 +161,16 @@ Bomb* Bomb::clone() const {
 // Blockade
 Blockade::Blockade(Player* player, Territory* target) : Order(player), target(target) {}
 
-Blockade::Blockade(const Blockade& other) : Order(other) {}
+Blockade::Blockade(const Blockade& order): Order(order), target(new Territory(*(order.target))){}
 
 Blockade::~Blockade() {}
+
+Blockade& Blockade::operator=(const Blockade& other){
+    Order::operator=(other);
+    this->target = other.target;
+
+    return *this;
+}
 
 bool Blockade::validate() const {
     return this->player->hasTerritory(this->target);
@@ -169,6 +202,17 @@ bool Airlift::validate() const {
     return this->player->hasTerritory(source) && this->player->hasTerritory(target);
 }
 
+Airlift::Airlift(const Airlift& order): Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), deploy(new Deploy(*(order.deploy))){};
+
+Airlift& Airlift::operator=(const Airlift& other){
+    Order::operator=(other);
+    this->source = other.source;
+    this->target = other.target;
+    this-> deploy = other.deploy;
+
+    return *this;
+}
+
 bool Airlift::execute() {
     if (validate()) {
         // what? deploy order? advance order? i need to shleep
@@ -188,6 +232,14 @@ Airlift* Airlift::clone() const {
 Negotiate::Negotiate(Player* player) : Order(player) {}
 
 Negotiate::~Negotiate() {}
+
+Negotiate::Negotiate(const Negotiate& order): Order(order){}
+
+Negotiate& Negotiate::operator=(const Negotiate& other){
+    Order::operator=(other);
+
+    return *this;
+}
 
 bool Negotiate::validate() const { return true; }
 
