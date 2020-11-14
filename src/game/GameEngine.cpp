@@ -176,7 +176,7 @@ void GameEngine::reinforcementPhase() {
 
             if (hasAllTerritoires) {
                 // Should add the continent bonus which we don't currently have.
-                player->addArmies(1);
+                player->addArmies(continent->getBonus());
             }
         }
     }

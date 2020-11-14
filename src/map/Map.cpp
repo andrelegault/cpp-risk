@@ -136,13 +136,11 @@ Map* Territory::getMap() const {
 }
 
 // Continent
-Continent::Continent() : Continent("") {}
+Continent::Continent() : Continent("", 0) {}
 
-Continent::Continent(string name) : MapNode(name) {
-    this->map = nullptr;
-}
+Continent::Continent(string name, int bonus) : MapNode(name), bonus(bonus), map(nullptr) { }
 
-Continent::Continent(const Continent& continent) : MapNode(continent) {
+Continent::Continent(const Continent& continent) : MapNode(continent), bonus(continent.bonus) {
     Map* m = new Map(*(continent.getMap()));
     Continent* continentCopy = m->get(continent);
 
@@ -160,7 +158,7 @@ Continent::~Continent() {
 
 // TODO: Better print.
 ostream& operator<<(ostream& stream, const Continent& continent) {
-    stream << continent.name << endl;
+    stream << continent.name << "(" << continent.bonus << ")" << endl;
 
     for (auto border : continent.borders) {
         stream << "-> " << border->getOther((Continent*)&continent)->getName() << endl;
@@ -173,6 +171,7 @@ Continent& Continent::operator=(const Continent& other) {
     if (&other != this) {
         this->~Continent();
         this->name = other.name;
+        this->bonus = other.bonus;
         this->borders = other.borders;
         this->map = other.map;
         this->territories = other.territories;
@@ -181,7 +180,7 @@ Continent& Continent::operator=(const Continent& other) {
 }
 
 bool operator== (const Continent& c1, const Continent& c2) {
-    return c1.name == c2.name;
+    return c1.name == c2.name && c1.bonus == c2.bonus;
 }
 
 void Continent::connect(Map* map) {
@@ -216,6 +215,10 @@ Map* Continent::getMap() const {
     return this->map;
 }
 
+const int Continent::getBonus() const {
+    return this->bonus;
+}
+
 // Map
 Map::Map() : Map("") {}
 
@@ -235,9 +238,10 @@ Map::Map(const Map& m) {
 
     for (auto continent : m.continents) {
         string continentName = continent->getName();
+        int continentBonus = continent->getBonus();
 
         // Making copy of the Continent and attaching to parent Map.
-        Continent* continentClone = new Continent(continentName);
+        Continent* continentClone = new Continent(continentName, continentBonus);
         this->connect(continentClone);
 
         // Mapping name to object.

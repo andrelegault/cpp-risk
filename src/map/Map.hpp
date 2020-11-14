@@ -114,21 +114,23 @@ bool operator== (const MapNode& m1, const MapNode& m2);
  */
 class Continent : public MapNode {
 private:
-    // Territories inside continent subgroup.
+    /// Territories inside continent subgroup.
     vector<Territory*> territories;
-    // Map that Continent is part of.
+    /// Map that Continent is part of.
     Map* map;
+
+    /// Bonus armies for the continent.
+    int bonus;
 public:
-    /**
-     * Default constructor.
-     */
+    /// Default constructor.
     Continent();
 
     /**
      * Primary constructor.
      * @param name Name of Continent.
+     * @param bonus Bonus for that continent.
      */
-    Continent(string name);
+    Continent(string name, int bonus);
 
     /**
      * Copy constructor.
@@ -197,6 +199,9 @@ public:
      * @return Map.
      */
     Map* getMap() const;
+
+    /// Gets the bonus for the continent.
+    const int getBonus() const;
 
     /**
      * Checks if containing territories are connected.

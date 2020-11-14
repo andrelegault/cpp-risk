@@ -62,7 +62,7 @@ Map MapLoader::load(const string file_name) {
                 // 1 - army value
                 // 2 - color
 
-                continents.push_back(new Continent(words[0]));
+                continents.push_back(new Continent(words[0], stoi(words[1])));
                 getline(file, line);
             }
         }
