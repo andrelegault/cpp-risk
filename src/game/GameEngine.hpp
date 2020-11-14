@@ -37,6 +37,11 @@ public:
      */
     void assignTerritories();
 
+    /**
+     * print territories with their owner names, grouped by continents
+     */ 
+    void GameEngine::printTerritoryOwners();
+
     Player* getWinningPlayer();
 
     friend class PhaseObserver;

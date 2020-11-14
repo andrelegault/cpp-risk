@@ -1,4 +1,6 @@
 #include "GameEngine.hpp"
+#include <algorithm>
+#include <random>
 
 GameEngine::GameEngine() : deck(new Deck()) {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
@@ -86,7 +88,8 @@ int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
 
 void GameEngine::startupPhase() {
     //shuffle the players in the list to get random order
-    std::random_shuffle(this->players.begin(), this->players.end());
+    std::random_device rd;
+    std::shuffle(this->players.begin(), this->players.end(), rd);
 
     int armyCount = this->getPlayerArmyCount(this->players.size());
 
@@ -96,6 +99,8 @@ void GameEngine::startupPhase() {
     }
 
     assignTerritories();
+
+    printTerritoryOwners();
 
     //TODO make sure that "all players have all the orders for playing in a turn"
 }
@@ -123,6 +128,15 @@ void GameEngine::assignTerritories() {
         // remove it from the list of available indexes
         avail.erase(avail.begin() + rIndex);
     }
+}
+
+void GameEngine::printTerritoryOwners(){
+     for (Continent* continent : this->map->getContinents()){
+            cout << continent->getName() << ":" << endl;
+            for (Territory* territory : continent->getTerritories()){
+                cout << "\t" << territory->getName() << " , owned by " << territory->getOwnerName() << endl;
+            }
+        }
 }
 
 Player* GameEngine::getWinningPlayer() {

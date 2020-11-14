@@ -127,6 +127,10 @@ void Territory::set(Player* player) {
     this->playerOwner = player;
 }
 
+string Territory::getOwnerName(){
+    return this->playerOwner->getName();
+}
+
 bool Territory::validate() {
     return this->borders.size() > 0;
 }

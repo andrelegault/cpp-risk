@@ -284,6 +284,11 @@ public:
     void set(Player* player);
 
     /**
+     * return the name of the player who owns the territory
+     */
+    string Territory::getOwnerName();
+
+    /**
      * Sets parent Continent.
      *
      * @param continent Continent to add.
