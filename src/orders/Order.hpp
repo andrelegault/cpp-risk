@@ -67,6 +67,8 @@ private:
     Territory* target;
 public:
     Deploy(Player* player, Territory* target);
+    Deploy(const Deploy& order);
+    Deploy& operator=(const Deploy& other);
     Deploy* clone() const;
     ~Deploy();
     bool validate() const;
@@ -76,6 +78,8 @@ public:
 class Advance : public Order {
 public:
     Advance(Player* player, Territory* source, Territory* target);
+    Advance(const Advance& order);
+    Advance& operator=(const Advance& other);
     Advance* clone() const;
     ~Advance();
     bool validate() const;
@@ -91,6 +95,8 @@ private:
     Territory* target;
 public:
     Bomb(Player* player, Territory* target);
+    Bomb(const Bomb& order);
+    Bomb& operator=(const Bomb& other);
     ~Bomb();
     Bomb* clone() const;
     bool validate() const;
@@ -102,8 +108,9 @@ private:
     Territory* target;
 public:
     Blockade(Player* player, Territory* target);
+    Blockade(const Blockade& order);
+    Blockade& operator=(const Blockade& other);
     ~Blockade();
-    Blockade(const Blockade& other);
     Blockade* clone() const;
     bool validate() const;
     bool execute();
@@ -116,6 +123,8 @@ private:
     Deploy* deploy;
 public:
     Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy);
+    Airlift(const Airlift& order);
+    Airlift& operator=(const Airlift& other);
     ~Airlift();
     Airlift* clone() const;
     bool validate() const;
@@ -125,6 +134,8 @@ public:
 class Negotiate : public Order {
 public:
     Negotiate(Player* player);
+    Negotiate(const Negotiate& order);
+    Negotiate& operator=(const Negotiate& other);
     ~Negotiate();
     Negotiate* clone() const;
     bool validate() const;
