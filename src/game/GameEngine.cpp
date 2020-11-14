@@ -138,7 +138,7 @@ void GameEngine::mainGameLoop() {
 
     Player* winningPlayer = this->getWinningPlayer();
 
-    if(winningPlayer != nullptr) {
+    if (winningPlayer != nullptr) {
         cout << "WINNER " << winningPlayer << endl;
         return;
     }

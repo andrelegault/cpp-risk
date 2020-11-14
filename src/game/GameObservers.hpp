@@ -17,7 +17,7 @@ public:
     ~PhaseObserver();
 
     PhaseObserver(const PhaseObserver& phaseObserver);
-    
+
     friend ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver);
 
     virtual ostream& print(ostream& stream) const override { stream << *this; return stream; };

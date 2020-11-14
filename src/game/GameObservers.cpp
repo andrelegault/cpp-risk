@@ -22,7 +22,7 @@ void PhaseObserver::_update() {
 }
 
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver) {
-    if(phaseObserver.component != nullptr) {
+    if (phaseObserver.component != nullptr) {
         stream << *phaseObserver.component;
     }
 
@@ -59,10 +59,10 @@ void GameStatisticsObserver::_update() {
 }
 
 ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver) {
-    if(gameStatisticsObserver.component != nullptr) {
+    if (gameStatisticsObserver.component != nullptr) {
         stream << *gameStatisticsObserver.component;
     }
-    
+
     return stream;
 }
 
@@ -78,7 +78,7 @@ GameUI::~GameUI() {
 }
 
 ostream& operator<<(ostream& stream, const GameUI& gameUI) {
-    if(gameUI.component != nullptr) {
+    if (gameUI.component != nullptr) {
         stream << *gameUI.component;
     }
 

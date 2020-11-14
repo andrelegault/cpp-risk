@@ -67,10 +67,10 @@ vector<Territory*> Player::toAttack() {
     vector<Territory*> enemyTerritories;
 
     for (auto territory : this->territories) {
-        for(auto border : territory->getBorders()) {
-            Territory* neighbor = (Territory*) border->getOther(territory);
+        for (auto border : territory->getBorders()) {
+            Territory* neighbor = (Territory*)border->getOther(territory);
 
-            if(std::find(this->territories.begin(), this->territories.end(), neighbor) != this->territories.end()) {
+            if (std::find(this->territories.begin(), this->territories.end(), neighbor) != this->territories.end()) {
                 enemyTerritories.push_back(neighbor);
             }
         }
@@ -102,33 +102,33 @@ void Player::issueOrder() {
     }
 
     while (true) {
-        switch(UI::ask("What you like to do?", {"Attack", "Defend", "End"})) {
-            case 1:
-                int territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
+        switch (UI::ask("What you like to do?", { "Attack", "Defend", "End" })) {
+        case 1:
+            int territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
 
-                // TODO: The Advance should take the territory.
-                orders->addOrder(new Advance());
+            // TODO: The Advance should take the territory.
+            orders->addOrder(new Advance());
 
-                break;
-            case 2:
-                int territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
+            break;
+        case 2:
+            int territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
 
-                // TODO: The Advance should take the territory.
-                orders->addOrder(new Advance());
+            // TODO: The Advance should take the territory.
+            orders->addOrder(new Advance());
 
-                break;
-            default:
-                goto nextState;
+            break;
+        default:
+            goto nextState;
         }
     }
 
-    nextState:;
+nextState:;
 
     map<CardType, Card*> cardTypeMap;
 
     for (auto card : this->hand->getCards()) {
         cardTypeMap[*(card->cardType)] = card;
-    } 
+    }
 
     vector<CardType> cardTypeVector(cardTypeMap.begin(), cardTypeMap.end());
     vector<string> cardTypeStrings;
@@ -136,7 +136,7 @@ void Player::issueOrder() {
     for (auto cardType : cardTypeVector) {
         cardTypeStrings.push_back(cardTypeToString(cardType));
     }
-    
+
     int cardIndex = UI::ask("Choose a card to play.", cardTypeStrings) - 1;
 
     Card* card = cardTypeMap[cardTypeVector[cardIndex]];
@@ -176,11 +176,11 @@ string Player::getName() const {
     return name;
 }
 
-void Player::addArmies(int newArmies){
+void Player::addArmies(int newArmies) {
     armies += newArmies;
 }
 
-vector<Territory *> Player::getTerritories() const {
+vector<Territory*> Player::getTerritories() const {
     return this->territories;
 }
 

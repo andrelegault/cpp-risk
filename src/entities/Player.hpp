@@ -52,7 +52,7 @@ public:
     // Number of territories owned by the player.
     int getNumTerritories() const;
 
-    vector<Territory *> getTerritories() const;
+    vector<Territory*> getTerritories() const;
 
     /**
      * Stream insertion operator.

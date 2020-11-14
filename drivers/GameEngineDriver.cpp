@@ -14,6 +14,6 @@ int main() {
     GameEngine gameEngine;
 
     gameEngine.mainGameLoop();
-    
+
     return 0;
 }

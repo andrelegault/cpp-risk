@@ -4,16 +4,16 @@ using std::cout;
 
 string cardTypeToString(CardType cardType) {
     switch (cardType) {
-        case 0:
-            return "Airlift";
-        case 1:
-            return "Bomb";
-        case 2:
-            return "Blockade";
-        case 3:
-            return "Diplomacy";
-        case 4:
-            return "Reinforcement";
+    case 0:
+        return "Airlift";
+    case 1:
+        return "Bomb";
+    case 2:
+        return "Blockade";
+    case 3:
+        return "Diplomacy";
+    case 4:
+        return "Reinforcement";
     }
 }
 
@@ -32,7 +32,7 @@ Deck::Deck(int size) {
     for (int i = 0; i < size; ++i) {
         int type = rand() % 5;
 
-        cards.push_back(new Card(new CardType((CardType) type)));
+        cards.push_back(new Card(new CardType((CardType)type)));
     }
 
     cout << "Created deck containing " << cards.size() << " cards!" << endl;
