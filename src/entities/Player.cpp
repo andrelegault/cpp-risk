@@ -49,9 +49,19 @@ void Player::addTerritory(Territory* territory) {
 
 
 void Player::removeTerritory(Territory* territory) {
-    auto t = find(territories.begin(), territories.end(), territory);
-    territories.erase(t);
-    cout << "Player " << name << ": Removed territory " << territory->getName() << " from the Territory List " << name << endl;
+    auto t = getTerritory(territory);
+    if (t != this->territories.end()) {
+        territories.erase(t);
+        cout << "Player " << name << ": Removed territory " << territory->getName() << " from the Territory List " << name << endl;
+    }
+}
+
+vector<Territory*>::iterator Player::getTerritory(Territory* territory) {
+    return find(territories.begin(), territories.end(), territory);
+}
+
+bool Player::hasTerritory(Territory* territory) {
+    return this->getTerritory(territory) != this->territories.end();
 }
 
 
@@ -97,24 +107,25 @@ void Player::issueOrder() {
 
         int numberOfArmies = UI::range("Enter number of armies.", 0, this->armies);
 
-        // TODO: The Deploy order should take the territory as parameter!
-        orders->addOrder(new Deploy());
+        // TODO: use actual territory pointer
+        orders->addOrder(new Deploy(this, NULL));
     }
 
     while (true) {
-        switch (UI::ask("What you like to do?", { "Attack", "Defend", "End" })) {
+        int territory;
+        switch (UI::ask("What would you like to do?", { "Attack", "Defend", "End" })) {
         case 1:
-            int territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
+            territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            orders->addOrder(new Advance());
+            orders->addOrder(new Advance(this));
 
             break;
         case 2:
-            int territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
+            territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            orders->addOrder(new Advance());
+            orders->addOrder(new Advance(this));
 
             break;
         default:

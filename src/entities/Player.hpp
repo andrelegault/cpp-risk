@@ -99,6 +99,12 @@ public:
      */
     void removeTerritory(Territory* territory);
 
+    /// Gets the iterator of a territory.
+    vector<Territory*>::iterator getTerritory(Territory* territory);
+
+    /// Checks if the player has a specific territory.
+    bool hasTerritory(Territory* territory);
+
     void addArmies(const int newArmies);
 
     int getArmies();
