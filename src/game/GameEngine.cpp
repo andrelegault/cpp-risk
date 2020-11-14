@@ -1,6 +1,6 @@
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine() : deck(new Deck()) {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
         return;
@@ -124,6 +124,7 @@ void GameEngine::assignTerritories() {
         avail.erase(avail.begin() + rIndex);
     }
 }
+
 Player* GameEngine::getWinningPlayer() {
     Player* lastPlayerWithTerritories = nullptr;
     int numberOfPlayersWithTerritories;
@@ -160,22 +161,23 @@ void GameEngine::mainGameLoop() {
 
 void GameEngine::reinforcementPhase() {
     for (auto player : this->players) {
-        player->addArmies(std::max(player->getNumTerritories() / 3, 3));
+        // add armies based on current number of owned territories
+        player->addArmies(std::max((int)floor(player->getNumTerritories() / 3), 3));
 
         for (auto continent : this->map->getContinents()) {
             bool hasAllTerritoires = true;
 
             for (auto territory : continent->getTerritories()) {
-                auto territories = player->getTerritories();
 
-                if (std::find(territories.begin(), territories.end(), territory) == territories.end()) {
+                // why not just check if the territory's owner == player?, i.e., territory->playerOwner == player
+                if (!player->hasTerritory(territory)) {
                     hasAllTerritoires = false;
                     break;
                 }
             }
 
             if (hasAllTerritoires) {
-                // Should add the continent bonus which we don't currently have.
+                // add bonus if applicable
                 player->addArmies(continent->getBonus());
             }
         }
