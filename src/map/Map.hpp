@@ -301,6 +301,9 @@ public:
      */
     Map* getMap() const;
 
+    /// Gets the player owning this territory.
+    Player* getOwner() const;
+
     /**
      * Validates that node is connected.
      *

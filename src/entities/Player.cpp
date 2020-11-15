@@ -60,11 +60,6 @@ vector<Territory*>::iterator Player::getTerritory(Territory* territory) {
     return find(territories.begin(), territories.end(), territory);
 }
 
-bool Player::hasTerritory(Territory* territory) {
-    return this->getTerritory(territory) != this->territories.end();
-}
-
-
 vector<Territory*> Player::toDefend() {
     return this->getTerritories();
 }

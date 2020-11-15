@@ -34,14 +34,12 @@ Deploy::Deploy(Player* player, Territory* target) : Order(player), target(target
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    auto ownedTerritories = this->player->getTerritories();
-    auto end = ownedTerritories.end();
-    return find(ownedTerritories.begin(), end, this->target) != end;
+    return this->target->getOwner() == this->player;
 }
 
-Deploy::Deploy(const Deploy& order): Order(order), target(new Territory(*(order.target))){}
+Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
 
-Deploy& Deploy::operator=(const Deploy& other){
+Deploy& Deploy::operator=(const Deploy& other) {
     Order::operator=(other);
     this->target = other.target;
 
@@ -71,14 +69,12 @@ Advance::Advance(Player* player, Territory* source, Territory* target) : Order(p
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    auto ownedTerritories = this->player->getTerritories();
-    auto end = ownedTerritories.end();
-    return find(ownedTerritories.begin(), end, this->source) != end;
+    return this->target->getOwner() == this->player;
 }
 
-Advance::Advance(const Advance& order): Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))){};
+Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
 
-Advance& Advance::operator=(const Advance& other){
+Advance& Advance::operator=(const Advance& other) {
     Order::operator=(other);
     this->source = other.source;
     this->target = other.target;
@@ -99,7 +95,7 @@ int Advance::getKilledUnits(int chance, int numAttacker, int numDefender) const 
 
 bool Advance::execute() {
     if (validate()) {
-        bool ownsTarget = this->player->hasTerritory(this->target);
+        bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
             // TODO: move some number of units from source to target
         }
@@ -130,9 +126,9 @@ Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
 
 Bomb::~Bomb() {}
 
-Bomb::Bomb(const Bomb& order): Order(order), target(new Territory(*(order.target))){}
+Bomb::Bomb(const Bomb& order) : Order(order), target(new Territory(*(order.target))) {}
 
-Bomb& Bomb::operator=(const Bomb& other){
+Bomb& Bomb::operator=(const Bomb& other) {
     Order::operator=(other);
     this->target = other.target;
 
@@ -140,7 +136,7 @@ Bomb& Bomb::operator=(const Bomb& other){
 }
 
 bool Bomb::validate() const {
-    return !this->player->hasTerritory(this->target);
+    return this->target->getOwner() != this->player;
 }
 
 bool Bomb::execute() {
@@ -161,11 +157,11 @@ Bomb* Bomb::clone() const {
 // Blockade
 Blockade::Blockade(Player* player, Territory* target) : Order(player), target(target) {}
 
-Blockade::Blockade(const Blockade& order): Order(order), target(new Territory(*(order.target))){}
+Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
 
 Blockade::~Blockade() {}
 
-Blockade& Blockade::operator=(const Blockade& other){
+Blockade& Blockade::operator=(const Blockade& other) {
     Order::operator=(other);
     this->target = other.target;
 
@@ -173,7 +169,7 @@ Blockade& Blockade::operator=(const Blockade& other){
 }
 
 bool Blockade::validate() const {
-    return this->player->hasTerritory(this->target);
+    return this->target->getOwner() == this->player;
 }
 
 bool Blockade::execute() {
@@ -199,16 +195,16 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, Deploy* d
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    return this->player->hasTerritory(source) && this->player->hasTerritory(target);
+    return this->source->getOwner() == this->player && this->target->getOwner() == this->player;
 }
 
-Airlift::Airlift(const Airlift& order): Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), deploy(new Deploy(*(order.deploy))){};
+Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), deploy(new Deploy(*(order.deploy))) {};
 
-Airlift& Airlift::operator=(const Airlift& other){
+Airlift& Airlift::operator=(const Airlift& other) {
     Order::operator=(other);
     this->source = other.source;
     this->target = other.target;
-    this-> deploy = other.deploy;
+    this->deploy = other.deploy;
 
     return *this;
 }
@@ -233,9 +229,9 @@ Negotiate::Negotiate(Player* player) : Order(player) {}
 
 Negotiate::~Negotiate() {}
 
-Negotiate::Negotiate(const Negotiate& order): Order(order){}
+Negotiate::Negotiate(const Negotiate& order) : Order(order) {}
 
-Negotiate& Negotiate::operator=(const Negotiate& other){
+Negotiate& Negotiate::operator=(const Negotiate& other) {
     Order::operator=(other);
 
     return *this;

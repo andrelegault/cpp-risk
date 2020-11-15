@@ -139,6 +139,10 @@ Map* Territory::getMap() const {
     return this->continent->getMap();
 }
 
+Player* Territory::getOwner() const {
+    return this->playerOwner;
+}
+
 // Continent
 Continent::Continent() : Continent("", 0) {}
 

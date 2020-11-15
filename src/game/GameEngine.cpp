@@ -184,7 +184,7 @@ void GameEngine::reinforcementPhase() {
             for (auto territory : continent->getTerritories()) {
 
                 // why not just check if the territory's owner == player?, i.e., territory->playerOwner == player
-                if (!player->hasTerritory(territory)) {
+                if (territory->getOwner() == player) {
                     hasAllTerritoires = false;
                     break;
                 }
