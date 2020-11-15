@@ -125,7 +125,7 @@ void GameEngine::assignTerritories() {
         // get the pointer using random value
         Territory* rTerritory = territories.at(tIndex);
         // add it to the player's territories
-        this->players.at(++roundRobin % numPlayers)->addTerritory(rTerritory);
+        this->players.at(roundRobin++ % numPlayers)->addTerritory(rTerritory);
         // remove it from the list of available indexes
         avail.erase(avail.begin() + rIndex);
     }
