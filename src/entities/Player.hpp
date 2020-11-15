@@ -105,4 +105,10 @@ public:
     void addArmies(const int newArmies);
 
     int getArmies();
+
+    /**
+     * Gets the player's next order.
+     * @return the order with highest priority.
+     */
+    Order* getNextOrder() const;
 };

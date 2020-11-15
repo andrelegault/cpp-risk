@@ -103,7 +103,7 @@ void Player::issueOrder() {
         int numberOfArmies = UI::range("Enter number of armies.", 0, this->armies);
 
         // TODO: use actual territory pointer
-        orders->addOrder(new Deploy(this, NULL));
+        orders->add(new Deploy(this, NULL));
     }
 
     while (true) {
@@ -113,14 +113,14 @@ void Player::issueOrder() {
             territory = UI::ask("Which territory to attack?", territoriesToAttackStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            // orders->addOrder(new Advance(this));
+            // orders->add(new Advance(this));
 
             break;
         case 2:
             territory = UI::ask("Which territory to defend?", territoriesToDefendStrings) - 1;
 
             // TODO: The Advance should take the territory.
-            // orders->addOrder(new Advance(this));
+            // orders->add(new Advance(this));
 
             break;
         default:
@@ -154,7 +154,7 @@ nextState:;
 }
 
 void Player::addOrder(Order* order) {
-    orders->addOrder(order);
+    orders->add(order);
 }
 
 ostream& operator<<(ostream& strm, const Player& player) {
@@ -195,4 +195,8 @@ vector<Territory*> Player::getTerritories() const {
 
 int Player::getArmies() {
     return armies;
+}
+
+Order* Player::getNextOrder() const {
+    return orders->next();
 }

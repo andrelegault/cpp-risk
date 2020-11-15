@@ -28,13 +28,13 @@ int main() {
     assert(airlift->validate() == true);
     assert(negotiate->validate() == true);
 
-    // Testing OrdersList::addOrder
-    orders.addOrder(bomb);
-    orders.addOrder(deploy);
-    orders.addOrder(advance);
-    orders.addOrder(blockade);
-    orders.addOrder(airlift);
-    orders.addOrder(negotiate);
+    // Testing OrdersList::add
+    orders.add(bomb);
+    orders.add(deploy);
+    orders.add(advance);
+    orders.add(blockade);
+    orders.add(airlift);
+    orders.add(negotiate);
     assert(bomb == orders.getAtIndex(0));
     assert(deploy == orders.getAtIndex(1));
     assert(advance == orders.getAtIndex(2));

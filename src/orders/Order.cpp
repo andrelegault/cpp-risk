@@ -12,13 +12,13 @@ ostream& operator<<(ostream& os, const Order& order) {
     return os;
 }
 
-Order::Order(Player* player) : player(player) { }
+Order::Order(Player* player, const int priority) : player(player), priority(priority) { }
 
 Order::~Order() {
     cout << "Destroying Order" << endl;
 }
 
-Order::Order(const Order& order) { }
+Order::Order(const Order& order) : player(order.player), priority(order.priority) { }
 
 Order& Order::operator=(const Order& order) {
     if (this != NULL) {
@@ -29,7 +29,7 @@ Order& Order::operator=(const Order& order) {
 
 
 // Deploy
-Deploy::Deploy(Player* player, Territory* target) : Order(player), target(target) {}
+Deploy::Deploy(Player* player, Territory* target) : Order(player, 1), target(target) {}
 
 Deploy::~Deploy() {}
 
@@ -64,7 +64,7 @@ Deploy* Deploy::clone() const {
 }
 
 // Advance
-Advance::Advance(Player* player, Territory* source, Territory* target) : Order(player), source(source), target(target) {}
+Advance::Advance(Player* player, Territory* source, Territory* target) : Order(player, 4), source(source), target(target) {}
 
 Advance::~Advance() {}
 
@@ -122,7 +122,7 @@ Advance* Advance::clone() const {
 }
 
 // Bomb
-Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
+Bomb::Bomb(Player* player, Territory* target) : Order(player, 4), target(target) {}
 
 Bomb::~Bomb() {}
 
@@ -155,7 +155,7 @@ Bomb* Bomb::clone() const {
 }
 
 // Blockade
-Blockade::Blockade(Player* player, Territory* target) : Order(player), target(target) {}
+Blockade::Blockade(Player* player, Territory* target) : Order(player, 3), target(target) {}
 
 Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
 
@@ -190,7 +190,7 @@ Blockade* Blockade::clone() const {
 }
 
 // Airlift
-Airlift::Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy) : Order(player), source(source), target(target), deploy(deploy) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy) : Order(player, 2), source(source), target(target), deploy(deploy) {}
 
 Airlift::~Airlift() {}
 
@@ -225,7 +225,7 @@ Airlift* Airlift::clone() const {
 }
 
 // Negotiate
-Negotiate::Negotiate(Player* player) : Order(player) {}
+Negotiate::Negotiate(Player* player) : Order(player, 4) {}
 
 Negotiate::~Negotiate() {}
 
@@ -257,7 +257,6 @@ Negotiate* Negotiate::clone() const {
 
 OrdersList::OrdersList() { }
 
-// TODO: implement copy constructor
 OrdersList::OrdersList(const OrdersList& other) {
     for (auto o : other.orders) {
         Order* temp = o->clone();
@@ -293,7 +292,7 @@ OrdersList& OrdersList::operator=(const OrdersList& other) {
     return *this;
 }
 
-void OrdersList::addOrder(Order* what) {
+void OrdersList::add(Order* what) {
     orders.push_back(what);
 }
 
@@ -320,4 +319,21 @@ void OrdersList::move(Order* first, Order* second) {
     auto firstIt = findOrder(first);
     auto secondIt = findOrder(second);
     iter_swap(firstIt, secondIt);
+}
+
+Order* OrdersList::next() const {
+    const int numOrders = orders.size();
+    if (numOrders > 0) {
+        Order* highest = orders.at(0);
+        for (int i = 1; i < numOrders; ++i) {
+            Order* cur = orders.at(i);
+            if (highest->priority > cur->priority) {
+                highest = cur;
+            }
+        }
+        return highest;
+    }
+    else {
+        return NULL;
+    }
 }

@@ -19,12 +19,11 @@ public:
      */
     friend ostream& operator<<(ostream& os, const Order& order);
 
-
     /**
      * Parameter constructor.
      * @param player Owner of the order.
      */
-    Order(Player* player);
+    Order(Player* player, const int priority);
 
     /**
      * Destructor.
@@ -59,12 +58,15 @@ public:
      * @return Whether the order was successfully executed.
      */
     virtual bool execute() = 0;
+
+    friend OrdersList;
+protected:
     Player* player;
+private:
+    const int priority;
 };
 
 class Deploy : public Order {
-private:
-    Territory* target;
 public:
     Deploy(Player* player, Territory* target);
     Deploy(const Deploy& order);
@@ -73,6 +75,8 @@ public:
     ~Deploy();
     bool validate() const;
     bool execute();
+private:
+    Territory* target;
 };
 
 class Advance : public Order {
@@ -146,16 +150,6 @@ public:
  * Structure to hold orders and apply operations over.
  */
 class OrdersList {
-private:
-    // Set of Order pointers.
-    vector<Order*> orders;
-
-    /**
-     * Finds an order in orders.
-     * @param order Order pointer to find.
-     * @return orders.end() if not found
-     */
-    vector<Order*>::iterator findOrder(Order* order);
 public:
     /**
      * Default constructor.
@@ -172,10 +166,7 @@ public:
      */
     ~OrdersList();
 
-    /**
-     * Adds an order to orders.
-     */
-    void addOrder(Order* order);
+    friend Player;
 
     /**
      * Gets the number of elements in orders.
@@ -199,12 +190,6 @@ public:
     OrdersList& operator=(const OrdersList& other);
 
     /**
-     * Deletes an order from the list
-     * @param order Order to remove from the list.
-     */
-    void remove(Order* order);
-
-    /**
      * Gets an Order pointer at a specific index.
      * @param index Index of the desired object.
      * @return Pointer to the Order object, or `nullptr` if not found.
@@ -212,9 +197,37 @@ public:
     Order* getAtIndex(const unsigned int index) const;
 
     /**
+     * Deletes an order from the list
+     * @param order Order to remove from the list.
+     */
+    void remove(Order* order);
+
+    /**
+     * Adds an order to orders.
+     */
+    void add(Order* order);
+
+    /**
      * Swaps two orders' position in the list.
      * @param first First order.
      * @param second Second order.
      */
     void move(Order* first, Order* second);
+private:
+    /// Set of Order pointers.
+    vector<Order*> orders;
+
+    /**
+     * Finds an order in orders.
+     * @param order Order pointer to find.
+     * @return orders.end() if not found
+     */
+    vector<Order*>::iterator findOrder(Order* order);
+
+    /**
+     * Gets the next order, taking into account priority.
+     * Priority 1 takes precedence over priority 4.
+     * @return the order with the highest priority.
+     */
+    Order* next() const;
 };

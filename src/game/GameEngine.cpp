@@ -207,6 +207,8 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::executeOrdersPhase() {
     for (auto player : this->players) {
+        Order* nextOrder = player->getNextOrder();
+        nextOrder->execute();
         // Execute all deploy orders.
     }
 
