@@ -13,7 +13,7 @@ int main() {
     Deck deck(10);
     assert(deck.getLength() == 10);
 
-    Player mockPlayer(deck);
+    Player mockPlayer(&deck);
 
     const Hand* hand = mockPlayer.hand;
     assert(hand->getLength() == 5);

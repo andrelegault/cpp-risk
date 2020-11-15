@@ -1,6 +1,67 @@
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine() : deck(new Deck()) {
+GameEngine::GameEngine() : deck(new Deck()), map(nullptr), gameUI(nullptr) {}
+
+GameEngine::~GameEngine() {
+    delete this->deck;
+
+    delete this->map;
+
+    for (auto player : this->players) delete player;
+
+    delete this->gameUI;
+}
+
+int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
+    return std::max(50 - (numberOfPlayers * 5), 25);
+}
+
+void GameEngine::initPlayers() {
+    std::shuffle(this->players.begin(), this->players.end(), std::random_device{});
+
+    int armyCount = this->getPlayerArmyCount(this->players.size());
+
+    for (auto player : this->players) {
+        player->addArmies(armyCount);
+    }
+}
+
+void GameEngine::assignTerritories() {
+    vector<Territory*> territories = this->map->getTerritories();
+
+    std::shuffle(territories.begin(), territories.end(), std::random_device{});
+
+    int roundRobin = 0;
+
+    int numberOfPlayers = this->players.size();
+
+    for (auto territory : territories) {
+        this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
+    }
+}
+
+void GameEngine::printTerritoryOwners() {
+    vector<vector<UI::Component*>> table;
+
+    for (auto continent : this->map->getContinents()) {
+        table.push_back({ new UI::Text(continent->getName()) });
+
+        vector<string> territoryList;
+        for (auto territory : continent->getTerritories()) {
+            stringstream ss;
+
+            ss << territory->getOwnerName() << " -> " << territory->getName();
+
+            territoryList.push_back(ss.str());
+        }
+
+        table.push_back({ new UI::List(territoryList) });
+    }
+
+    cout << Grid(table);
+}
+
+void GameEngine::init() {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
         return;
@@ -23,7 +84,7 @@ GameEngine::GameEngine() : deck(new Deck()) {
 
     UI::clear();
 
-    Map mapObj = MapLoader::load(directory + maps[ask("Select Map", maps) - 1] + ".map");
+    Map mapObj = MapLoader::load(directory + maps.at(ask("Select Map", maps) - 1) + ".map");
 
     if (!mapObj.validate()) {
         UI::clear();
@@ -38,7 +99,9 @@ GameEngine::GameEngine() : deck(new Deck()) {
     int numberOfPlayers = range("Number of Players", 2, 5);
 
     for (int i = 0; i < numberOfPlayers; ++i) {
-        this->players.push_back(new Player(*this->deck));
+        Player* player = new Player(this->deck);
+
+        this->players.push_back(player);
     }
 
     vector<Component*> observers;
@@ -67,81 +130,10 @@ GameEngine::GameEngine() : deck(new Deck()) {
     else {
         this->gameUI = new GameUI();
     }
-}
 
-GameEngine::~GameEngine() {
-    delete this->deck;
-    delete this->map;
+    UI::clear();
 
-    for (auto player : this->players) {
-        delete player;
-    }
-
-    delete this->gameUI;
-}
-
-int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
-    // TODO: throw error if numberOfPlayers isn't within acceptable range
-    return (2 <= numberOfPlayers <= 5) ? (50 - (numberOfPlayers * 5)) : -1;
-}
-
-void GameEngine::initPlayers() {
-    std::random_device rd;
-
-    std::shuffle(this->players.begin(), this->players.end(), rd);
-
-    int armyCount = this->getPlayerArmyCount(this->players.size());
-
-    cout << "ARMY COUNT -> " << armyCount << endl;
-
-    for (auto player : this->players) {
-        player->addArmies(armyCount);
-    }
-}
-
-void GameEngine::assignTerritories() {
-    vector<Territory*> territories = this->map->getTerritories();
-
-    std::random_device rd;
-
-    std::shuffle(territories.begin(), territories.end(), rd);
-
-    int roundRobin = 0;
-
-    int numberOfPlayers = this->players.size();
-
-    for (auto territory : territories) {
-        this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
-    }
-}
-
-void GameEngine::printTerritoryOwners() {
-    for (auto continent : this->map->getContinents()) {
-        cout << continent->getName() << ":" << endl;
-
-        for (auto territory : continent->getTerritories()) {
-            cout << "\t" << territory->getName() << ", owned by " << territory->getOwnerName() << endl;
-        }
-    }
-}
-
-Player* GameEngine::getWinningPlayer() {
-    Player* lastPlayerWithTerritories = nullptr;
-    int numberOfPlayersWithTerritories;
-
-    for (auto player : this->players) {
-        if (player->getNumTerritories() > 0) {
-            lastPlayerWithTerritories = player;
-            numberOfPlayersWithTerritories++;
-        }
-    }
-
-    if (numberOfPlayersWithTerritories == 1) {
-        return lastPlayerWithTerritories;
-    }
-    else {
-        return nullptr;
-    }
+    this->startupPhase();
 }
 
 void GameEngine::startupPhase() {
@@ -157,23 +149,39 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
-    this->reinforcementPhase();
-    this->issueOrdersPhase();
-    this->executeOrdersPhase();
+    while (true) {
+        // Removes losing players.
+        std::vector<Player*> playersWithTerritory;
 
-    Player* winningPlayer = this->getWinningPlayer();
+        for (auto player : this->players) {
+            if (player->getTerritories().size() > 0) {
+                playersWithTerritory.push_back(player);
+            }
+            else {
+                delete player;
+            }
+        }
 
-    if (winningPlayer != nullptr) {
-        cout << "WINNER " << winningPlayer << endl;
-        return;
+        this->players = playersWithTerritory;
+
+        // Checks win condition.
+        if (this->players.size() == 1) {
+            cout << "WINNER " << this->players.front() << endl;
+            return;
+        }
+        else if (this->players.size() == 0) {
+            return;
+        }
+
+        // Phases.
+        this->reinforcementPhase();
+        this->issueOrdersPhase();
+        this->executeOrdersPhase();
     }
-
-    this->mainGameLoop();
 }
 
 void GameEngine::reinforcementPhase() {
     for (auto player : this->players) {
-        // add armies based on current number of owned territories
         player->addArmies(std::max((int)floor(player->getNumTerritories() / 3), 3));
 
         for (auto continent : this->map->getContinents()) {
@@ -187,7 +195,6 @@ void GameEngine::reinforcementPhase() {
             }
 
             if (hasAllTerritories) {
-                // add bonus if applicable
                 player->addArmies(continent->getBonus());
             }
         }
@@ -206,12 +213,15 @@ bool GameEngine::isExecutionDone() const {
             return false;
         }
     }
+
     return true;
 }
 
 void GameEngine::executeOrdersPhase() {
     const int numPlayers = this->players.size();
+
     int playersDoneDeploying = 0;
+
     while (playersDoneDeploying < numPlayers) {
         for (auto player : this->players) {
             Order* nextDeployed = player->getNextOrder(4);
@@ -224,6 +234,7 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
+
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
             Order* nextOrder = player->getNextOrder();

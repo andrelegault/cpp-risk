@@ -1,6 +1,175 @@
 #include "Map.hpp"
 
-// MapNode
+Map::Map() : Map("") {}
+
+Map::Map(const string name) {
+    this->name = name;
+}
+
+Map::Map(const Map& m) {
+    this->name = m.name;
+
+    // Used for mapping name to object.
+    map<string, Continent*> continentMap;
+    map<string, Territory*> territoryMap;
+
+    // Used for mapping border name to name.
+    vector<pair<string, string>> continentBorders;
+    vector<pair<string, string>> territoryBorders;
+
+    for (auto continent : m.continents) {
+        string continentName = continent->getName();
+        int continentBonus = continent->getBonus();
+
+        // Making copy of the Continent and attaching to parent Map.
+        Continent* continentClone = new Continent(continentName, continentBonus);
+        this->connect(continentClone);
+
+        // Mapping name to object.
+        continentMap.insert({ continentName, continentClone });
+
+        // Getting all borders (cannot connect automatically because the continent object could not exist).
+        for (auto border : continent->getBorders()) {
+            continentBorders.push_back({ continentName, border->getOther(continent)->getName() });
+        }
+
+        for (auto territory : continent->getTerritories()) {
+            string territoryName = territory->getName();
+
+            // Making copy of the Territory and attaching to parent cContinent.
+            Territory* territoryClone = new Territory(territoryName);
+            continentClone->connect(territoryClone);
+
+            // Mapping name to object.
+            territoryMap.insert({ territoryName, territoryClone });
+
+            // Getting all borders (cannot connect automatically because the continent object could not exist).
+            for (auto border : territory->getBorders()) {
+                territoryBorders.push_back({ territoryName, border->getOther(territory)->getName() });
+            }
+        }
+    }
+
+    // Connecting Continents according to border (we know all objects must exist at this point).
+    for (auto border : continentBorders) {
+        ((MapNode*)continentMap[border.first])->connect(continentMap[border.second]);
+    }
+
+    // Connecting Borders according to border (we know all objects must exist at this point).
+    for (auto border : territoryBorders) {
+        ((MapNode*)territoryMap[border.first])->connect(territoryMap[border.second]);
+    }
+}
+
+Map::~Map() {
+    while (!this->continents.empty()) delete this->continents.back();
+}
+
+ostream& operator<<(ostream& stream, const Map& m) {
+    stream << m.name << endl << endl;
+
+    stream << "-----------------" << endl << endl;
+
+    for (auto continent : m.continents) {
+        stream << *continent;
+    }
+
+    stream << "-----------------" << endl << endl;
+
+    for (auto territory : m.getTerritories()) {
+        stream << *territory;
+    }
+
+    return stream;
+}
+
+Map& Map::operator=(const Map& other) {
+    if (&other != this) {
+        this->~Map();
+        this->name = other.name;
+        this->continents = other.continents;
+    }
+
+    return *this;
+}
+
+void Map::connect(Continent* continent) {
+    continent->connect(this);
+    this->continents.push_back(continent);
+}
+
+void Map::remove(Continent* continent) {
+    auto p = find(this->continents.begin(), this->continents.end(), continent);
+
+    if (p != this->continents.end()) this->continents.erase(p);
+}
+
+bool Map::validate() {
+    set<Territory*> seenTerritories;
+
+    for (auto continent : this->continents) {
+        if (!continent->validate()) return false;
+
+        for (auto territory : continent->getTerritories()) {
+            if (seenTerritories.find(territory) != seenTerritories.end()) return false;
+
+            seenTerritories.insert(territory);
+        }
+    }
+
+    return true;
+}
+
+vector<Continent*> Map::getContinents() const {
+    return this->continents;
+}
+
+vector<Territory*> Map::getTerritories() const {
+    vector<Territory*> territories;
+
+    for (auto continent : this->continents) {
+        vector<Territory*> temp = continent->getTerritories();
+
+        territories.insert(territories.end(), temp.begin(), temp.end());
+    }
+
+    return territories;
+}
+
+vector<Border*> Map::getBorders() const {
+    vector<Border*> borders;
+
+    for (auto territory : this->getTerritories()) {
+        vector<Border*> temp = territory->getBorders();
+
+        borders.insert(borders.end(), temp.begin(), temp.end());
+    }
+
+    return borders;
+}
+
+Continent* Map::get(const Continent& continent) {
+    for (auto c : this->continents) if (*c == continent) return c;
+
+    return nullptr;
+}
+
+Territory* Map::get(const Territory& territory) {
+    for (auto t : this->getTerritories()) if (*t == territory) return t;
+
+    return nullptr;
+}
+
+Border* Map::get(const Border& border) {
+    for (auto b : this->getBorders()) if (*b == border) return b;
+
+    return nullptr;
+}
+
+/******************************************************
+ * MAPNODE
+ *****************************************************/
+
 MapNode::MapNode() : MapNode("") {}
 
 MapNode::MapNode(const string name) {
@@ -21,14 +190,17 @@ MapNode& MapNode::operator=(const MapNode& other) {
         borders = other.borders;
         name = other.name;
     }
+
     return *this;
 }
 
 ostream& operator<<(ostream& stream, const MapNode& node) {
     stream << "MapNode with name: " << node.name << endl;
+
     for (Border* border : node.borders) {
         stream << "\t" << border << endl;
     }
+
     return stream;
 }
 
@@ -65,10 +237,13 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
     return m1.name == m2.name;
 }
 
-// Territory
+/******************************************************
+ * TERRITORY
+ *****************************************************/
+
 Territory::Territory() : Territory("") {}
 
-Territory::Territory(const string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) { }
+Territory::Territory(const string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) {}
 
 Territory::Territory(const Territory& territory) : MapNode(territory) {
     Map* m = new Map(*(territory.getMap()));
@@ -81,9 +256,7 @@ Territory::Territory(const Territory& territory) : MapNode(territory) {
 }
 
 Territory::~Territory() {
-    if (continent != nullptr) {
-        this->continent->remove(this);
-    }
+    if (continent != nullptr) this->continent->remove(this);
 }
 
 // TODO: Better print.
@@ -108,6 +281,7 @@ Territory& Territory::operator=(const Territory& other) {
         this->playerOwner = other.playerOwner;
         this->continent = other.continent;
     }
+
     return *this;
 }
 
@@ -168,7 +342,10 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
     }
 }
 
-// Continent
+/******************************************************
+ * CONTIENT
+ *****************************************************/
+
 Continent::Continent() : Continent("", 0) {}
 
 Continent::Continent(string name, int bonus) : MapNode(name), bonus(bonus), map(nullptr) { }
@@ -182,9 +359,7 @@ Continent::Continent(const Continent& continent) : MapNode(continent), bonus(con
 }
 
 Continent::~Continent() {
-    if (this->map != NULL) {
-        this->map->remove(this);
-    }
+    if (this->map != nullptr) this->map->remove(this);
 
     while (!this->territories.empty()) delete this->territories.back();
 }
@@ -233,8 +408,6 @@ void Continent::remove(Territory* territory) {
 }
 
 bool Continent::validate() {
-    //if (this->borders.size() == 0) return false;
-
     for (auto territory : this->territories) if (!territory->validate()) return false;
 
     return true;
@@ -252,190 +425,9 @@ const int Continent::getBonus() const {
     return this->bonus;
 }
 
-// Map
-Map::Map() : Map("") {}
-
-Map::Map(const string name) {
-    this->name = name;
-}
-
-Map::Map(const Map& m) {
-    this->name = m.name;
-
-    // Used for mapping name to object.
-    map<string, Continent*> continentMap;
-    map<string, Territory*> territoryMap;
-    // Used for mapping border name to name.
-    vector<pair<string, string>> continentBorders;
-    vector<pair<string, string>> territoryBorders;
-
-    for (auto continent : m.continents) {
-        string continentName = continent->getName();
-        int continentBonus = continent->getBonus();
-
-        // Making copy of the Continent and attaching to parent Map.
-        Continent* continentClone = new Continent(continentName, continentBonus);
-        this->connect(continentClone);
-
-        // Mapping name to object.
-        continentMap.insert({ continentName, continentClone });
-
-        // Getting all borders (cannot connect automatically because the continent object could not exist).
-        for (auto border : continent->getBorders()) {
-            continentBorders.push_back({ continentName, border->getOther(continent)->getName() });
-        }
-
-        for (auto territory : continent->getTerritories()) {
-            string territoryName = territory->getName();
-
-            // Making copy of the Territory and attaching to parent cContinent.
-            Territory* territoryClone = new Territory(territoryName);
-            continentClone->connect(territoryClone);
-
-            // Mapping name to object.
-            territoryMap.insert({ territoryName, territoryClone });
-
-            // Getting all borders (cannot connect automatically because the continent object could not exist).
-            for (auto border : territory->getBorders()) {
-                territoryBorders.push_back({ territoryName, border->getOther(territory)->getName() });
-            }
-        }
-    }
-
-    // Connecting Continents according to border (we know all objects must exist at this point).
-    for (auto border : continentBorders) {
-        ((MapNode*)continentMap[border.first])->connect(continentMap[border.second]);
-    }
-
-    // Connecting Borders according to border (we know all objects must exist at this point).
-    for (auto border : territoryBorders) {
-        ((MapNode*)territoryMap[border.first])->connect(territoryMap[border.second]);
-    }
-}
-
-Map::~Map() {
-    while (!this->continents.empty()) {
-        Continent* temp = this->continents.back();
-        delete temp;
-        temp = nullptr;
-    }
-}
-
-// TODO: Better print.
-ostream& operator<<(ostream& stream, const Map& m) {
-    stream << m.name << endl << endl;
-
-    stream << "-----------------" << endl << endl;
-
-    for (auto continent : m.continents) {
-        stream << *continent;
-    }
-
-    stream << "-----------------" << endl << endl;
-
-    for (auto territory : m.getTerritories()) {
-        stream << *territory;
-    }
-
-    return stream;
-}
-
-Map& Map::operator=(const Map& other) {
-    if (&other != this) {
-        this->~Map();
-        this->name = other.name;
-        this->continents = other.continents;
-    }
-    return *this;
-}
-
-void Map::connect(Continent* continent) {
-    continent->connect(this);
-    this->continents.push_back(continent);
-}
-
-void Map::remove(Continent* continent) {
-    auto p = find(this->continents.begin(), this->continents.end(), continent);
-
-    if (p != this->continents.end()) this->continents.erase(p);
-}
-
-bool Map::validate() {
-    set<Territory*> seenTerritories;
-
-    for (auto continent : this->continents) {
-        if (!continent->validate()) return false;
-
-        for (auto territory : continent->getTerritories()) {
-            if (seenTerritories.find(territory) != seenTerritories.end()) return false;
-
-            seenTerritories.insert(territory);
-        }
-    }
-
-    return true;
-}
-
-vector<Continent*> Map::getContinents() const {
-    return this->continents;
-}
-
-vector<Territory*> Map::getTerritories() const {
-    vector<Territory*> territories;
-
-    for (auto continent : this->continents) {
-        vector<Territory*> temp = continent->getTerritories();
-
-        territories.insert(territories.end(), temp.begin(), temp.end());
-    }
-
-    return territories;
-}
-
-vector<Border*> Map::getBorders() const {
-    vector<Border*> borders;
-
-    for (auto territory : this->getTerritories()) {
-        vector<Border*> temp = territory->getBorders();
-
-        borders.insert(borders.end(), temp.begin(), temp.end());
-    }
-
-    return borders;
-}
-
-Continent* Map::get(const Continent& continent) {
-    for (auto c : this->continents) {
-        if (*c == continent) {
-            return c;
-        }
-    }
-
-    return NULL;
-}
-
-Territory* Map::get(const Territory& territory) {
-    for (auto t : this->getTerritories()) {
-        if (*t == territory) {
-            return t;
-        }
-    }
-
-    return NULL;
-}
-
-Border* Map::get(const Border& border) {
-    for (auto b : this->getBorders()) {
-        if (*b == border) {
-            return b;
-        }
-    }
-
-    return NULL;
-}
-
-
-// Border
+/******************************************************
+ * BORDER
+ *****************************************************/
 
 Border::Border() : Border(nullptr, nullptr) {}
 
@@ -453,8 +445,8 @@ Border::Border(const Border& border) {
 }
 
 Border::~Border() {
-    if (this->n1) this->n1->remove(this);
-    if (this->n2) this->n2->remove(this);
+    if (this->n1 != nullptr) this->n1->remove(this);
+    if (this->n2 != nullptr) this->n2->remove(this);
 }
 
 ostream& operator<<(ostream& stream, const Border* border) {

@@ -12,14 +12,121 @@
 using namespace std;
 
 /**
+ * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
+ * We can discuss if borders and territories should be handled by the subgroups.
+ */
+class Map {
+public:
+    /**
+     * Default constructor.
+     */
+    Map();
+
+    /**
+     * Primary constructor.
+     * @param name Name of Map.
+     */
+    Map(const string name);
+
+    /**
+     * Copy constructor.
+     * @param map Map to copy.
+     */
+    Map(const Map& map);
+
+    /**
+     * Destructor.
+     */
+    ~Map();
+
+    /**
+     * Stream operator to describe Map in string format.
+     * @param os The stream to output to.
+     * @param map The object to convert to string.
+     * @return Updates ostream&.
+     */
+    friend ostream& operator<<(ostream& stream, const Map& map);
+
+    /**
+     * Assignment operator overload.
+     * @param other Other Map used for assignment.
+     */
+    Map& operator=(const Map& map);
+
+    /**
+     * Adds a continent to the map.
+     * @param continent Continent to insert.
+     */
+    void connect(Continent* continent);
+
+    /**
+     * Finds equivalent Continent in Map (used for deep copy).
+     *
+     * @param continent Continent to find.
+     * @return Equivalent Continent.
+     */
+    Continent* get(const Continent& continent);
+
+    /**
+     * Finds equivalent Territory in Map (used for deep copy).
+     *
+     * @param territory Territory to find.
+     * @return Equivalent Territory.
+     */
+    Territory* get(const Territory& territory);
+
+    /**
+     * Finds equivalent Border in Map (used for deep copy).
+     *
+     * @param border Border to find.
+     * @return Equivalent Border.
+     */
+    Border* get(const Border& border);
+
+    /**
+     * Removes a continent from the map.
+     * @param continent Continent to remove.
+     */
+    void remove(Continent* continent);
+
+    /**
+     * Returns list of all Continents.
+     */
+    vector<Continent*> getContinents() const;
+
+    /**
+     * Returns list of all Territories.
+     */
+    vector<Territory*> getTerritories() const;
+
+    /**
+     * Returns list of all Borders.
+     */
+    vector<Border*> getBorders() const;
+
+    /**
+     * Method that checks if:
+     * 1) The map is a connected graph
+     * 2) Continents are connected subgraphs
+     * 3) Each territory belongs to one contient.
+     * @return The Map is valid.
+     */
+    bool validate();
+
+private:
+    // Collection of continents.
+    vector<Continent*> continents;
+
+    // Map name.
+    string name;
+};
+
+ostream& operator<<(ostream& stream, const Map& map);
+
+/**
  * Abstracted node for bidirectional graphs.
  */
 class MapNode {
-protected:
-    // The name as defined in the Conquer Map file.
-    string name;
-    // Collection of Border edges.
-    vector<Border*> borders;
 public:
     /**
      * Default constructor.
@@ -105,6 +212,12 @@ public:
      * @return Borders.
      */
     vector<Border*> getBorders() const;
+
+protected:
+    // The name as defined in the Conquer Map file.
+    string name;
+    // Collection of Border edges.
+    vector<Border*> borders;
 };
 
 bool operator== (const MapNode& m1, const MapNode& m2);
@@ -113,14 +226,6 @@ bool operator== (const MapNode& m1, const MapNode& m2);
  * A Node Subgroup for the Map graph.
  */
 class Continent : public MapNode {
-private:
-    /// Territories inside continent subgroup.
-    vector<Territory*> territories;
-    /// Map that Continent is part of.
-    Map* map;
-
-    /// Bonus armies for the continent.
-    int bonus;
 public:
     /// Default constructor.
     Continent();
@@ -209,6 +314,15 @@ public:
      * @return Are territories connected?
      */
     bool validate();
+
+private:
+    /// Territories inside continent subgroup.
+    vector<Territory*> territories;
+    /// Map that Continent is part of.
+    Map* map;
+
+    /// Bonus armies for the continent.
+    int bonus;
 };
 
 bool operator== (const Continent& c1, const Continent& c2);
@@ -317,7 +431,7 @@ public:
      * Simulates an attack on a target territory using a specified number of units from this territory.
      *
      * The battle ends when one territory has no more armies.
-     * 
+     *
      * If the attacker wins, their leftover armies are transferred to the target territory and ownership is transferred.
      *
      * @param attacker Offensive player.
@@ -327,126 +441,16 @@ public:
      * @return whether the attacker was successful.
      */
     bool attack(Territory* target, int attackerArmies, int attackerOdds = DEFAULT_ATTACKER_ODDS, int defenderOdds = DEFAULT_DEFENDER_ODDS);
+private:
+    // Current player that owns this country.
+    Player* playerOwner;
+
+    // Parent Continent.
+    Continent* continent;
 };
 
 bool operator==(const Territory& t1, const Territory& t2);
 ostream& operator<<(ostream& stream, const Territory& territory);
-
-
-// Map
-
-/**
- * Bidirectional Graph collecting Territory nodes, Border edges, and Continent subgroups.
- * We can discuss if borders and territories should be handled by the subgroups.
- */
-class Map {
-private:
-    // Collection of continents.
-    vector<Continent*> continents;
-
-    // Map name.
-    string name;
-
-public:
-    /**
-     * Default constructor.
-     */
-    Map();
-
-    /**
-     * Primary constructor.
-     * @param name Name of Map.
-     */
-    Map(const string name);
-
-    /**
-     * Copy constructor.
-     * @param map Map to copy.
-     */
-    Map(const Map& map);
-
-    /**
-     * Destructor.
-     */
-    ~Map();
-
-    /**
-     * Stream operator to describe Map in string format.
-     * @param os The stream to output to.
-     * @param map The object to convert to string.
-     * @return Updates ostream&.
-     */
-    friend ostream& operator<<(ostream& stream, const Map& map);
-
-    /**
-     * Assignment operator overload.
-     * @param other Other Map used for assignment.
-     */
-    Map& operator=(const Map& map);
-
-    /**
-     * Adds a continent to the map.
-     * @param continent Continent to insert.
-     */
-    void connect(Continent* continent);
-
-    /**
-     * Finds equivalent Continent in Map (used for deep copy).
-     *
-     * @param continent Continent to find.
-     * @return Equivalent Continent.
-     */
-    Continent* get(const Continent& continent);
-
-    /**
-     * Finds equivalent Territory in Map (used for deep copy).
-     *
-     * @param territory Territory to find.
-     * @return Equivalent Territory.
-     */
-    Territory* get(const Territory& territory);
-
-    /**
-     * Finds equivalent Border in Map (used for deep copy).
-     *
-     * @param border Border to find.
-     * @return Equivalent Border.
-     */
-    Border* get(const Border& border);
-
-    /**
-     * Removes a continent from the map.
-     * @param continent Continent to remove.
-     */
-    void remove(Continent* continent);
-
-    /**
-     * Returns list of all Continents.
-     */
-    vector<Continent*> getContinents() const;
-
-    /**
-     * Returns list of all Territories.
-     */
-    vector<Territory*> getTerritories() const;
-
-    /**
-     * Returns list of all Borders.
-     */
-    vector<Border*> getBorders() const;
-
-    /**
-     * Method that checks if:
-     * 1) The map is a connected graph
-     * 2) Continents are connected subgraphs
-     * 3) Each territory belongs to one contient.
-     * @return The Map is valid.
-     */
-    bool validate();
-};
-
-ostream& operator<<(ostream& stream, const Map& map);
-
 
 // Border
 
@@ -454,12 +458,6 @@ ostream& operator<<(ostream& stream, const Map& map);
  * Bidirectional edge for the Map graph.
  */
 class Border {
-private:
-    // MapNode connected to Border edge.
-    MapNode* n1;
-    // MapNode connected to Border edge.
-    MapNode* n2;
-
 public:
     /**
      * Default constructor.
@@ -527,6 +525,12 @@ public:
      * @return Map.
      */
     Map* getMap() const;
+
+private:
+    // MapNode connected to Border edge.
+    MapNode* n1;
+    // MapNode connected to Border edge.
+    MapNode* n2;
 };
 
 bool operator== (const Border& b1, const Border& b2);

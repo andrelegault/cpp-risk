@@ -12,8 +12,6 @@ PhaseObserver::~PhaseObserver() {
 }
 
 void PhaseObserver::_update() {
-    cout << "PHASE OBSERVER" << endl;
-
     if (this->component != nullptr) {
         delete this->component;
     }
@@ -46,8 +44,6 @@ void GameStatisticsObserver::update() {
 }
 
 void GameStatisticsObserver::_update() {
-    cout << "GAME STATISTICS" << endl;
-
     if (this->component != nullptr) {
         delete this->component;
     }
@@ -55,9 +51,7 @@ void GameStatisticsObserver::_update() {
     vector<vector<Component*>> rows;
 
     for (auto player : this->gameEngine->players) {
-        Text* score = new Text("0");
-
-        rows.push_back(vector<Component*>{ new Text(player->getName()), score });
+        rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size())) });
     }
 
     this->component = new Grid(rows);
