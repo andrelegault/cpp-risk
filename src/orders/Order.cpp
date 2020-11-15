@@ -50,8 +50,10 @@ Deploy& Deploy::operator=(const Deploy& other) {
 
 
 bool Deploy::execute() {
+    cout << "Executing a deploy order!" << endl;
+
     if (validate()) {
-        cout << "Executing an execute order!" << endl;
+        // TODO: get correct number of armies to add
         this->target->numberOfArmies += this->armyCount;
         return true;
     }
@@ -93,6 +95,8 @@ Advance& Advance::operator=(const Advance& other) {
 
 
 bool Advance::execute() {
+    cout << "Executing an advance order!" << endl;
+
     if (validate()) {
         bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
@@ -136,9 +140,11 @@ bool Bomb::validate() const {
 }
 
 bool Bomb::execute() {
+    cout << "Executing a bomb order!" << endl;
+
     if (validate()) {
-        cout << "Executing a bomb order!" << endl;
         this->target->numberOfArmies /= 2;
+
         return true;
     }
     else {
@@ -170,8 +176,9 @@ bool Blockade::validate() const {
 }
 
 bool Blockade::execute() {
+    cout << "Executing a blockade order!" << endl;
+
     if (validate()) {
-        cout << "Executing a blockade order!" << endl;
         this->target->numberOfArmies *= 2;
         this->player->removeTerritory(this->target);
         // TODO: transfer ownership to neutral player
@@ -209,6 +216,8 @@ Airlift& Airlift::operator=(const Airlift& other) {
 }
 
 bool Airlift::execute() {
+    cout << "Executing an airlift order!" << endl;
+
     if (validate()) {
         const bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
@@ -225,8 +234,6 @@ bool Airlift::execute() {
                 // player->hand->addCard()
             }
         }
-
-        cout << "Executing an airlift order!" << endl;
         return true;
     }
     else {
@@ -318,11 +325,8 @@ void OrdersList::add(Order* what) {
 
 void OrdersList::remove(Order* order) {
     auto o = findOrder(order);
-    if (o != orders.end()) {
-        orders.erase(o);
-        delete order;
-        order = nullptr;
-    }
+
+    if (o != orders.end()) orders.erase(o);
 }
 
 vector<Order*>::iterator OrdersList::findOrder(Order* order) {
@@ -344,30 +348,33 @@ void OrdersList::move(Order* first, Order* second) {
 }
 
 Order* OrdersList::next(const int wantedPriority) const {
-    const int numOrders = orders.size();
-    if (numOrders > 0) {
-        if (wantedPriority == -1) {
-            // by regular priority
-            Order* highest = orders.front();
-            for (int i = 1; i < numOrders; ++i) {
-                Order* cur = orders.at(i);
-                if (highest->priority > cur->priority) {
-                    highest = cur;
+    if (wantedPriority == -1) {
+        // by regular priority
+        Order* highest = nullptr;
+
+        if (this->orders.size() > 0) {
+            for (auto order : this->orders) {
+                if (highest == nullptr) {
+                    highest = order;
+                }
+                else if (highest->priority > order->priority) {
+                    highest = order;
                 }
             }
-            return highest;
         }
-        else {
+
+        return highest;
+    }
+    else {
+        if (this->orders.size() > 0) {
             // with specific priority
-            for (auto order : orders) {
+            for (auto order : this->orders) {
                 if (order->priority == wantedPriority) {
                     return order;
                 }
             }
-            return NULL;
         }
     }
-    else {
-        return NULL;
-    }
+
+    return nullptr;
 }
