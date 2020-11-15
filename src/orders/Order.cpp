@@ -348,25 +348,25 @@ void OrdersList::move(Order* first, Order* second) {
 }
 
 Order* OrdersList::next(const int wantedPriority) const {
-    if (wantedPriority == -1) {
-        // by regular priority
-        Order* highest = nullptr;
+    const int orderSize = this->orders.size();
+    if (orderSize > 0) {
+        if (wantedPriority == -1) {
+            // by regular priority
+            Order* highest = nullptr;
 
-        if (this->orders.size() > 0) {
             for (auto order : this->orders) {
                 if (highest == nullptr) {
                     highest = order;
                 }
                 else if (highest->priority > order->priority) {
+                    // lower priority takes precedence
                     highest = order;
                 }
             }
-        }
 
-        return highest;
-    }
-    else {
-        if (this->orders.size() > 0) {
+            return highest;
+        }
+        else {
             // with specific priority
             for (auto order : this->orders) {
                 if (order->priority == wantedPriority) {
@@ -375,6 +375,7 @@ Order* OrdersList::next(const int wantedPriority) const {
             }
         }
     }
-
-    return nullptr;
+    else {
+        return nullptr;
+    }
 }
