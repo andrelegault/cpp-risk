@@ -108,17 +108,13 @@ bool Advance::execute() {
             this->target->numberOfArmies += this->armyCount;
         }
         else {
-            const int sourceArmies = this->source->numberOfArmies;
-            const int targetArmies = this->source->numberOfArmies;
-            const int killedDefenders = this->getKilledUnits(60, sourceArmies, targetArmies);
-            const int killedAttackers = this->getKilledUnits(70, targetArmies, sourceArmies);
-            if (killedDefenders >= targetArmies) {
-                // conquered territory
-                const int attackersLeft = sourceArmies - killedAttackers;
-                return true;
+            const bool successful = this->source->attack(this->target, this->armyCount);
+            if (successful) {
+                // TODO: give a card to the player, but which one?
+                
+                // player->hand->addCard()
             }
         }
-        cout << "Executing an advance order!" << endl;
     }
 
     return false;

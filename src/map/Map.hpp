@@ -221,6 +221,8 @@ ostream& operator<<(ostream& stream, const Continent& continent);
  */
 class Territory : public MapNode {
 private:
+    static const int DEFAULT_ATTACKER_ODDS = 60;
+    static const int DEFAULT_DEFENDER_ODDS = 70;
     // Current player that owns this country.
     Player* playerOwner;
 
@@ -310,6 +312,21 @@ public:
      * @return Node is connected.
      */
     bool validate();
+
+    /**
+     * Simulates an attack on a target territory using a specified number of units from this territory.
+     *
+     * The battle ends when one territory has no more armies.
+     * 
+     * If the attacker wins, their leftover armies are transferred to the target territory and ownership is transferred.
+     *
+     * @param attacker Offensive player.
+     * @param defender Defensive player.
+     * @param attackerOdds Odds the attacker for each army (default 60).
+     * @param defenderOdds Odds for each of the defender's army (default 70).
+     * @return whether the attacker was successful.
+     */
+    bool attack(Territory* target, int attackerArmies, int attackerOdds = DEFAULT_ATTACKER_ODDS, int defenderOdds = DEFAULT_DEFENDER_ODDS);
 };
 
 bool operator==(const Territory& t1, const Territory& t2);

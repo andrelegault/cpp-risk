@@ -125,7 +125,7 @@ void Territory::setPlayerOwner(Player* player) {
     this->playerOwner = player;
 }
 
-string Territory::getOwnerName(){
+string Territory::getOwnerName() {
     return this->playerOwner->getName();
 }
 
@@ -139,6 +139,33 @@ Map* Territory::getMap() const {
 
 Player* Territory::getOwner() const {
     return this->playerOwner;
+}
+
+bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
+    srand(time(NULL));
+    this->numberOfArmies -= attackerArmies;
+    while (attackerArmies > 0 && target->numberOfArmies > 0) {
+        const int attackRoll = rand() % 100;
+        if (attackRoll <= attackerOdds) {
+            target->numberOfArmies--;
+        }
+        if (target->numberOfArmies > 0) {
+            const int defendRoll = rand() % 100;
+            if (defendRoll <= defenderOdds) {
+                attackerArmies--;
+            }
+        }
+    }
+    if (attackerArmies > 0) {
+        // attacker won
+        target->numberOfArmies = attackerArmies;
+        target->playerOwner = this->playerOwner;
+        return true;
+    }
+    else {
+        // attacker lost
+        return false;
+    }
 }
 
 // Continent
