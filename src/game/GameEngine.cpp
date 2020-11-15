@@ -176,16 +176,16 @@ void GameEngine::reinforcementPhase() {
         player->addArmies(std::max((int)floor(player->getNumTerritories() / 3), 3));
 
         for (auto continent : this->map->getContinents()) {
-            bool hasAllTerritoires = true;
+            bool hasAllTerritories = true;
 
             for (auto territory : continent->getTerritories()) {
                 if (territory->getOwner() == player) {
-                    hasAllTerritoires = false;
+                    hasAllTerritories = false;
                     break;
                 }
             }
 
-            if (hasAllTerritoires) {
+            if (hasAllTerritories) {
                 player->addArmies(continent->getBonus());
             }
         }
@@ -198,14 +198,37 @@ void GameEngine::issueOrdersPhase() {
     }
 }
 
-void GameEngine::executeOrdersPhase() {
+bool GameEngine::isExecutionDone() const {
     for (auto player : this->players) {
-        Order* nextOrder = player->getNextOrder();
-        nextOrder->execute();
-        // Execute all deploy orders.
+        if (player->remainingOrders() > 0) {
+            return false;
+        }
     }
+    return true;
+}
 
-    for (auto player : this->players) {
-        // Execute orders according to priority.
+void GameEngine::executeOrdersPhase() {
+    const int numPlayers = this->players.size();
+    int playersDoneDeploying = 0;
+    while (playersDoneDeploying < numPlayers) {
+        for (auto player : this->players) {
+            Order* nextDeployed = player->getNextOrder(4);
+            if (nextDeployed == NULL) {
+                playersDoneDeploying++;
+            }
+            else {
+                nextDeployed->execute();
+                player->removeOrder(nextDeployed);
+            }
+        }
+    }
+    while (!this->isExecutionDone()) {
+        for (auto player : this->players) {
+            Order* nextOrder = player->getNextOrder();
+            if (nextOrder != NULL) {
+                nextOrder->execute();
+                player->removeOrder(nextOrder);
+            }
+        }
     }
 }

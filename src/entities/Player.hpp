@@ -80,6 +80,15 @@ public:
     void addOrder(Order* order);
 
     /**
+     * Removes an order from the player's list of orders.
+     * @param order Order to add.
+     */
+    void removeOrder(Order* order);
+
+    /// Gets the number of orders in the player's order list.
+    int remainingOrders() const;
+
+    /**
      * Add territory to territories.
      */
     void addTerritory(Territory* territory);
@@ -100,7 +109,8 @@ public:
      * Gets the player's next order.
      * @return the order with highest priority.
      */
-    Order* getNextOrder() const;
+    Order* getNextOrder(const int wantedPriority = -1) const;
+
 private:
     // The territories owned by the players.
     vector<Territory*> territories;

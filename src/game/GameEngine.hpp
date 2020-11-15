@@ -32,6 +32,8 @@ public:
 
     void executeOrdersPhase();
 
+    bool isExecutionDone() const;
+
     int getPlayerArmyCount(int numberOfPlayers) const;
 
     void initPlayers();
@@ -45,7 +47,7 @@ public:
 
     /**
      * print territories with their owner names, grouped by continents
-     */ 
+     */
     void printTerritoryOwners();
 
     Player* getWinningPlayer();

@@ -145,6 +145,14 @@ void Player::addOrder(Order* order) {
     orders->add(order);
 }
 
+void Player::removeOrder(Order* order) {
+    orders->remove(order);
+}
+
+int Player::remainingOrders() const {
+    return orders->getLength();
+}
+
 ostream& operator<<(ostream& strm, const Player& player) {
     strm << "Player's name: " << player.name << ", Territories: [";
     for (int i = 0; i < player.territories.size(); i++) {
@@ -184,6 +192,6 @@ int Player::getArmies() {
     return armies;
 }
 
-Order* Player::getNextOrder() const {
-    return orders->next();
+Order* Player::getNextOrder(const int wantedPriority) const {
+    return orders->next(wantedPriority);
 }
