@@ -227,9 +227,9 @@ private:
     /**
      * Gets the next order, taking into account priority.
      * Priority 1 takes precedence over priority 4.
-     * 
+     *
      * If `wantedPriority` is passed, it will return the next order with that priority.
-     * 
+     *
      * @return the order with the highest priority.
      */
     Order* next(const int wantedPriority = -1) const;
