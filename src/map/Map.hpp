@@ -281,7 +281,7 @@ public:
      *
      * @param player Player to make owner of.
      */
-    void set(Player* player);
+    void setPlayerOwner(Player* player);
 
     /**
      * return the name of the player who owns the territory

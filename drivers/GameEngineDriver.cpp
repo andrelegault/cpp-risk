@@ -13,7 +13,7 @@ using namespace UI;
 int main() {
     GameEngine gameEngine;
 
-    gameEngine.mainGameLoop();
+    gameEngine.startupPhase();
 
     return 0;
 }

@@ -3,24 +3,17 @@
 int Player::count = 0;
 
 //set armies to 0 by default
-Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()), armies(0) {
-    cout << "Player " << name << " created" << endl;
-}
+Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()), armies(0) {}
 
+Player::Player(Deck& deck) : hand(new Hand(deck)), name("p" + to_string(count++)), orders(new OrdersList()), armies(0) {}
 
 Player::Player(const Player& player) : name("p" + to_string(count++)), orders(new OrdersList(*(player.orders))) {
-    cout << "Player " << name << " created (copy constructor)" << endl;
-
     for (Territory* t : player.territories) {
-        Territory* newTer = new Territory(*t);
-        this->territories.push_back(newTer);
+        this->territories.push_back(new Territory(*t));
     }
 }
 
-
 Player::~Player() {
-    cout << "Player is being deleted" << endl;
-
     delete orders;
     orders = nullptr;
 
@@ -35,16 +28,10 @@ Player::~Player() {
     hand = nullptr;
 }
 
-
-Player::Player(Deck& deck) :
-    hand(new Hand(deck)),
-    name("p" + to_string(count++)),
-    orders(new OrdersList()) { }
-
-
 void Player::addTerritory(Territory* territory) {
-    territories.push_back(territory);
-    cout << "Player " << name << ": Added territory " << territory->getName() << " to the Territory List" << endl;
+    this->territories.push_back(territory);
+
+    territory->setPlayerOwner(this);
 }
 
 
@@ -52,7 +39,6 @@ void Player::removeTerritory(Territory* territory) {
     auto t = getTerritory(territory);
     if (t != this->territories.end()) {
         territories.erase(t);
-        cout << "Player " << name << ": Removed territory " << territory->getName() << " from the Territory List " << name << endl;
     }
 }
 
@@ -104,6 +90,8 @@ void Player::issueOrder() {
 
         // TODO: use actual territory pointer
         orders->add(new Deploy(this, NULL));
+
+        this->armies -= numberOfArmies;
     }
 
     while (true) {
@@ -139,6 +127,7 @@ nextState:;
     vector<CardType> cardTypeVector;
 
     std::transform(cardTypeMap.begin(), cardTypeMap.end(), std::back_inserter(cardTypeVector), [](auto& pair) { return pair.first; });
+
     vector<string> cardTypeStrings;
 
     for (auto cardType : cardTypeVector) {
@@ -149,8 +138,7 @@ nextState:;
 
     Card* card = cardTypeMap[cardTypeVector[cardIndex]];
 
-    // TODO: Find a way to map acces the GameEngine deck.
-    // card->play(*this, DECK);
+    card->play(*this);
 }
 
 void Player::addOrder(Order* order) {
@@ -193,9 +181,10 @@ string Player::getName() const {
 }
 
 void Player::addArmies(const int newArmies) {
-    armies += newArmies;
-}
+    cout << "NUM ARMIES: " << this->armies << endl;
 
+    this->armies += newArmies;
+}
 
 vector<Territory*> Player::getTerritories() const {
     return this->territories;

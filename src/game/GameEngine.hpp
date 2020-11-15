@@ -36,6 +36,13 @@ public:
 
     int getPlayerArmyCount(int numberOfPlayers) const;
 
+    void initPlayers();
+
+    /**
+     * Assigns territories to players in a round-robin fashion.
+     */
+    void assignTerritories();
+
     /**
      * print territories with their owner names, grouped by continents
      */ 
@@ -50,9 +57,4 @@ private:
     Map* map;
     Deck* deck;
     GameUI* gameUI;
-
-    /**
-     * Assigns territories to players in a round-robin fashion.
-     */
-    void assignTerritories();
 };
