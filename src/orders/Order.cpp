@@ -3,8 +3,6 @@
 using std::endl;
 using std::ostream;
 
-// TODO: implement DEEP copy for copy constructor + assignment operator for each class that has a pointer member variable
-
 // Order
 
 ostream& operator<<(ostream& os, const Order& order) {
@@ -12,13 +10,13 @@ ostream& operator<<(ostream& os, const Order& order) {
     return os;
 }
 
-Order::Order(Player* player, const int priority) : player(player), priority(priority) { }
+Order::Order(Player* player) : player(player) { }
 
 Order::~Order() {
     cout << "Destroying Order" << endl;
 }
 
-Order::Order(const Order& order) : player(order.player), priority(order.priority) { }
+Order::Order(const Order& order) : player(order.player) { }
 
 Order& Order::operator=(const Order& order) {
     if (this != NULL) {
@@ -29,7 +27,7 @@ Order& Order::operator=(const Order& order) {
 
 
 // Deploy
-Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player, 1), target(target), armyCount(armyCount) {}
+Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player), target(target), armyCount(armyCount) {}
 
 Deploy::~Deploy() {}
 
@@ -48,7 +46,7 @@ Deploy& Deploy::operator=(const Deploy& other) {
 
 
 bool Deploy::execute() {
-    cout << "Executing a deploy order!" << endl;
+    // cout << "Executing a deploy order!" << endl;
 
     if (validate()) {
         // TODO: get correct number of armies to add
@@ -65,7 +63,7 @@ Deploy* Deploy::clone() const {
 }
 
 // Advance
-Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player, 4), source(source), target(target), armyCount(armyCount) {}
+Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player), source(source), target(target), armyCount(armyCount) {}
 
 Advance::~Advance() {}
 
@@ -102,7 +100,7 @@ int Advance::getKilledUnits(int chance, int numAttacker, int numDefender) const 
 }
 
 bool Advance::execute() {
-    cout << "Executing an advance order!" << endl;
+    // cout << "Executing an advance order!" << endl;
 
     if (validate()) {
         bool ownsTarget = this->target->getOwner() == this->player;
@@ -128,7 +126,7 @@ Advance* Advance::clone() const {
 }
 
 // Bomb
-Bomb::Bomb(Player* player, Territory* target) : Order(player, 4), target(target) {}
+Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
 
 Bomb::~Bomb() {}
 
@@ -146,7 +144,7 @@ bool Bomb::validate() const {
 }
 
 bool Bomb::execute() {
-    cout << "Executing a bomb order!" << endl;
+    // cout << "Executing a bomb order!" << endl;
 
     if (validate()) {
         this->target->numberOfArmies /= 2;
@@ -163,7 +161,7 @@ Bomb* Bomb::clone() const {
 }
 
 // Blockade
-Blockade::Blockade(Player* player, Territory* target) : Order(player, 3), target(target) {}
+Blockade::Blockade(Player* player, Territory* target) : Order(player), target(target) {}
 
 Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
 
@@ -181,7 +179,7 @@ bool Blockade::validate() const {
 }
 
 bool Blockade::execute() {
-    cout << "Executing a blockade order!" << endl;
+    // cout << "Executing a blockade order!" << endl;
 
     if (validate()) {
         this->target->numberOfArmies *= 2;
@@ -200,7 +198,7 @@ Blockade* Blockade::clone() const {
 }
 
 // Airlift
-Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player, 2), source(source), target(target), armyCount(armies) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player), source(source), target(target), armyCount(armies) {}
 
 Airlift::~Airlift() {}
 
@@ -220,7 +218,7 @@ Airlift& Airlift::operator=(const Airlift& other) {
 }
 
 bool Airlift::execute() {
-    cout << "Executing an airlift order!" << endl;
+    // cout << "Executing an airlift order!" << endl;
 
     if (validate()) {
         const bool ownsTarget = this->target->getOwner() == this->player;
@@ -245,7 +243,7 @@ Airlift* Airlift::clone() const {
 }
 
 // Negotiate
-Negotiate::Negotiate(Player* player, Player* target) : Order(player, 4), target(target) {}
+Negotiate::Negotiate(Player* player, Player* target) : Order(player), target(target) {}
 
 Negotiate::~Negotiate() {}
 
@@ -265,8 +263,9 @@ bool Negotiate::validate() const {
 }
 
 bool Negotiate::execute() {
+    // cout << "Executing a negotiate order!" << endl;
+
     if (validate()) {
-        cout << "Executing a negotiate order!" << endl;
         return true;
     }
     else {
@@ -352,11 +351,13 @@ Order* OrdersList::next(const int wantedPriority) const {
 
         if (this->orders.size() > 0) {
             for (auto order : this->orders) {
-                if (highest == nullptr) {
-                    highest = order;
-                }
-                else if (highest->priority > order->priority) {
-                    highest = order;
+                if (order != nullptr) {
+                    if (highest == nullptr) {
+                        highest = order;
+                    }
+                    else if (highest->getPriority() > order->getPriority()) {
+                        highest = order;
+                    }
                 }
             }
         }
@@ -367,8 +368,10 @@ Order* OrdersList::next(const int wantedPriority) const {
         if (this->orders.size() > 0) {
             // with specific priority
             for (auto order : this->orders) {
-                if (order->priority == wantedPriority) {
-                    return order;
+                if (order != nullptr) {
+                    if (order->getPriority() == wantedPriority) {
+                        return order;
+                    }
                 }
             }
         }

@@ -94,9 +94,11 @@ void Player::issueOrder() {
     while (this->armies > 0) {
         int armyCount = rand() % (this->armies + 1);
 
-        this->armies -= armyCount;
+        if (territories.size() > 0) {
+            this->armies -= armyCount;
 
-        this->addOrder(new Deploy(this, territories.at(roundRobin++ % static_cast<int>(territories.size())), armyCount));
+            this->addOrder(new Deploy(this, territories.at(roundRobin++ % static_cast<int>(territories.size())), armyCount));
+        }
     }
 
     int duration = rand() % 10;
@@ -111,7 +113,7 @@ void Player::issueOrder() {
             source = this->toAttack().at(rand() % static_cast<int>(this->toAttack().size()));
         }
 
-        if (source != nullptr) {
+        if (source != nullptr && source->numberOfArmies > 0) {
             vector<Territory*> neighbours = this->getNeighbourTerritories(source);
 
             if (neighbours.size() > 0) {
@@ -130,7 +132,7 @@ void Player::issueOrder() {
 
     this->hand->draw();
 
-    // this->notify();
+    this->notify();
 }
 
 void Player::addOrder(Order* order) {

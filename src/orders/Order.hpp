@@ -23,7 +23,7 @@ public:
      * Parameter constructor.
      * @param player Owner of the order.
      */
-    Order(Player* player, const int priority);
+    Order(Player* player);
 
     /**
      * Destructor.
@@ -59,12 +59,15 @@ public:
      */
     virtual bool execute() = 0;
 
+    /**
+     * Returns the priority for the order.
+     */ 
+    virtual int getPriority() = 0;
+
     friend OrdersList;
 protected:
     /// Player issuing the order.
     Player* player;
-private:
-    const int priority;
 };
 
 class Deploy : public Order {
@@ -76,6 +79,7 @@ public:
     ~Deploy();
     bool validate() const;
     bool execute();
+    virtual int getPriority() override { return 1; };
 private:
     Territory* target;
     int armyCount;
@@ -91,6 +95,7 @@ public:
     bool validate() const;
     bool execute();
     int getKilledUnits(int chance, int numAttacker, int numDefender) const;
+    virtual int getPriority() override { return 4; };
 private:
     Territory* source;
     Territory* target;
@@ -106,6 +111,7 @@ public:
     Bomb* clone() const;
     bool validate() const;
     bool execute();
+    virtual int getPriority() override { return 3; };
 private:
     Territory* target;
 };
@@ -119,6 +125,7 @@ public:
     Blockade* clone() const;
     bool validate() const;
     bool execute();
+    virtual int getPriority() override { return 2; };
 private:
     Territory* target;
 };
@@ -132,6 +139,7 @@ public:
     Airlift* clone() const;
     bool validate() const;
     bool execute();
+    virtual int getPriority() override { return 2; };
 private:
     Territory* source;
     Territory* target;
@@ -147,6 +155,7 @@ public:
     Negotiate* clone() const;
     bool validate() const;
     bool execute();
+    virtual int getPriority() override { return 2; };
 private:
     Player* target;
 };

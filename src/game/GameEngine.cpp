@@ -216,41 +216,30 @@ bool GameEngine::isExecutionDone() const {
 }
 
 void GameEngine::executeOrdersPhase() {
-    cout << "EXECUTE ORDERS 1" << endl;
-
     int playersDoneDeploying = 0;
 
     while (playersDoneDeploying < this->players.size()) {
         for (auto player : this->players) {
             Order* nextDeployed = player->getNextOrder(1);
 
-            cout << "NEXT DEPLOYED" << endl;
-
-            cout << nextDeployed << endl;
-
             if (nextDeployed == nullptr) {
                 playersDoneDeploying++;
             }
             else {
                 nextDeployed->execute();
-                cout << "EXECUTE ORDERS" << endl;
                 player->removeOrder(nextDeployed);
-                cout << "REMOVE ORDERS" << endl;
             }
         }
     }
 
-    cout << "EXECUTE ORDERS 2" << endl;
-
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
             Order* nextOrder = player->getNextOrder();
+
             if (nextOrder != nullptr) {
                 nextOrder->execute();
                 player->removeOrder(nextOrder);
             }
         }
     }
-
-    cout << "EXECUTE ORDERS 3" << endl;
 }
