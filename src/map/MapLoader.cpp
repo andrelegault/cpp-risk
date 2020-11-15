@@ -58,6 +58,7 @@ Map MapLoader::load(const string file_name) {
                 if (!(words.size() == 3 || words.empty())) {
                     throw logic_error("Invalid Continent Format");
                 }
+
                 // 0 - name
                 // 1 - army value
                 // 2 - color
@@ -75,6 +76,7 @@ Map MapLoader::load(const string file_name) {
                 if (!(words.size() == 5 || words.empty())) {
                     throw logic_error("Invalid Country Format");
                 }
+
                 // 0 - country #
                 // 1 - name
                 // 2 - continent #
@@ -98,6 +100,7 @@ Map MapLoader::load(const string file_name) {
                 if (words.size() < 2) {
                     throw logic_error("Invalid Border Format");
                 }
+                
                 // 0  - parent country #
                 // 1+ - adjacent country #
 

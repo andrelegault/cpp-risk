@@ -67,8 +67,6 @@ GameEngine::GameEngine() : deck(new Deck()) {
     else {
         this->gameUI = new GameUI();
     }
-
-    this->gameUI->update();
 }
 
 GameEngine::~GameEngine() {
@@ -84,60 +82,47 @@ GameEngine::~GameEngine() {
 
 int GameEngine::getPlayerArmyCount(int numberOfPlayers) const {
     // TODO: throw error if numberOfPlayers isn't within acceptable range
-    return 2 <= numberOfPlayers <= 5 ? 50 - (numberOfPlayers * 5) : -1;
+    return (2 <= numberOfPlayers <= 5) ? (50 - (numberOfPlayers * 5)) : -1;
 }
 
-void GameEngine::startupPhase() {
-    //shuffle the players in the list to get random order
+void GameEngine::initPlayers() {
     std::random_device rd;
+
     std::shuffle(this->players.begin(), this->players.end(), rd);
 
     int armyCount = this->getPlayerArmyCount(this->players.size());
 
-    //set number of armies based on number of players
+    cout << "ARMY COUNT -> " << armyCount << endl;
+
     for (auto player : this->players) {
         player->addArmies(armyCount);
     }
-
-    assignTerritories();
-
-    printTerritoryOwners();
-
-    //TODO make sure that "all players have all the orders for playing in a turn"
 }
 
 void GameEngine::assignTerritories() {
-    srand(time(NULL));
     vector<Territory*> territories = this->map->getTerritories();
-    const int numTerritories = territories.size();
-    const int numPlayers = this->players.size();
-    // vector containing {0, 1, ..., numTerritories - 1}
-    vector<int> avail(numTerritories);
-    for (int i = 0; i < numTerritories; ++i) {
-        avail[i] = i;
-    }
+
+    std::random_device rd;
+
+    std::shuffle(territories.begin(), territories.end(), rd);
 
     int roundRobin = 0;
-    while (avail.size() > 0) {
-        // get a random index from any that are left
-        const int rIndex = rand() % avail.size();
-        const int tIndex = avail.at(rIndex);
-        // get the pointer using random value
-        Territory* rTerritory = territories.at(tIndex);
-        // add it to the player's territories
-        this->players.at(++roundRobin % numPlayers)->addTerritory(rTerritory);
-        // remove it from the list of available indexes
-        avail.erase(avail.begin() + rIndex);
+
+    int numberOfPlayers = this->players.size();
+
+    for (auto territory : territories) {
+        this->players[roundRobin++ % numberOfPlayers]->addTerritory(territory);
     }
 }
 
-void GameEngine::printTerritoryOwners(){
-     for (Continent* continent : this->map->getContinents()){
-            cout << continent->getName() << ":" << endl;
-            for (Territory* territory : continent->getTerritories()){
-                cout << "\t" << territory->getName() << " , owned by " << territory->getOwnerName() << endl;
-            }
+void GameEngine::printTerritoryOwners() {
+    for (auto continent : this->map->getContinents()) {
+        cout << continent->getName() << ":" << endl;
+
+        for (auto territory : continent->getTerritories()) {
+            cout << "\t" << territory->getName() << ", owned by " << territory->getOwnerName() << endl;
         }
+    }
 }
 
 Player* GameEngine::getWinningPlayer() {
@@ -157,6 +142,18 @@ Player* GameEngine::getWinningPlayer() {
     else {
         return nullptr;
     }
+}
+
+void GameEngine::startupPhase() {
+    initPlayers();
+
+    assignTerritories();
+
+    printTerritoryOwners();
+
+    //TODO make sure that "all players have all the orders for playing in a turn"
+
+    this->mainGameLoop();
 }
 
 void GameEngine::mainGameLoop() {

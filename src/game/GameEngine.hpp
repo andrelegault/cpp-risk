@@ -34,6 +34,8 @@ public:
 
     int getPlayerArmyCount(int numberOfPlayers) const;
 
+    void initPlayers();
+
     /**
      * Assigns territories to players in a round-robin fashion.
      */

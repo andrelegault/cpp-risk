@@ -119,10 +119,8 @@ void Territory::connect(Continent* continent) {
     this->continent = continent;
 }
 
-void Territory::set(Player* player) {
-    if (this->playerOwner) this->playerOwner->removeTerritory(this);
-
-    player->addTerritory(this);
+void Territory::setPlayerOwner(Player* player) {
+    if (this->playerOwner != nullptr) this->playerOwner->removeTerritory(this);
 
     this->playerOwner = player;
 }
