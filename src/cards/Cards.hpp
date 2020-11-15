@@ -162,7 +162,7 @@ public:
      * Parameterized constructor.
      * @param deck Deck to draw cards from.
      */
-    Hand(Deck& deck);
+    Hand(Deck* deck);
 
     /**
      * Copy constructor.
@@ -210,8 +210,11 @@ public:
 
     vector<Card*> getCards() const;
 
+    void draw();
+
 private:
     // Holds the card pointers.
     vector<Card*> hand;
+    Deck* deck;
     const int MAX_HAND_SIZE = 5;
 };

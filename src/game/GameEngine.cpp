@@ -7,9 +7,7 @@ GameEngine::~GameEngine() {
 
     delete this->map;
 
-    for (auto player : this->players) {
-        delete player;
-    }
+    for (auto player : this->players) delete player;
 
     delete this->gameUI;
 }
@@ -38,37 +36,29 @@ void GameEngine::assignTerritories() {
     int numberOfPlayers = this->players.size();
 
     for (auto territory : territories) {
-        this->players[roundRobin++ % numberOfPlayers]->addTerritory(territory);
+        this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
     }
 }
 
 void GameEngine::printTerritoryOwners() {
+    vector<vector<UI::Component*>> table;
+
     for (auto continent : this->map->getContinents()) {
-        cout << continent->getName() << ":" << endl;
+        table.push_back({ new UI::Text(continent->getName()) });
 
+        vector<string> territoryList;
         for (auto territory : continent->getTerritories()) {
-            cout << "\t" << territory->getName() << ", owned by " << territory->getOwnerName() << endl;
+            stringstream ss;
+
+            ss << territory->getOwnerName() << " -> " << territory->getName();
+
+            territoryList.push_back(ss.str());
         }
-    }
-}
 
-Player* GameEngine::getWinningPlayer() {
-    Player* lastPlayerWithTerritories = nullptr;
-    int numberOfPlayersWithTerritories;
-
-    for (auto player : this->players) {
-        if (player->getNumTerritories() > 0) {
-            lastPlayerWithTerritories = player;
-            numberOfPlayersWithTerritories++;
-        }
+        table.push_back({ new UI::List(territoryList) });
     }
 
-    if (numberOfPlayersWithTerritories == 1) {
-        return lastPlayerWithTerritories;
-    }
-    else {
-        return nullptr;
-    }
+    cout << Grid(table);
 }
 
 void GameEngine::init() {
@@ -94,7 +84,7 @@ void GameEngine::init() {
 
     UI::clear();
 
-    Map mapObj = MapLoader::load(directory + maps[ask("Select Map", maps) - 1] + ".map");
+    Map mapObj = MapLoader::load(directory + maps.at(ask("Select Map", maps) - 1) + ".map");
 
     if (!mapObj.validate()) {
         UI::clear();
@@ -109,7 +99,7 @@ void GameEngine::init() {
     int numberOfPlayers = range("Number of Players", 2, 5);
 
     for (int i = 0; i < numberOfPlayers; ++i) {
-        Player* player = new Player(*this->deck);
+        Player* player = new Player(this->deck);
 
         this->players.push_back(player);
     }
@@ -141,6 +131,8 @@ void GameEngine::init() {
         this->gameUI = new GameUI();
     }
 
+    UI::clear();
+
     this->startupPhase();
 }
 
@@ -157,18 +149,35 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
-    this->reinforcementPhase();
-    this->issueOrdersPhase();
-    this->executeOrdersPhase();
+    while (true) {
+        // Removes losing players.
+        std::vector<Player*> playersWithTerritory;
 
-    Player* winningPlayer = this->getWinningPlayer();
+        for (auto player : this->players) {
+            if (player->getTerritories().size() > 0) {
+                playersWithTerritory.push_back(player);
+            }
+            else {
+                delete player;
+            }
+        }
 
-    if (winningPlayer != nullptr) {
-        cout << "WINNER " << winningPlayer << endl;
-        return;
+        this->players = playersWithTerritory;
+
+        // Checks win condition.
+        if (this->players.size() == 1) {
+            cout << "WINNER " << this->players.front() << endl;
+            return;
+        }
+        else if (this->players.size() == 0) {
+            return;
+        }
+
+        // Phases.
+        this->reinforcementPhase();
+        this->issueOrdersPhase();
+        this->executeOrdersPhase();
     }
-
-    this->mainGameLoop();
 }
 
 void GameEngine::reinforcementPhase() {
@@ -204,12 +213,15 @@ bool GameEngine::isExecutionDone() const {
             return false;
         }
     }
+
     return true;
 }
 
 void GameEngine::executeOrdersPhase() {
     const int numPlayers = this->players.size();
+
     int playersDoneDeploying = 0;
+
     while (playersDoneDeploying < numPlayers) {
         for (auto player : this->players) {
             Order* nextDeployed = player->getNextOrder(4);
@@ -222,6 +234,7 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
+
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
             Order* nextOrder = player->getNextOrder();

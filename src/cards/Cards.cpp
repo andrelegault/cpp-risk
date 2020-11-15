@@ -5,7 +5,7 @@ string cardTypeToString(CardType cardType) {
     case 0: return "Airlift";
     case 1: return "Bomb";
     case 2: return "Blockade";
-    case 3: return "Diplomacy"; 
+    case 3: return "Diplomacy";
     case 4: return "Reinforcement";
     default: return "";
     }
@@ -24,8 +24,8 @@ Deck::Deck(int size) {
     int variantCount = size / CardType::LENGTH;
 
     for (int i = 0; i < CardType::LENGTH; i++) {
-        for(int j = 0; j < variantCount; j++) {
-            this->addCard(new Card(new CardType((CardType) i), this));
+        for (int j = 0; j < variantCount; j++) {
+            this->addCard(new Card(new CardType((CardType)i), this));
         }
     }
 
@@ -40,8 +40,7 @@ Deck::Deck(int size) {
 
 Deck::Deck(const Deck& other) {
     for (Card* card : other.cards) {
-        Card* temp = new Card(*card);
-        cards.push_back(temp);
+        cards.push_back(new Card(*card));
     }
 }
 
@@ -56,7 +55,14 @@ Deck& Deck::operator=(const Deck& other) {
 }
 
 void Deck::addCard(Card* const card) {
-    cards.insert(cards.begin() + (int) (rand() % (this->cards.size() + 1)), card);
+    int index = rand() % (this->cards.size() + 1);
+
+    if (index >= cards.size()) {
+        cards.push_back(card);
+    }
+    else {
+        cards.insert(cards.begin() + index, card);
+    }
 }
 
 ostream& operator<<(ostream& stream, const Deck& deck) {
@@ -102,9 +108,8 @@ Card& Card::operator=(const Card& other) {
 }
 
 void Card::play(Player& player) {
-    cout << "Playing card " << *this << endl;
-
     Order* order = nullptr;
+
     // switch (*(cardType)) {
     // case 0: order = new Bomb(); break;
     // case 1: order = new Airlift(); break;
@@ -115,7 +120,9 @@ void Card::play(Player& player) {
     // }
 
     player.addOrder(order);
+
     player.hand->removeCard(this);
+
     this->deck->addCard(this);
 }
 
@@ -136,17 +143,15 @@ Hand::~Hand() {
     hand.clear();
 }
 
-Hand::Hand(Deck& deck) {
-    for (int i = 0; i < MAX_HAND_SIZE; ++i) {
-        this->hand.push_back(deck.cards.back());
-        deck.cards.pop_back();
+Hand::Hand(Deck* deck) : deck(deck) {
+    for (int i = 0; i < 5; ++i) {
+        this->draw();
     }
 }
 
 Hand::Hand(const Hand& other) {
     for (Card* card : other.hand) {
-        Card* temp = new Card(*card);
-        hand.push_back(temp);
+        hand.push_back(new Card(*card));
     }
 }
 
@@ -158,6 +163,11 @@ Hand& Hand::operator=(const Hand& other) {
         hand = other.hand;
         return *this;
     }
+}
+
+void Hand::draw() {
+    this->hand.push_back(this->deck->cards.back());
+    this->deck->cards.pop_back();
 }
 
 Card* Hand::getAtIndex(int index) const {

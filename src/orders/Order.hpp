@@ -68,7 +68,7 @@ private:
 
 class Deploy : public Order {
 public:
-    Deploy(Player* player, Territory* target);
+    Deploy(Player* player, Territory* target, int armyCount = 0);
     Deploy(const Deploy& order);
     Deploy& operator=(const Deploy& other);
     Deploy* clone() const;
@@ -77,11 +77,12 @@ public:
     bool execute();
 private:
     Territory* target;
+    int armyCount;
 };
 
 class Advance : public Order {
 public:
-    Advance(Player* player, Territory* source, Territory* target);
+    Advance(Player* player, Territory* source, Territory* target, int armyCount = 0);
     Advance(const Advance& order);
     Advance& operator=(const Advance& other);
     Advance* clone() const;
@@ -92,6 +93,7 @@ public:
 private:
     Territory* source;
     Territory* target;
+    int armyCount;
 };
 
 class Bomb : public Order {

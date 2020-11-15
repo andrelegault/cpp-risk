@@ -23,7 +23,7 @@ public:
     //default constructor
     Player();
 
-    Player(Deck& deck);
+    Player(Deck* deck);
 
     // Copy constructor
     Player(const Player& other);
@@ -67,6 +67,10 @@ public:
      */
     vector<Territory*> toAttack();
 
+    /**
+     * @return A list of the Territory that Player owns relative to this territory.
+     */
+    vector<Territory*> getNeighbourTerritories(Territory* territory);
 
     /**
      * Creates an Order and adds it to the list of orders.

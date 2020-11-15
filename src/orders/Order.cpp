@@ -29,7 +29,7 @@ Order& Order::operator=(const Order& order) {
 
 
 // Deploy
-Deploy::Deploy(Player* player, Territory* target) : Order(player, 1), target(target) {}
+Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player, 1), target(target), armyCount(armyCount) {}
 
 Deploy::~Deploy() {}
 
@@ -51,7 +51,7 @@ bool Deploy::execute() {
     if (validate()) {
         cout << "Executing an execute order!" << endl;
         // TODO: get correct number of armies to add
-        this->target->numberOfArmies++;
+        this->target->numberOfArmies += this->armyCount;
         return true;
     }
     else {
@@ -64,7 +64,7 @@ Deploy* Deploy::clone() const {
 }
 
 // Advance
-Advance::Advance(Player* player, Territory* source, Territory* target) : Order(player, 4), source(source), target(target) {}
+Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player, 4), source(source), target(target), armyCount(armyCount) {}
 
 Advance::~Advance() {}
 
