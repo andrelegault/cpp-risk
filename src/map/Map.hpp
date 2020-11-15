@@ -6,8 +6,8 @@
 #include <set>
 #include <algorithm>
 
-#include <Map.fwd.hpp>
-#include <Player.hpp>
+#include "Map.fwd.hpp"
+#include "Player.hpp"
 
 using namespace std;
 

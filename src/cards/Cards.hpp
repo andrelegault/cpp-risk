@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Cards.fwd.hpp>
-#include <Player.hpp>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
 #include <iterator>
+#include <Cards.fwd.hpp>
+#include "Player.hpp"
 
 using std::vector;
 using std::ostream;

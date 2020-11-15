@@ -1,8 +1,8 @@
 #pragma once
 
-#include "GameObservers.fwd.hpp"
 #include <vector>
 #include <iostream>
+#include "GameObservers.fwd.hpp"
 #include "MVC.hpp"
 #include "UI.hpp"
 #include "GameEngine.hpp"

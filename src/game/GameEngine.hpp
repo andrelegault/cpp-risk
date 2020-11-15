@@ -1,5 +1,9 @@
 #pragma once
 
+#include <filesystem>
+#include <math.h>
+#include <algorithm>
+#include <random>
 #include "GameEngine.fwd.hpp"
 #include "UI.hpp"
 #include "Player.hpp"
@@ -8,10 +12,6 @@
 #include "Map.hpp"
 #include "Cards.hpp"
 #include "GameObservers.hpp"
-#include <filesystem>
-#include <math.h>
-#include <algorithm>
-#include <random>
 
 using namespace filesystem;
 using namespace UI;
