@@ -5,6 +5,8 @@ int Player::count = 0;
 //set armies to 0 by default
 Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()), armies(0) {}
 
+Player::Player(string name) : name(name), orders(new OrdersList()), hand(nullptr), armies(0) {}
+
 Player::Player(Deck* deck) : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
 
 Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))) {
@@ -73,10 +75,10 @@ vector<Territory*> Player::toAttack() {
 vector<Territory*> Player::getNeighbourTerritories(Territory* territory) {
     vector<Territory*> territories;
 
-    for(auto border : territory->getBorders()) {
-        Territory* otherTerritory = (Territory*) border->getOther(territory);
+    for (auto border : territory->getBorders()) {
+        Territory* otherTerritory = (Territory*)border->getOther(territory);
 
-        if(otherTerritory->getOwner() == this) {
+        if (otherTerritory->getOwner() == this) {
             territories.push_back(otherTerritory);
         }
     }
@@ -87,11 +89,11 @@ vector<Territory*> Player::getNeighbourTerritories(Territory* territory) {
 void Player::issueOrder() {
     vector<Territory*> territories = this->toDefend();
 
-    std::shuffle(territories.begin(), territories.end(), std::random_device {});
+    std::shuffle(territories.begin(), territories.end(), std::random_device{});
 
     int roundRobin = 0;
 
-    while(this->armies > 0) {
+    while (this->armies > 0) {
         int armyCount = rand() % (this->armies + 1);
 
         this->armies -= armyCount;
@@ -101,12 +103,13 @@ void Player::issueOrder() {
 
     int duration = rand() % 10;
 
-    for(int i = 0; i < duration; i++) {
+    for (int i = 0; i < duration; i++) {
         Territory* source;
 
-        if(rand() % 2 == 1) {
+        if (rand() % 2 == 1) {
             source = this->toDefend().at(rand() % this->toDefend().size());
-        } else {
+        }
+        else {
             source = this->toAttack().at(rand() % this->toAttack().size());
         }
 
@@ -119,7 +122,7 @@ void Player::issueOrder() {
         this->addOrder(new Advance(this, source, target, armyCount));
     }
 
-    if(this->hand->getLength() > 0) {
+    if (this->hand->getLength() > 0) {
         this->hand->getCards().back()->play(*this);
     }
 

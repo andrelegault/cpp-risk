@@ -29,6 +29,8 @@ Order& Order::operator=(const Order& order) {
 
 
 // Deploy
+Deploy::Deploy() : Order(nullptr, 0) {}
+
 Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player, 1), target(target), armyCount(armyCount) {}
 
 Deploy::~Deploy() {}
@@ -50,7 +52,6 @@ Deploy& Deploy::operator=(const Deploy& other) {
 bool Deploy::execute() {
     if (validate()) {
         cout << "Executing an execute order!" << endl;
-        // TODO: get correct number of armies to add
         this->target->numberOfArmies += this->armyCount;
         return true;
     }
@@ -64,6 +65,7 @@ Deploy* Deploy::clone() const {
 }
 
 // Advance
+Advance::Advance() : Order(nullptr, 0) {}
 Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player, 4), source(source), target(target), armyCount(armyCount) {}
 
 Advance::~Advance() {}
@@ -89,16 +91,6 @@ Advance& Advance::operator=(const Advance& other) {
     return *this;
 }
 
-int Advance::getKilledUnits(int chance, int numAttacker, int numDefender) const {
-    int damaged = 0;
-    for (int i = 0; i < numAttacker; ++i) {
-        const int roll = rand() % 100;
-        if (roll <= chance) {
-            damaged++;
-        }
-    }
-    return damaged;
-}
 
 bool Advance::execute() {
     if (validate()) {
@@ -111,7 +103,7 @@ bool Advance::execute() {
             const bool successful = this->source->attack(this->target, this->armyCount);
             if (successful) {
                 // TODO: give a card to the player, but which one?
-                
+
                 // player->hand->addCard()
             }
         }
@@ -125,6 +117,7 @@ Advance* Advance::clone() const {
 }
 
 // Bomb
+Bomb::Bomb() : Order(nullptr, 0) {}
 Bomb::Bomb(Player* player, Territory* target) : Order(player, 4), target(target) {}
 
 Bomb::~Bomb() {}
@@ -158,6 +151,7 @@ Bomb* Bomb::clone() const {
 }
 
 // Blockade
+Blockade::Blockade() : Order(nullptr, 0) {}
 Blockade::Blockade(Player* player, Territory* target) : Order(player, 3), target(target) {}
 
 Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -194,6 +188,7 @@ Blockade* Blockade::clone() const {
 }
 
 // Airlift
+Airlift::Airlift() : Order(nullptr, 0) {}
 Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player, 2), source(source), target(target), armyCount(armies) {}
 
 Airlift::~Airlift() {}
@@ -223,7 +218,12 @@ bool Airlift::execute() {
         }
         else {
             // attac
-            // TODO: this->source->attack(this->target);
+            const bool successful = this->source->attack(this->target, this->armyCount);
+            if (successful) {
+                // TODO: give a card to the player, but which one?
+
+                // player->hand->addCard()
+            }
         }
 
         cout << "Executing an airlift order!" << endl;
@@ -239,6 +239,7 @@ Airlift* Airlift::clone() const {
 }
 
 // Negotiate
+Negotiate::Negotiate() : Order(nullptr, 0) {}
 Negotiate::Negotiate(Player* player, Player* target) : Order(player, 4), target(target) {}
 
 Negotiate::~Negotiate() {}

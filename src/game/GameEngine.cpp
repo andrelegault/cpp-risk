@@ -222,9 +222,10 @@ void GameEngine::executeOrdersPhase() {
 
     int playersDoneDeploying = 0;
 
+    // deploying only
     while (playersDoneDeploying < numPlayers) {
         for (auto player : this->players) {
-            Order* nextDeployed = player->getNextOrder(4);
+            Order* nextDeployed = player->getNextOrder(1);
             if (nextDeployed == NULL) {
                 playersDoneDeploying++;
             }
@@ -235,6 +236,7 @@ void GameEngine::executeOrdersPhase() {
         }
     }
 
+    // cards make it so orders are placed in the player's order list
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
             Order* nextOrder = player->getNextOrder();

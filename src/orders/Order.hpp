@@ -69,6 +69,7 @@ private:
 
 class Deploy : public Order {
 public:
+    Deploy();
     Deploy(Player* player, Territory* target, int armyCount = 0);
     Deploy(const Deploy& order);
     Deploy& operator=(const Deploy& other);
@@ -83,6 +84,7 @@ private:
 
 class Advance : public Order {
 public:
+    Advance();
     Advance(Player* player, Territory* source, Territory* target, int armyCount);
     Advance(const Advance& order);
     Advance& operator=(const Advance& other);
@@ -90,7 +92,6 @@ public:
     ~Advance();
     bool validate() const;
     bool execute();
-    int getKilledUnits(int chance, int numAttacker, int numDefender) const;
 private:
     Territory* source;
     Territory* target;
@@ -99,6 +100,7 @@ private:
 
 class Bomb : public Order {
 public:
+    Bomb();
     Bomb(Player* player, Territory* target);
     Bomb(const Bomb& order);
     Bomb& operator=(const Bomb& other);
@@ -112,6 +114,7 @@ private:
 
 class Blockade : public Order {
 public:
+    Blockade();
     Blockade(Player* player, Territory* target);
     Blockade(const Blockade& order);
     Blockade& operator=(const Blockade& other);
@@ -125,6 +128,7 @@ private:
 
 class Airlift : public Order {
 public:
+    Airlift();
     Airlift(Player* player, Territory* source, Territory* target, int armyCount);
     Airlift(const Airlift& order);
     Airlift& operator=(const Airlift& other);
@@ -140,6 +144,7 @@ private:
 
 class Negotiate : public Order {
 public:
+    Negotiate();
     Negotiate(Player* player, Player* target);
     Negotiate(const Negotiate& order);
     Negotiate& operator=(const Negotiate& other);

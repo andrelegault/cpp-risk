@@ -23,6 +23,8 @@ public:
     //default constructor
     Player();
 
+	Player(string name);
+
     Player(Deck* deck);
 
     // Copy constructor

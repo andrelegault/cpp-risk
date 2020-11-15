@@ -37,7 +37,7 @@ public:
      * Default parameterized constructor.
      * @param size Number of cards to add to the deck.
      */
-    Deck(int size = 20);
+    Deck(int size = DEFAULT_DECK_SIZE);
 
     /**
      * Destructor.
@@ -95,6 +95,7 @@ public:
      */
     void draw(Player& player, int count = 1);
 private:
+    static const int DEFAULT_DECK_SIZE = 20;
     vector<Card*> cards;
 };
 
@@ -216,5 +217,5 @@ private:
     // Holds the card pointers.
     vector<Card*> hand;
     Deck* deck;
-    const int MAX_HAND_SIZE = 5;
+    static const int MAX_HAND_SIZE = 5;
 };
