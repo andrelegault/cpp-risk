@@ -5,9 +5,9 @@ int Player::count = 0;
 //set armies to 0 by default
 Player::Player() : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand()), armies(0) {}
 
-Player::Player(Deck& deck) : hand(new Hand(deck)), name("p" + to_string(count++)), orders(new OrdersList()), armies(0) {}
+Player::Player(Deck& deck) : name("p" + to_string(count++)), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
 
-Player::Player(const Player& player) : name("p" + to_string(count++)), orders(new OrdersList(*(player.orders))) {
+Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))) {
     for (Territory* t : player.territories) {
         this->territories.push_back(new Territory(*t));
     }
@@ -173,8 +173,6 @@ string Player::getName() const {
 }
 
 void Player::addArmies(const int newArmies) {
-    cout << "NUM ARMIES: " << this->armies << endl;
-
     this->armies += newArmies;
 }
 

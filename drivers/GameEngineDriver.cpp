@@ -11,9 +11,11 @@ using namespace std;
 using namespace UI;
 
 int main() {
+    srand(time(NULL));
+
     GameEngine gameEngine;
 
-    gameEngine.startupPhase();
+    gameEngine.init();
 
     return 0;
 }

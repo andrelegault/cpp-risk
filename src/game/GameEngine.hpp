@@ -36,6 +36,8 @@ public:
 
     void initPlayers();
 
+    void init();
+
     /**
      * Assigns territories to players in a round-robin fashion.
      */

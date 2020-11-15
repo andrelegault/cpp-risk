@@ -19,16 +19,6 @@ using std::endl;
  * A Risk player.
  */
 class Player : public Subject {
-private:
-    // The territories owned by the players.
-    vector<Territory*> territories;
-
-    static int count;
-    string name;
-
-    int armies;
-
-
 public:
     //default constructor
     Player();
@@ -111,4 +101,13 @@ public:
      * @return the order with highest priority.
      */
     Order* getNextOrder() const;
+private:
+    // The territories owned by the players.
+    vector<Territory*> territories;
+
+    static int count;
+    
+    string name;
+
+    int armies;
 };

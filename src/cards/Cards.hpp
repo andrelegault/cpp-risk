@@ -6,11 +6,13 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iterator>
+#include <random>
 #include <Cards.fwd.hpp>
 #include "Player.hpp"
 
 using std::vector;
 using std::ostream;
+using std::cout;
 
 /**
  * Enumerator for card types.
@@ -20,7 +22,8 @@ enum CardType {
     BOMB,
     BLOCKADE,
     DIPLOMACY,
-    REINFORCEMENT
+    REINFORCEMENT,
+    LENGTH
 };
 
 string cardTypeToString(CardType cardType);
@@ -29,8 +32,6 @@ string cardTypeToString(CardType cardType);
  * Represents a deck containing cards.
  */
 class Deck {
-private:
-    vector<Card*> cards;
 public:
     /**
      * Default parameterized constructor.
@@ -92,10 +93,10 @@ public:
      * 2. Places it in the player's hand.
      * @param player Player whose hand will be modified to include the card drawn from the deck.
      */
-    void draw(Player& player);
+    void draw(Player& player, int count = 1);
+private:
+    vector<Card*> cards;
 };
-
-
 
 /**
  * A Risk card.
@@ -151,10 +152,6 @@ private:
  * Represents a hand, which is a subset of deck.
  */
 class Hand {
-private:
-    // Holds the card pointers.
-    vector<Card*> hand;
-    const int MAX_HAND_SIZE = 5;
 public:
     // Default constructor.
     Hand();
@@ -212,4 +209,9 @@ public:
     void removeCard(Card* card);
 
     vector<Card*> getCards() const;
+
+private:
+    // Holds the card pointers.
+    vector<Card*> hand;
+    const int MAX_HAND_SIZE = 5;
 };
