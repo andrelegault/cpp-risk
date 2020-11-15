@@ -73,10 +73,10 @@ vector<Territory*> Player::toAttack() {
 vector<Territory*> Player::getNeighbourTerritories(Territory* territory) {
     vector<Territory*> territories;
 
-    for(auto border : territory->getBorders()) {
-        Territory* otherTerritory = (Territory*) border->getOther(territory);
+    for (auto border : territory->getBorders()) {
+        Territory* otherTerritory = (Territory*)border->getOther(territory);
 
-        if(otherTerritory->getOwner() == this) {
+        if (otherTerritory->getOwner() == this) {
             territories.push_back(otherTerritory);
         }
     }
@@ -87,45 +87,50 @@ vector<Territory*> Player::getNeighbourTerritories(Territory* territory) {
 void Player::issueOrder() {
     vector<Territory*> territories = this->toDefend();
 
-    std::shuffle(territories.begin(), territories.end(), std::random_device {});
+    std::shuffle(territories.begin(), territories.end(), std::random_device{});
 
     int roundRobin = 0;
 
-    while(this->armies > 0) {
+    while (this->armies > 0) {
         int armyCount = rand() % (this->armies + 1);
 
         this->armies -= armyCount;
 
-        this->addOrder(new Deploy(this, territories.at(roundRobin++ % territories.size()), armyCount));
+        this->addOrder(new Deploy(this, territories.at(roundRobin++ % static_cast<int>(territories.size())), armyCount));
     }
 
     int duration = rand() % 10;
 
-    for(int i = 0; i < duration; i++) {
-        Territory* source;
+    for (int i = 0; i < duration; i++) {
+        Territory* source = nullptr;
 
-        if(rand() % 2 == 1) {
-            source = this->toDefend().at(rand() % this->toDefend().size());
-        } else {
-            source = this->toAttack().at(rand() % this->toAttack().size());
+        if (rand() % 2 == 1 && this->toDefend().size() > 0) {
+            source = this->toDefend().at(rand() % static_cast<int>(this->toDefend().size()));
+        }
+        else if (this->toAttack().size() > 0) {
+            source = this->toAttack().at(rand() % static_cast<int>(this->toAttack().size()));
         }
 
-        vector<Territory*> neighbours = this->getNeighbourTerritories(source);
+        if (source != nullptr) {
+            vector<Territory*> neighbours = this->getNeighbourTerritories(source);
 
-        Territory* target = neighbours.at(rand() % neighbours.size());
+            if (neighbours.size() > 0) {
+                Territory* target = neighbours.at(rand() % static_cast<int>(neighbours.size()));
 
-        int armyCount = rand() % (source->numberOfArmies + 1);
+                int armyCount = rand() % (static_cast<int>(source->numberOfArmies) + 1);
 
-        this->addOrder(new Advance(this, source, target, armyCount));
+                this->addOrder(new Advance(this, source, target, armyCount));
+            }
+        }
     }
 
-    if(this->hand->getLength() > 0) {
+    if (this->hand->getLength() > 0) {
         this->hand->getCards().back()->play(*this);
     }
 
     this->hand->draw();
 
-    //this->notify();
+    // this->notify();
 }
 
 void Player::addOrder(Order* order) {

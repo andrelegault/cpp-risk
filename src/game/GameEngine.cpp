@@ -138,9 +138,7 @@ void GameEngine::init() {
 
 void GameEngine::startupPhase() {
     initPlayers();
-
     assignTerritories();
-
     printTerritoryOwners();
 
     //TODO make sure that "all players have all the orders for playing in a turn"
@@ -218,30 +216,41 @@ bool GameEngine::isExecutionDone() const {
 }
 
 void GameEngine::executeOrdersPhase() {
-    const int numPlayers = this->players.size();
+    cout << "EXECUTE ORDERS 1" << endl;
 
     int playersDoneDeploying = 0;
 
-    while (playersDoneDeploying < numPlayers) {
+    while (playersDoneDeploying < this->players.size()) {
         for (auto player : this->players) {
-            Order* nextDeployed = player->getNextOrder(4);
-            if (nextDeployed == NULL) {
+            Order* nextDeployed = player->getNextOrder(1);
+
+            cout << "NEXT DEPLOYED" << endl;
+
+            cout << nextDeployed << endl;
+
+            if (nextDeployed == nullptr) {
                 playersDoneDeploying++;
             }
             else {
                 nextDeployed->execute();
+                cout << "EXECUTE ORDERS" << endl;
                 player->removeOrder(nextDeployed);
+                cout << "REMOVE ORDERS" << endl;
             }
         }
     }
 
+    cout << "EXECUTE ORDERS 2" << endl;
+
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
             Order* nextOrder = player->getNextOrder();
-            if (nextOrder != NULL) {
+            if (nextOrder != nullptr) {
                 nextOrder->execute();
                 player->removeOrder(nextOrder);
             }
         }
     }
+
+    cout << "EXECUTE ORDERS 3" << endl;
 }
