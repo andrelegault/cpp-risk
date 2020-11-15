@@ -8,14 +8,15 @@ GameEngine::GameEngine() : deck(new Deck()) {
         break;
     }
 
-    const string directory = "maps/";
+    string directory = "maps/";
 
     vector<string> maps;
 
     for (const auto& entry : directory_iterator(directory)) {
         const path mapPath = entry.path();
 
-        if (mapPath.extension() == "map") {
+        if (mapPath.extension() == ".map") {
+            cout << mapPath.stem() << endl;
             maps.push_back(mapPath.stem());
         }
     }

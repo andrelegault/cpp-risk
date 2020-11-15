@@ -28,7 +28,7 @@ Deck::Deck(int size) {
     for (int i = 0; i < size; ++i) {
         int type = rand() % 5;
 
-        cards.push_back(new Card(new CardType((CardType)type)));
+        cards.push_back(new Card(new CardType((CardType)type), this));
     }
 
     cout << "Created deck containing " << cards.size() << " cards!" << endl;
@@ -84,9 +84,11 @@ Card* Deck::getAtIndex(int index) {
     return cards.at(index);
 }
 
-Card::Card(const CardType* cardType) : cardType(cardType) { }
+Card::Card(const CardType* cardType, Deck* deck) : cardType(cardType), deck(deck) { }
 
 Card::~Card() {
+    deck = nullptr;
+
     delete cardType;
     cardType = nullptr;
 }
@@ -103,7 +105,7 @@ Card& Card::operator=(const Card& other) {
     }
 }
 
-void Card::play(Player& player, Deck& deck) {
+void Card::play(Player& player) {
     cout << "Playing card " << *this << endl;
 
     Order* order = nullptr;
@@ -118,7 +120,7 @@ void Card::play(Player& player, Deck& deck) {
 
     player.addOrder(order);
     player.hand->removeCard(this);
-    deck.addCard(this);
+    this->deck->addCard(this);
 }
 
 ostream& operator<<(ostream& stream, const Card& card) {

@@ -30,7 +30,7 @@ int main() {
     assert(hand->getLength() == 6);
 
     Card* card = hand->getAtIndex(0);
-    card->play(mockPlayer, deck);
+    card->play(mockPlayer);
     assert(mockPlayer.orders->getLength() == 1);
 
     return 0;

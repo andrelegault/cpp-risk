@@ -101,7 +101,6 @@ public:
  * A Risk card.
  */
 class Card {
-private:
 public:
     // Destructor.
     ~Card();
@@ -112,8 +111,9 @@ public:
     /**
      * Pamaraterized constructor.
      * @param cardType Type of card.
+     * @param deck Parent deck.
      */
-    Card(const CardType* cardType);
+    Card(const CardType* cardType, Deck* deck);
 
     /**
      * Copy constructor.
@@ -140,11 +140,11 @@ public:
      * 3. Removes card from player hand.
      * 4. Places card back in deck.
      * @param player Player to perform card action on (and remove card from hand).
-     * @param deck Deck to place card back into.
      */
-    void play(Player& player, Deck& deck);
+    void play(Player& player);
+private:
+    Deck* deck;
 };
-
 
 
 /**
