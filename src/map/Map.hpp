@@ -334,14 +334,6 @@ ostream& operator<<(ostream& stream, const Continent& continent);
  * Node for the Map graph.
  */
 class Territory : public MapNode {
-private:
-    static const int DEFAULT_ATTACKER_ODDS = 60;
-    static const int DEFAULT_DEFENDER_ODDS = 70;
-    // Current player that owns this country.
-    Player* playerOwner;
-
-    // Parent Continent.
-    Continent* continent;
 public:
     // Counter for number of armies that current player owns in this country.
     int numberOfArmies;
@@ -442,6 +434,8 @@ public:
      */
     bool attack(Territory* target, int attackerArmies, int attackerOdds = DEFAULT_ATTACKER_ODDS, int defenderOdds = DEFAULT_DEFENDER_ODDS);
 private:
+    static const int DEFAULT_ATTACKER_ODDS = 60;
+    static const int DEFAULT_DEFENDER_ODDS = 70;
     // Current player that owns this country.
     Player* playerOwner;
 
