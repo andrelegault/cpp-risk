@@ -61,6 +61,7 @@ public:
 
     friend OrdersList;
 protected:
+    /// Player issuing the order.
     Player* player;
 private:
     const int priority;
@@ -81,7 +82,7 @@ private:
 
 class Advance : public Order {
 public:
-    Advance(Player* player, Territory* source, Territory* target);
+    Advance(Player* player, Territory* source, Territory* target, int armyCount);
     Advance(const Advance& order);
     Advance& operator=(const Advance& other);
     Advance* clone() const;
@@ -92,11 +93,10 @@ public:
 private:
     Territory* source;
     Territory* target;
+    int armyCount;
 };
 
 class Bomb : public Order {
-private:
-    Territory* target;
 public:
     Bomb(Player* player, Territory* target);
     Bomb(const Bomb& order);
@@ -105,11 +105,11 @@ public:
     Bomb* clone() const;
     bool validate() const;
     bool execute();
+private:
+    Territory* target;
 };
 
 class Blockade : public Order {
-private:
-    Territory* target;
 public:
     Blockade(Player* player, Territory* target);
     Blockade(const Blockade& order);
@@ -118,32 +118,36 @@ public:
     Blockade* clone() const;
     bool validate() const;
     bool execute();
+private:
+    Territory* target;
 };
 
 class Airlift : public Order {
-private:
-    Territory* source;
-    Territory* target;
-    Deploy* deploy;
 public:
-    Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy);
+    Airlift(Player* player, Territory* source, Territory* target, int armyCount);
     Airlift(const Airlift& order);
     Airlift& operator=(const Airlift& other);
     ~Airlift();
     Airlift* clone() const;
     bool validate() const;
     bool execute();
+private:
+    Territory* source;
+    Territory* target;
+    int armyCount;
 };
 
 class Negotiate : public Order {
 public:
-    Negotiate(Player* player);
+    Negotiate(Player* player, Player* target);
     Negotiate(const Negotiate& order);
     Negotiate& operator=(const Negotiate& other);
     ~Negotiate();
     Negotiate* clone() const;
     bool validate() const;
     bool execute();
+private:
+    Player* target;
 };
 
 /**

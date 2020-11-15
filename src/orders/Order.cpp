@@ -64,12 +64,19 @@ Deploy* Deploy::clone() const {
 }
 
 // Advance
-Advance::Advance(Player* player, Territory* source, Territory* target) : Order(player, 4), source(source), target(target) {}
+Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player, 4), source(source), target(target), armyCount(armyCount) {}
 
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    return this->target->getOwner() == this->player;
+    auto borders = this->source->getBorders();
+    bool isAdjacent = false;
+    for (auto border : borders) {
+        if (border->has(target)) {
+            isAdjacent = true;
+        }
+    }
+    return isAdjacent && this->source->getOwner() == this->player;
 }
 
 Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
@@ -97,10 +104,10 @@ bool Advance::execute() {
     if (validate()) {
         bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
-            // TODO: move some number of units from source to target
+            this->source->numberOfArmies -= this->armyCount;
+            this->target->numberOfArmies += this->armyCount;
         }
         else {
-            const int killDefenderUnit = rand() % 100;
             const int sourceArmies = this->source->numberOfArmies;
             const int targetArmies = this->source->numberOfArmies;
             const int killedDefenders = this->getKilledUnits(60, sourceArmies, targetArmies);
@@ -177,6 +184,7 @@ bool Blockade::execute() {
         cout << "Executing a blockade order!" << endl;
         this->target->numberOfArmies *= 2;
         this->player->removeTerritory(this->target);
+        // TODO: transfer ownership to neutral player
 
         return true;
     }
@@ -190,28 +198,38 @@ Blockade* Blockade::clone() const {
 }
 
 // Airlift
-Airlift::Airlift(Player* player, Territory* source, Territory* target, Deploy* deploy) : Order(player, 2), source(source), target(target), deploy(deploy) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player, 2), source(source), target(target), armyCount(armies) {}
 
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    return this->source->getOwner() == this->player && this->target->getOwner() == this->player;
+    return this->source->getOwner() == this->player;
 }
 
-Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), deploy(new Deploy(*(order.deploy))) {};
+Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), armyCount(armyCount) {};
 
 Airlift& Airlift::operator=(const Airlift& other) {
     Order::operator=(other);
     this->source = other.source;
     this->target = other.target;
-    this->deploy = other.deploy;
+    this->armyCount = other.armyCount;
 
     return *this;
 }
 
 bool Airlift::execute() {
     if (validate()) {
-        // what? deploy order? advance order? i need to shleep
+        const bool ownsTarget = this->target->getOwner() == this->player;
+        if (ownsTarget) {
+            // move armies from source to target
+            this->target->numberOfArmies += this->source->numberOfArmies;
+            this->source->numberOfArmies = 0;
+        }
+        else {
+            // attac
+            // TODO: this->source->attack(this->target);
+        }
+
         cout << "Executing an airlift order!" << endl;
         return true;
     }
@@ -225,19 +243,24 @@ Airlift* Airlift::clone() const {
 }
 
 // Negotiate
-Negotiate::Negotiate(Player* player) : Order(player, 4) {}
+Negotiate::Negotiate(Player* player, Player* target) : Order(player, 4), target(target) {}
 
 Negotiate::~Negotiate() {}
 
-Negotiate::Negotiate(const Negotiate& order) : Order(order) {}
+Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
 
 Negotiate& Negotiate::operator=(const Negotiate& other) {
     Order::operator=(other);
+    if (this != NULL) {
+        this->target = new Player(*(other.target));
+    }
 
     return *this;
 }
 
-bool Negotiate::validate() const { return true; }
+bool Negotiate::validate() const {
+    return this->target != this->player;
+}
 
 bool Negotiate::execute() {
     if (validate()) {
