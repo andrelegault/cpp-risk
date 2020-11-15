@@ -298,9 +298,11 @@ void OrdersList::add(Order* what) {
 
 void OrdersList::remove(Order* order) {
     auto o = findOrder(order);
-    orders.erase(o);
-    delete order;
-    order = nullptr;
+    if (o != orders.end()) {
+        orders.erase(o);
+        delete order;
+        order = nullptr;
+    }
 }
 
 vector<Order*>::iterator OrdersList::findOrder(Order* order) {
@@ -321,17 +323,29 @@ void OrdersList::move(Order* first, Order* second) {
     iter_swap(firstIt, secondIt);
 }
 
-Order* OrdersList::next() const {
+Order* OrdersList::next(const int wantedPriority) const {
     const int numOrders = orders.size();
     if (numOrders > 0) {
-        Order* highest = orders.at(0);
-        for (int i = 1; i < numOrders; ++i) {
-            Order* cur = orders.at(i);
-            if (highest->priority > cur->priority) {
-                highest = cur;
+        if (wantedPriority == -1) {
+            // by regular priority
+            Order* highest = orders.front();
+            for (int i = 1; i < numOrders; ++i) {
+                Order* cur = orders.at(i);
+                if (highest->priority > cur->priority) {
+                    highest = cur;
+                }
             }
+            return highest;
         }
-        return highest;
+        else {
+            // with specific priority
+            for (auto order : orders) {
+                if (order->priority == wantedPriority) {
+                    return order;
+                }
+            }
+            return NULL;
+        }
     }
     else {
         return NULL;

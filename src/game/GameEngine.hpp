@@ -32,6 +32,8 @@ public:
 
     void executeOrdersPhase();
 
+    bool isExecutionDone() const;
+
     int getPlayerArmyCount(int numberOfPlayers) const;
 
     /**
