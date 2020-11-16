@@ -55,13 +55,18 @@ Deck& Deck::operator=(const Deck& other) {
 }
 
 void Deck::addCard(Card* const card) {
-    int index = rand() % (this->cards.size() + 1);
+    if (this->cards.size() > 0) {
+        int index = rand() % (this->cards.size() + 1);
 
-    if (index >= cards.size()) {
-        cards.push_back(card);
+        if (index >= cards.size()) {
+            cards.push_back(card);
+        }
+        else {
+            cards.insert(cards.begin() + index, card);
+        }
     }
     else {
-        cards.insert(cards.begin() + index, card);
+        cards.push_back(card);
     }
 }
 
@@ -119,7 +124,9 @@ void Card::play(Player& player) {
     // case 5: order = new Deploy(); break;
     // }
 
-    player.addOrder(order);
+    if (order) {
+        player.addOrder(order);
+    }
 
     player.hand->removeCard(this);
 
