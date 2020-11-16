@@ -80,10 +80,11 @@ Advance::Advance(Player* player, Territory* source, Territory* target, int armyC
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
+    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) throw runtime_error("Invalid Advance order!");
     if (this->player != this->source->getOwner()) return false;
 
-    for (auto border : this->source->getBorders()) {
+    vector<Border*> borders = this->source->getBorders();
+    for (auto border : borders) {
         if (border->has(target)) {
             return true;
         }
@@ -95,9 +96,10 @@ bool Advance::validate() const {
 Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
 
 string Advance::toString() const {
-    if(this->source != nullptr && this->target != nullptr) {
+    if (this->source != nullptr && this->target != nullptr) {
         return "ADVANCE:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
-    } else {
+    }
+    else {
         throw "ADVANCE:: Invalid Advance";
     }
 }
@@ -128,11 +130,8 @@ bool Advance::execute() {
         }
         else {
             const bool successful = this->source->attack(this->target, this->armyCount);
-
             if (successful) {
-                // TODO: give a card to the player, but which one?
-
-                // player->hand->addCard()
+                player->hand->draw();
             }
         }
     }
@@ -242,6 +241,7 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armie
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) throw runtime_error("Invalid airlift order");
     return this->source->getOwner() == this->player;
 }
 
@@ -279,9 +279,7 @@ bool Airlift::execute() {
             // attac
             const bool successful = this->source->attack(this->target, this->armyCount);
             if (successful) {
-                // TODO: give a card to the player, but which one?
-
-                // player->hand->addCard()
+                this->player->hand->draw();
             }
         }
         return true;

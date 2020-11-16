@@ -112,23 +112,22 @@ Card& Card::operator=(const Card& other) {
     }
 }
 
-void Card::play(Player& player) {
+void Card::play(Player* player, Player* targetPlayer, Territory* source, Territory* targetTerritory, int armyCount) {
     Order* order = nullptr;
 
-    // switch (*(cardType)) {
-    // case 0: order = new Bomb(); break;
-    // case 1: order = new Airlift(); break;
-    // case 2: order = new Blockade(); break;
-    // case 3: order = new Negotiate(); break;
-    // case 4: order = new Advance(); break;
-    // case 5: order = new Deploy(); break;
-    // }
-
-    if (order) {
-        player.addOrder(order);
+    switch (*(this->cardType)) {
+    case CardType::AIRLIFT: order = new Airlift(player, source, targetTerritory, armyCount); break;
+    case CardType::BOMB: order = new Bomb(player, targetTerritory); break;
+    case CardType::BLOCKADE: order = new Blockade(player, source); break;
+    case CardType::DIPLOMACY: order = new Negotiate(player, targetPlayer); break;
+    case CardType::REINFORCEMENT: order = new Deploy(player, source, 5); break;
     }
 
-    player.hand->removeCard(this);
+    if (order) {
+        player->addOrder(order);
+    }
+
+    player->hand->removeCard(this);
 
     this->deck->addCard(this);
 }

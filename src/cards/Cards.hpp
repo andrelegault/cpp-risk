@@ -143,7 +143,7 @@ public:
      * 4. Places card back in deck.
      * @param player Player to perform card action on (and remove card from hand).
      */
-    void play(Player& player);
+    void play(Player* p1, Player* targetPlayer = nullptr, Territory* source = nullptr, Territory* targetTerritory = nullptr, int armyCount = -1);
 private:
     Deck* deck;
 };

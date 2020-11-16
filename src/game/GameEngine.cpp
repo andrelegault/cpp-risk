@@ -225,7 +225,6 @@ void GameEngine::executeOrdersPhase() {
     int numPlayers = this->players.size();
 
     while (playersDoneDeploying < numPlayers) {
-        cout << playersDoneDeploying << " / " << numPlayers << endl;
         for (auto player : this->players) {
             cout << player->getName() << endl;
             Order* nextDeployed = player->getNextOrder(1);
@@ -234,11 +233,9 @@ void GameEngine::executeOrdersPhase() {
                 playersDoneDeploying++;
             }
             else {
-                cout << "NEXT DEPLOYED" << endl;
                 cout << *nextDeployed << endl;
                 nextDeployed->execute();
                 player->removeOrder(nextDeployed);
-                cout << "finished with p0" << endl;
             }
         }
     }
@@ -248,7 +245,6 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
-                cout << "NEXT DEPLOYED" << endl;
                 cout << *nextOrder << endl;
                 nextOrder->execute();
                 player->removeOrder(nextOrder);
