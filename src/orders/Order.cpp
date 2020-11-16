@@ -23,6 +23,18 @@ Order& Order::operator=(const Order& order) {
     return *this;
 }
 
+BlockableOrder::BlockableOrder() : Order(nullptr) { }
+BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(other.player), target(other.target), armyCount(other.armyCount) { }
+BlockableOrder::BlockableOrder(Player* player, Territory* target) : Order(player), target(target) { }
+
+bool BlockableOrder::isBlocked() {
+    tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
+    const auto it = GameEngine::immunities.find(current);
+    const bool exists = it != GameEngine::immunities.end();
+    const bool blocked = exists && it->second;
+    return blocked;
+}
+
 
 // Deploy
 Deploy::Deploy() : Order(nullptr) {}
@@ -77,8 +89,8 @@ int Deploy::getPriority() {
 }
 
 // Advance
-Advance::Advance() : Order(nullptr) {}
-Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player), source(source), target(target), armyCount(armyCount) {}
+Advance::Advance() : BlockableOrder(nullptr, nullptr), armyCount(-1) {}
+Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
 Advance::~Advance() {}
 
@@ -98,7 +110,7 @@ bool Advance::validate() const {
     return false;
 }
 
-Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
+Advance::Advance(const Advance& other) : BlockableOrder(other) {};
 
 string Advance::toString() const {
     if (this->source != nullptr && this->target != nullptr) {
@@ -132,10 +144,7 @@ bool Advance::execute() {
             this->target->numberOfArmies += this->armyCount;
         }
         else {
-            tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
-            auto checkImmune = GameEngine::immunities.find(current);
-            bool isImmune = checkImmune != GameEngine::immunities.end() && checkImmune->second;
-            if (!isImmune) {
+            if (!isBlocked()) {
                 // skip since immune
                 const bool successful = this->source->attack(this->target, this->armyCount);
                 if (successful) {
@@ -143,7 +152,7 @@ bool Advance::execute() {
                 }
             }
             else {
-                cout << this->target->getOwner()->getName() << " cannot receive attacks from " << this->player->getName() << endl;
+                cout << "blocked an advance order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
             }
         }
 
@@ -162,12 +171,12 @@ int Advance::getPriority() {
 }
 
 // Bomb
-Bomb::Bomb() : Order(nullptr) {}
-Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
+Bomb::Bomb() : BlockableOrder(nullptr, nullptr) {}
+Bomb::Bomb(Player* player, Territory* target) : BlockableOrder(player, target) {}
 
 Bomb::~Bomb() {}
 
-Bomb::Bomb(const Bomb& order) : Order(order), target(new Territory(*(order.target))) {}
+Bomb::Bomb(const Bomb& order) : BlockableOrder(order.player, order.target) {}
 
 string Bomb::toString() const {
     return "BOMB:: " + this->target->getName();
@@ -193,11 +202,17 @@ bool Bomb::validate() const {
 bool Bomb::execute() {
     if (validate()) {
         // cant bomb if num is 1 or 0
-        if (this->target->numberOfArmies > 1) {
-            this->target->numberOfArmies /= 2;
-        }
+        if (!isBlocked()) {
+            if (this->target->numberOfArmies > 1) {
+                this->target->numberOfArmies /= 2;
+            }
 
-        return true;
+            return true;
+        }
+        else {
+            cout << "blocked a bomb order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
+            return false;
+        }
     }
     else {
         return false;
@@ -263,8 +278,8 @@ int Blockade::getPriority() {
 }
 
 // Airlift
-Airlift::Airlift() : Order(nullptr) {}
-Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player), source(source), target(target), armyCount(armies) {}
+Airlift::Airlift() : BlockableOrder(nullptr, nullptr), source(nullptr), armyCount(-1) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
 Airlift::~Airlift() {}
 
@@ -273,7 +288,7 @@ bool Airlift::validate() const {
     return this->source->getOwner() == this->player;
 }
 
-Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), armyCount(armyCount) {};
+Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(armyCount) {};
 
 string Airlift::toString() const {
     return "AIRLIFT:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
@@ -302,17 +317,14 @@ bool Airlift::execute() {
             this->source->numberOfArmies = 0;
         }
         else {
-            tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
-            auto checkImmune = GameEngine::immunities.find(current);
-            bool isImmune = checkImmune != GameEngine::immunities.end() && checkImmune->second;
-            if (!isImmune) {
+            if (!isBlocked()) {
                 const bool successful = this->source->attack(this->target, this->armyCount);
                 if (successful) {
                     this->player->hand->draw();
                 }
             }
             else {
-                cout << this->target->getOwner()->getName() << " cannot receive attacks from " << this->player->getName() << endl;
+                cout << "blocked an airlift order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
             }
         }
         return true;

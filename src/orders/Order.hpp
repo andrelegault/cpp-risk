@@ -22,6 +22,8 @@ public:
 
     virtual string toString() const = 0;
 
+    Order();
+
     /**
      * Parameter constructor.
      * @param player Owner of the order.
@@ -64,13 +66,24 @@ public:
 
     /**
      * Returns the priority for the order.
-     */ 
+     */
     virtual int getPriority() = 0;
 
     friend OrdersList;
 protected:
     /// Player issuing the order.
     Player* player;
+};
+
+class BlockableOrder : public Order {
+public:
+    BlockableOrder();
+    BlockableOrder(const BlockableOrder& other);
+    BlockableOrder(Player* player, Territory* target);
+protected:
+    bool isBlocked();
+    Territory* target;
+    int armyCount;
 };
 
 class Deploy : public Order {
@@ -91,7 +104,7 @@ private:
     int armyCount;
 };
 
-class Advance : public Order {
+class Advance : public BlockableOrder {
 public:
     Advance();
     Advance(Player* player, Territory* source, Territory* target, int armyCount);
@@ -106,11 +119,10 @@ public:
     virtual int getPriority() override;
 private:
     Territory* source;
-    Territory* target;
     int armyCount;
 };
 
-class Bomb : public Order {
+class Bomb : public BlockableOrder {
 public:
     Bomb();
     Bomb(Player* player, Territory* target);
@@ -123,8 +135,6 @@ public:
     bool validate() const;
     bool execute();
     virtual int getPriority() override;
-private:
-    Territory* target;
 };
 
 class Blockade : public Order {
@@ -144,7 +154,7 @@ private:
     Territory* target;
 };
 
-class Airlift : public Order {
+class Airlift : public BlockableOrder {
 public:
     Airlift();
     Airlift(Player* player, Territory* source, Territory* target, int armyCount);
@@ -159,7 +169,6 @@ public:
     virtual int getPriority() override;
 private:
     Territory* source;
-    Territory* target;
     int armyCount;
 };
 
