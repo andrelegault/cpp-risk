@@ -132,11 +132,18 @@ bool Advance::execute() {
             this->target->numberOfArmies += this->armyCount;
         }
         else {
-            if (GameEngine::immunities.find(make_tuple(this->target->getOwner(), this->player)) == GameEngine::immunities.end()) {
+            tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
+            auto checkImmune = GameEngine::immunities.find(current);
+            bool isImmune = checkImmune != GameEngine::immunities.end() && checkImmune->second;
+            if (!isImmune) {
+                // skip since immune
                 const bool successful = this->source->attack(this->target, this->armyCount);
                 if (successful) {
                     this->player->hand->draw();
                 }
+            }
+            else {
+                cout << this->target->getOwner()->getName() << " cannot receive attacks from " << this->player->getName() << endl;
             }
         }
 
@@ -295,12 +302,17 @@ bool Airlift::execute() {
             this->source->numberOfArmies = 0;
         }
         else {
-            // attac
-            if (GameEngine::immunities.find(make_tuple(this->target->getOwner(), this->player)) == GameEngine::immunities.end()) {
+            tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
+            auto checkImmune = GameEngine::immunities.find(current);
+            bool isImmune = checkImmune != GameEngine::immunities.end() && checkImmune->second;
+            if (!isImmune) {
                 const bool successful = this->source->attack(this->target, this->armyCount);
                 if (successful) {
                     this->player->hand->draw();
                 }
+            }
+            else {
+                cout << this->target->getOwner()->getName() << " cannot receive attacks from " << this->player->getName() << endl;
             }
         }
         return true;
