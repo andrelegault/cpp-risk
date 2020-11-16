@@ -60,12 +60,10 @@ vector<Territory*> Player::toAttack() {
     set<Territory*> enemyTerritories;
 
     for (auto territory : this->territories) {
-        if(territory->numberOfArmies <= 1) continue;
-
         for (auto border : territory->getBorders()) {
             Territory* neighbour = (Territory*)border->getOther(territory);
 
-            if (std::find(this->territories.begin(), this->territories.end(), neighbour) != this->territories.end()) {
+            if (neighbour->getOwner() != this) {
                 enemyTerritories.insert(neighbour);
             }
         }
