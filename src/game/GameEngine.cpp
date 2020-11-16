@@ -1,12 +1,12 @@
 #include "GameEngine.hpp"
 
 string gamePhaseToString(GamePhase gamePhase) {
-    switch(gamePhase) {
-        case STARTUP_PHASE: return "Startup Phase";
-        case REINFORCEMENT_PHASE: return "Reinforcement Phase";
-        case ISSUE_ORDER_PHASE: return "Issue Order Phase";
-        case EXECUTE_ORDER_PHASE: return "Execute Order Phase";
-        default: return "Unknown Phase";
+    switch (gamePhase) {
+    case STARTUP_PHASE: return "Startup Phase";
+    case REINFORCEMENT_PHASE: return "Reinforcement Phase";
+    case ISSUE_ORDER_PHASE: return "Issue Order Phase";
+    case EXECUTE_ORDER_PHASE: return "Execute Order Phase";
+    default: return "Unknown Phase";
     }
 }
 
@@ -103,7 +103,6 @@ void GameEngine::init() {
         const path mapPath = entry.path();
 
         if (mapPath.extension() == ".map") {
-            cout << mapPath.stem() << endl;
             maps.push_back(mapPath.stem());
         }
     }
@@ -205,7 +204,13 @@ void GameEngine::mainGameLoop() {
         this->issueOrdersPhase();
         this->executeOrdersPhase();
 
+        for (auto player : this->players) {
+            cout << player->getName() << " has " << player->getTerritories().size() << " territories" << endl;
+        }
+
         // this->printTerritories();
+
+        // sleep(2);
     }
 }
 

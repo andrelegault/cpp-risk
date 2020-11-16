@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <filesystem>
 #include <math.h>
 #include <algorithm>
@@ -67,6 +73,7 @@ public:
 
     friend class PhaseObserver;
     friend class GameStatisticsObserver;
+
 private:
     vector<Player*> players;
     Player* currentPlayer;

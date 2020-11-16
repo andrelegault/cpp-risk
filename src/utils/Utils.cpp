@@ -61,3 +61,7 @@ std::string Utils::string_right(const std::string s, const int w) {
 
     return ss.str();
 }
+
+int Utils::getRandom(int min, int max) {
+    return min + (rand() % static_cast<int>(max - min + 1));
+}

@@ -118,4 +118,12 @@ namespace Utils {
 
         return zip2(v, indices);
     }
+
+    /**
+     * Generates a random integer within min and max (inclusive).
+     * @param min Minimum number for the range.
+     * @param max Maximum number for the range.
+     * @return Random number within range.
+     */
+    int getRandom(int min, int max);
 }
