@@ -34,7 +34,7 @@ Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player)
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    return this->target->getOwner() == this->player;
+    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player;
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -60,8 +60,8 @@ bool Deploy::execute() {
     // cout << "Executing a deploy order!" << endl;
 
     if (validate()) {
-        // TODO: get correct number of armies to add
         this->target->numberOfArmies += this->armyCount;
+
         return true;
     }
     else {
@@ -80,20 +80,26 @@ Advance::Advance(Player* player, Territory* source, Territory* target, int armyC
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    auto borders = this->source->getBorders();
-    bool isAdjacent = false;
-    for (auto border : borders) {
+    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
+    if (this->player != this->source->getOwner()) return false;
+
+    for (auto border : this->source->getBorders()) {
         if (border->has(target)) {
-            isAdjacent = true;
+            return true;
         }
     }
-    return isAdjacent && this->source->getOwner() == this->player;
+
+    return false;
 }
 
 Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
 
 string Advance::toString() const {
-    return "ADVANCE:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
+    if(this->source != nullptr && this->target != nullptr) {
+        return "ADVANCE:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
+    } else {
+        throw "ADVANCE:: Invalid Advance";
+    }
 }
 
 ostream& operator<<(ostream& os, const Advance& order) {
@@ -115,12 +121,14 @@ bool Advance::execute() {
 
     if (validate()) {
         bool ownsTarget = this->target->getOwner() == this->player;
+
         if (ownsTarget) {
             this->source->numberOfArmies -= this->armyCount;
             this->target->numberOfArmies += this->armyCount;
         }
         else {
             const bool successful = this->source->attack(this->target, this->armyCount);
+
             if (successful) {
                 // TODO: give a card to the player, but which one?
 
@@ -399,8 +407,7 @@ void OrdersList::move(Order* first, Order* second) {
 }
 
 Order* OrdersList::next(const int wantedPriority) const {
-    const int orderSize = this->orders.size();
-    if (orderSize > 0) {
+    if (this->orders.size() > 0) {
         if (wantedPriority == -1) {
             // by regular priority
             Order* highest = nullptr;
@@ -429,7 +436,6 @@ Order* OrdersList::next(const int wantedPriority) const {
             }
         }
     }
-    else {
-        return nullptr;
-    }
+
+    return nullptr;
 }

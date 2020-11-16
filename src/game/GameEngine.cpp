@@ -240,6 +240,8 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
+                cout << "NEXT DEPLOYED" << endl;
+                cout << *nextOrder << endl;
                 nextOrder->execute();
                 player->removeOrder(nextOrder);
             }
