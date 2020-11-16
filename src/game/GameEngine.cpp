@@ -10,12 +10,12 @@ string gamePhaseToString(GamePhase gamePhase) {
     }
 }
 
-GameEngine::GameEngine() : deck(new Deck()), map(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {}
+GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {}
 
 GameEngine::~GameEngine() {
     delete this->deck;
 
-    delete this->map;
+    delete this->warzoneMap;
 
     for (auto player : this->players) delete player;
 
@@ -53,7 +53,7 @@ GamePhase GameEngine::getGamePhase() {
 }
 
 void GameEngine::assignTerritories() {
-    vector<Territory*> territories = this->map->getTerritories();
+    vector<Territory*> territories = this->warzoneMap->getTerritories();
 
     std::shuffle(territories.begin(), territories.end(), std::random_device{});
 
@@ -64,6 +64,27 @@ void GameEngine::assignTerritories() {
     for (auto territory : territories) {
         this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
     }
+}
+
+void GameEngine::printTerritories() {
+    vector<vector<UI::Component*>> table;
+
+    for (auto continent : this->warzoneMap->getContinents()) {
+        table.push_back({ new UI::Text(continent->getName()) });
+
+        vector<string> territoryList;
+        for (auto territory : continent->getTerritories()) {
+            stringstream ss;
+
+            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->numberOfArmies;
+
+            territoryList.push_back(ss.str());
+        }
+
+        table.push_back({ new UI::List(territoryList) });
+    }
+
+    cout << Grid(table);
 }
 
 void GameEngine::init() {
@@ -98,7 +119,7 @@ void GameEngine::init() {
         return;
     }
 
-    this->map = new Map(mapObj);
+    this->warzoneMap = new Map(mapObj);
 
     int numberOfPlayers = range("Number of Players", 2, 5);
 
@@ -153,7 +174,9 @@ void GameEngine::startupPhase() {
 
 void GameEngine::mainGameLoop() {
     while (true) {
-        // TODO: Not sure if this part needs to go in the execute phase...
+        for (auto& entry : GameEngine::immunities) {
+            entry.second = true;
+        }
 
         // Removes losing players.
         std::vector<Player*> playersWithTerritory;
@@ -188,6 +211,14 @@ void GameEngine::mainGameLoop() {
             cout << player->getName() << " has " << player->getTerritories().size() << " territories" << endl;
         }
 
+        vector<tuple<Player*, Player*>> toErase;
+
+        for(auto entry : GameEngine::immunities) {
+            if (entry.second) toErase.push_back(entry.first);
+        }
+        for(auto tup : toErase) {
+            GameEngine::immunities.erase(tup);
+        }
         // this->printTerritories();
 
         // sleep(2);
@@ -202,7 +233,7 @@ void GameEngine::reinforcementPhase() {
 
         player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
 
-        for (auto continent : this->map->getContinents()) {
+        for (auto continent : this->warzoneMap->getContinents()) {
             bool hasAllTerritories = true;
 
             for (auto territory : continent->getTerritories()) {
@@ -278,3 +309,5 @@ void GameEngine::executeOrdersPhase() {
         }
     }
 }
+
+map<tuple<Player*, Player*>, bool> GameEngine::immunities;

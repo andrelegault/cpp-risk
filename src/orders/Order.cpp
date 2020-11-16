@@ -132,9 +132,11 @@ bool Advance::execute() {
             this->target->numberOfArmies += this->armyCount;
         }
         else {
-            const bool successful = this->source->attack(this->target, this->armyCount);
-            if (successful) {
-                player->hand->draw();
+            if (GameEngine::immunities.find(make_tuple(this->target->getOwner(), this->player)) == GameEngine::immunities.end()) {
+                const bool successful = this->source->attack(this->target, this->armyCount);
+                if (successful) {
+                    this->player->hand->draw();
+                }
             }
         }
 
@@ -260,7 +262,8 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armie
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    return (player != nullptr && source != nullptr && target != nullptr && armyCount != -1) && this->source->getOwner() == this->player;
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount != -1) return false;
+    return this->source->getOwner() == this->player;
 }
 
 Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), armyCount(armyCount) {};
@@ -293,9 +296,11 @@ bool Airlift::execute() {
         }
         else {
             // attac
-            const bool successful = this->source->attack(this->target, this->armyCount);
-            if (successful) {
-                this->player->hand->draw();
+            if (GameEngine::immunities.find(make_tuple(this->target->getOwner(), this->player)) == GameEngine::immunities.end()) {
+                const bool successful = this->source->attack(this->target, this->armyCount);
+                if (successful) {
+                    this->player->hand->draw();
+                }
             }
         }
         return true;
@@ -339,11 +344,12 @@ Negotiate& Negotiate::operator=(const Negotiate& other) {
 }
 
 bool Negotiate::validate() const {
-    return (this->player == nullptr && this->target == nullptr) && this->target != this->player;
+    return (this->player != nullptr && this->target != nullptr) && this->target != this->player;
 }
 
 bool Negotiate::execute() {
     if (validate()) {
+        GameEngine::immunities[make_tuple(this->player, this->target)] = false;
         return true;
     }
     else {

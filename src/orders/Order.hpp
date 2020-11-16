@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Order.fwd.hpp"
+#include "GameEngine.hpp"
 #include "Player.hpp"
 
 using namespace std;
@@ -175,6 +176,7 @@ public:
     bool validate() const;
     bool execute();
     virtual int getPriority() override;
+
 private:
     Player* target;
 };

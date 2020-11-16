@@ -73,11 +73,12 @@ void GameStatisticsObserver::update() {
         vector<vector<Component*>> rows;
 
         for (auto player : this->gameEngine->players) {
-            rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->map->getTerritories().size()) + "%") });
+            rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->warzoneMap->getTerritories().size()) + "%") });
         }
 
         this->component = new Grid({ {new Text("Game Stats")}, {new Grid(rows)} });
-    } else {
+    }
+    else {
         this->component = new Grid({ {new Text("Game Stats")}, {new Text("Congrats " + this->gameEngine->players.front()->getName())} });
     }
 

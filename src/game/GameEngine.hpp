@@ -74,11 +74,13 @@ public:
     friend class PhaseObserver;
     friend class GameStatisticsObserver;
 
+    /// first is immune to any attacks by second
+    static map<tuple<Player*, Player*>, bool> immunities;
 private:
     vector<Player*> players;
     Player* currentPlayer;
     GamePhase gamePhase;
-    Map* map;
+    Map* warzoneMap;
     Deck* deck;
     GameUI* gameUI;
 
