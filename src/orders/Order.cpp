@@ -32,7 +32,8 @@ Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player)
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
+    if (this->player == nullptr || this->target == nullptr || this->armyCount < 1) throw runtime_error("Invalid deployment!");
+    return this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -70,6 +71,10 @@ Deploy* Deploy::clone() const {
     return new Deploy(*this);
 }
 
+int Deploy::getPriority() {
+    return 1;
+}
+
 // Advance
 Advance::Advance() : Order(nullptr) {}
 Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player), source(source), target(target), armyCount(armyCount) {}
@@ -80,7 +85,7 @@ bool Advance::validate() const {
     if (this->player == nullptr || this->source == nullptr || this->target == nullptr) throw runtime_error("Advance order missing parameters.");
     if (this->player != this->source->getOwner()) return false;
     if (this->armyCount >= this->source->numberOfArmies) return false;
-    
+
 
     vector<Border*> borders = this->source->getBorders();
     for (auto border : borders) {
@@ -142,6 +147,10 @@ Advance* Advance::clone() const {
     return new Advance(*this);
 }
 
+int Advance::getPriority() {
+    return 4;
+}
+
 // Bomb
 Bomb::Bomb() : Order(nullptr) {}
 Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
@@ -167,6 +176,7 @@ Bomb& Bomb::operator=(const Bomb& other) {
 }
 
 bool Bomb::validate() const {
+    if (this->player == nullptr || this->target == nullptr) throw runtime_error("Something is null in a Bomb order, bad!");
     return this->target->getOwner() != this->player;
 }
 
@@ -183,6 +193,10 @@ bool Bomb::execute() {
 
 Bomb* Bomb::clone() const {
     return new Bomb(*this);
+}
+
+int Bomb::getPriority() {
+    return 3;
 }
 
 // Blockade
@@ -209,6 +223,7 @@ Blockade& Blockade::operator=(const Blockade& other) {
 }
 
 bool Blockade::validate() const {
+    if (this->player == nullptr || this->target == nullptr) throw runtime_error("Something is null in a Blockade order, bad!");
     return this->target->getOwner() == this->player;
 }
 
@@ -229,6 +244,10 @@ Blockade* Blockade::clone() const {
     return new Blockade(*this);
 }
 
+int Blockade::getPriority() {
+    return 2;
+}
+
 // Airlift
 Airlift::Airlift() : Order(nullptr) {}
 Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : Order(player), source(source), target(target), armyCount(armies) {}
@@ -236,7 +255,7 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armie
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) throw runtime_error("Invalid airlift order");
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) throw runtime_error("Something is null in an Airlift order, bad!");
     return this->source->getOwner() == this->player;
 }
 
@@ -286,6 +305,10 @@ Airlift* Airlift::clone() const {
     return new Airlift(*this);
 }
 
+int Airlift::getPriority() {
+    return 2;
+}
+
 // Negotiate
 Negotiate::Negotiate() : Order(nullptr) {}
 Negotiate::Negotiate(Player* player, Player* target) : Order(player), target(target) {}
@@ -312,6 +335,7 @@ Negotiate& Negotiate::operator=(const Negotiate& other) {
 }
 
 bool Negotiate::validate() const {
+    if (this->player == nullptr || this->target == nullptr) throw runtime_error("Something is null in a Negotiate order, bad!");
     return this->target != this->player;
 }
 
@@ -326,6 +350,10 @@ bool Negotiate::execute() {
 
 Negotiate* Negotiate::clone() const {
     return new Negotiate(*this);
+}
+
+int Negotiate::getPriority() {
+    return 2;
 }
 
 // OrdersList
