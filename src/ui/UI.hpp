@@ -63,4 +63,9 @@ namespace UI {
      * @return Value between min and max (including).
      */
     int validate(int min, int max);
+
+    /**
+     * Waits for user to key press.
+     */
+    void waitForInput();
 }

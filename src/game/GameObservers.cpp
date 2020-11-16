@@ -1,22 +1,33 @@
 #include "GameObservers.hpp"
 
-PhaseObserver::PhaseObserver(GameEngine* gameEngine) : gameEngine(gameEngine) {
-    this->_update();
-};
+/******************************************************
+ * PHASE OBSERVER
+ *****************************************************/
 
-// TODO
-PhaseObserver::PhaseObserver(const PhaseObserver& phaseObserver) {};
+PhaseObserver::PhaseObserver(GameEngine* gameEngine) : gameEngine(gameEngine), component(nullptr) {};
+
+PhaseObserver::PhaseObserver(const PhaseObserver& phaseObserver) {
+    this->gameEngine = phaseObserver.gameEngine;
+};
 
 PhaseObserver::~PhaseObserver() {
     delete this->component;
 }
 
-void PhaseObserver::_update() {
-    if (this->component != nullptr) {
-        delete this->component;
+void PhaseObserver::update() {
+    if (this->component != nullptr) delete this->component;
+
+    if(this->gameEngine->currentPlayer != nullptr) {
+        stringstream ss;
+
+        ss << this->gameEngine->currentPlayer->getName() << ": " << gamePhaseToString(this->gameEngine->gamePhase);
+
+        this->component = new Text(ss.str());
     }
 
-    this->component = new Text("HI");
+    Component::update();
+
+    UI::waitForInput();
 }
 
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver) {
@@ -27,34 +38,35 @@ ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver) {
     return stream;
 }
 
-GameStatisticsObserver::GameStatisticsObserver(GameEngine* gameEngine) : gameEngine(gameEngine) {
-    this->_update();
-};
+/******************************************************
+ * GAME STATISTICS
+ *****************************************************/
 
-// TODO
-GameStatisticsObserver::GameStatisticsObserver(const GameStatisticsObserver& gameStatisticsObserver) {};
+GameStatisticsObserver::GameStatisticsObserver(GameEngine* gameEngine) : gameEngine(gameEngine), component(nullptr) {};
+
+GameStatisticsObserver::GameStatisticsObserver(const GameStatisticsObserver& gameStatisticsObserver) {
+    this->gameEngine = gameStatisticsObserver.gameEngine;
+    this->component = gameStatisticsObserver.component;
+};
 
 GameStatisticsObserver::~GameStatisticsObserver() {
     delete this->component;
 }
 
 void GameStatisticsObserver::update() {
-    this->_update();
-    Component::update();
-}
-
-void GameStatisticsObserver::_update() {
-    if (this->component != nullptr) {
-        delete this->component;
-    }
+    if (this->component != nullptr) delete this->component;
 
     vector<vector<Component*>> rows;
 
     for (auto player : this->gameEngine->players) {
-        rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size())) });
+        rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->map->getTerritories().size()) + "%") });
     }
 
     this->component = new Grid(rows);
+
+    Component::update();
+
+    UI::waitForInput();
 }
 
 ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver) {
@@ -65,12 +77,17 @@ ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatistic
     return stream;
 }
 
+/******************************************************
+ * GAME UI
+ *****************************************************/
+
 GameUI::GameUI() : component(new Text()) {};
 
 GameUI::GameUI(vector<Component*> observers) : component(new Grid({ observers })) {};
 
-// TODO
-GameUI::GameUI(const GameUI& gameUI) {};
+GameUI::GameUI(const GameUI& gameUI) {
+    this->component = gameUI.component;
+};
 
 GameUI::~GameUI() {
     delete this->component;

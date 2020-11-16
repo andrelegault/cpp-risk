@@ -81,15 +81,11 @@ std::ostream& operator<<(std::ostream& stream, const UI::Grid& grid) {
 
             rowHeights[i] = std::max(rowHeights[i], (int)eSplit.size());
 
-            columnWidths[j] = std::max(
-                columnWidths[j],
-                (int)max_element(
-                    eSplit.begin(),
-                    eSplit.end(),
-                    [](std::string l, std::string r) {
-                        return l.size() < r.size();
-                    }
-            )[0].size());
+            if(eSplit.size() > 0) {
+                std::string maxString = *std::max_element(eSplit.begin(), eSplit.end(), [](std::string l, std::string r) { return l.size() < r.size();});
+
+                columnWidths[j] = std::max(columnWidths[j], (int)maxString.size());
+            }
         }
     }
 

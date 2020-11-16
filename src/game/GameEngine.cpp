@@ -1,6 +1,16 @@
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine() : deck(new Deck()), map(nullptr), gameUI(nullptr) {}
+string gamePhaseToString(GamePhase gamePhase) {
+    switch(gamePhase) {
+        case STARTUP_PHASE: return "Startup Phase";
+        case REINFORCEMENT_PHASE: return "Reinforcement Phase";
+        case ISSUE_ORDER_PHASE: return "Issue Order Phase";
+        case EXECUTE_ORDER_PHASE: return "Execute Order Phase";
+        default: return "Unknown Phase";
+    }
+}
+
+GameEngine::GameEngine() : deck(new Deck()), map(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {}
 
 GameEngine::~GameEngine() {
     delete this->deck;
@@ -24,6 +34,22 @@ void GameEngine::initPlayers() {
     for (auto player : this->players) {
         player->armies += armyCount;
     }
+}
+
+void GameEngine::setGamePhase(GamePhase gamePhase) {
+    this->gamePhase = gamePhase;
+}
+
+void GameEngine::setCurrentPlayer(Player* player) {
+    this->currentPlayer = player;
+}
+
+Player* GameEngine::getCurrentPlayer() {
+    return this->currentPlayer;
+}
+
+GamePhase GameEngine::getGamePhase() {
+    return this->gamePhase;
 }
 
 void GameEngine::assignTerritories() {
@@ -112,6 +138,7 @@ void GameEngine::init() {
 
         for (auto player : this->players) {
             player->attach(phaseObserver);
+            this->attach(phaseObserver);
         }
     }
 
@@ -121,6 +148,7 @@ void GameEngine::init() {
 
         for (auto player : this->players) {
             player->attach(gameStatisticsObserver);
+            this->attach(gameStatisticsObserver);
         }
     }
 
@@ -139,7 +167,7 @@ void GameEngine::init() {
 void GameEngine::startupPhase() {
     this->initPlayers();
     this->assignTerritories();
-    this->printTerritories();
+    // this->printTerritories();
 
     //TODO make sure that "all players have all the orders for playing in a turn"
 
@@ -164,7 +192,8 @@ void GameEngine::mainGameLoop() {
 
         // Checks win condition.
         if (this->players.size() == 1) {
-            cout << "WINNER " << this->players.front() << endl;
+            this->notify();
+
             return;
         }
         else if (this->players.size() == 0) {
@@ -176,13 +205,16 @@ void GameEngine::mainGameLoop() {
         this->issueOrdersPhase();
         this->executeOrdersPhase();
 
-        this->printTerritories();
+        // this->printTerritories();
     }
 }
 
 void GameEngine::reinforcementPhase() {
-    cout << "ENTERING REINFORCEMENT PHASE" << endl;
+    this->setGamePhase(REINFORCEMENT_PHASE);
+
     for (auto player : this->players) {
+        this->setCurrentPlayer(player);
+
         player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
 
         for (auto continent : this->map->getContinents()) {
@@ -199,16 +231,19 @@ void GameEngine::reinforcementPhase() {
                 player->armies += continent->getBonus();
             }
         }
+
+        this->notify();
     }
-    cout << "EXITING REINFORCEMENT PHASE" << endl;
 }
 
 void GameEngine::issueOrdersPhase() {
-    cout << "ENTERING ISSUING PHASE" << endl;
+    this->setGamePhase(ISSUE_ORDER_PHASE);
+
     for (auto player : this->players) {
+        this->setCurrentPlayer(player);
+
         player->issueOrder();
     }
-    cout << "EXITING ISSUING PHASE" << endl;
 }
 
 bool GameEngine::isExecutionDone() const {
@@ -222,20 +257,22 @@ bool GameEngine::isExecutionDone() const {
 }
 
 void GameEngine::executeOrdersPhase() {
-    cout << "ENTERING EXECUTION PHASE" << endl;
+    this->setGamePhase(EXECUTE_ORDER_PHASE);
+
     int playersDoneDeploying = 0;
     int numPlayers = this->players.size();
 
     while (playersDoneDeploying < numPlayers) {
         for (auto player : this->players) {
-            cout << player->getName() << endl;
+            this->setCurrentPlayer(player);
+
             Order* nextDeployed = player->getNextOrder(1);
 
             if (nextDeployed == nullptr) {
                 playersDoneDeploying++;
             }
             else {
-                if(nextDeployed->execute()) cout << *nextDeployed << endl;
+                nextDeployed->execute();
 
                 player->removeOrder(nextDeployed);
             }
@@ -244,14 +281,15 @@ void GameEngine::executeOrdersPhase() {
 
     while (!this->isExecutionDone()) {
         for (auto player : this->players) {
+            this->setCurrentPlayer(player);
+
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
-                if(nextOrder->execute()) cout << *nextOrder << endl;
+                nextOrder->execute();
 
                 player->removeOrder(nextOrder);
             }
         }
     }
-    cout << "EXITING EXECUTION PHASE" << endl;
 }

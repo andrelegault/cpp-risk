@@ -77,3 +77,9 @@ std::vector<UI::Component*> UI::toText(std::vector<std::string> strings) {
 
     return texts;
 }
+
+void UI::waitForInput() {
+    std::cout << std::endl << "> ";
+
+    std::cin.get();
+}

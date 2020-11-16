@@ -30,6 +30,8 @@ std::vector<std::string> Utils::split(const std::string& line, const std::string
 }
 
 std::string Utils::string_center(const std::string s, const int w) {
+    if(w < s.length()) return s;
+
     std::stringstream ss, spaces;
     int pad = w - s.size();
     for (int i = 0; i < pad / 2; ++i)
@@ -41,6 +43,8 @@ std::string Utils::string_center(const std::string s, const int w) {
 }
 
 std::string Utils::string_left(const std::string s, const int w) {
+    if(w < s.length()) return s;
+
     std::stringstream ss;
 
     ss << s << std::string(w - s.length(), ' ');
@@ -49,6 +53,8 @@ std::string Utils::string_left(const std::string s, const int w) {
 }
 
 std::string Utils::string_right(const std::string s, const int w) {
+    if(w < s.length()) return s;
+
     std::stringstream ss;
 
     ss << std::string(w - s.length(), ' ') << s;
