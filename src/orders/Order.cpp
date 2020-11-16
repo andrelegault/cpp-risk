@@ -75,6 +75,10 @@ Deploy* Deploy::clone() const {
     return new Deploy(*this);
 }
 
+int Deploy::getPriority() {
+    return 1;
+}
+
 // Advance
 Advance::Advance() : Order(nullptr) {}
 Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : Order(player), source(source), target(target), armyCount(armyCount) {}
@@ -149,6 +153,10 @@ Advance* Advance::clone() const {
     return new Advance(*this);
 }
 
+int Advance::getPriority() {
+    return 4;
+}
+
 // Bomb
 Bomb::Bomb() : Order(nullptr) {}
 Bomb::Bomb(Player* player, Territory* target) : Order(player), target(target) {}
@@ -193,6 +201,10 @@ bool Bomb::execute() {
 
 Bomb* Bomb::clone() const {
     return new Bomb(*this);
+}
+
+int Bomb::getPriority() {
+    return 3;
 }
 
 // Blockade
@@ -240,6 +252,10 @@ bool Blockade::execute() {
 
 Blockade* Blockade::clone() const {
     return new Blockade(*this);
+}
+
+int Blockade::getPriority() {
+    return 2;
 }
 
 // Airlift
@@ -301,6 +317,10 @@ Airlift* Airlift::clone() const {
     return new Airlift(*this);
 }
 
+int Airlift::getPriority() {
+    return 2;
+}
+
 // Negotiate
 Negotiate::Negotiate() : Order(nullptr) {}
 Negotiate::Negotiate(Player* player, Player* target) : Order(player), target(target) {}
@@ -344,6 +364,10 @@ bool Negotiate::execute() {
 
 Negotiate* Negotiate::clone() const {
     return new Negotiate(*this);
+}
+
+int Negotiate::getPriority() {
+    return 2;
 }
 
 // OrdersList

@@ -84,7 +84,7 @@ public:
     ~Deploy();
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 1; };
+    virtual int getPriority() override;
 private:
     Territory* target;
     int armyCount;
@@ -102,7 +102,7 @@ public:
     ~Advance();
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 4; };
+    virtual int getPriority() override;
 private:
     Territory* source;
     Territory* target;
@@ -121,7 +121,7 @@ public:
     Bomb* clone() const;
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 3; };
+    virtual int getPriority() override;
 private:
     Territory* target;
 };
@@ -138,7 +138,7 @@ public:
     Blockade* clone() const;
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 2; };
+    virtual int getPriority() override;
 private:
     Territory* target;
 };
@@ -155,7 +155,7 @@ public:
     Airlift* clone() const;
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 2; };
+    virtual int getPriority() override;
 private:
     Territory* source;
     Territory* target;
@@ -174,7 +174,7 @@ public:
     Negotiate* clone() const;
     bool validate() const;
     bool execute();
-    virtual int getPriority() override { return 2; };
+    virtual int getPriority() override;
 private:
     Player* target;
 };
