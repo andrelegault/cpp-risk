@@ -56,3 +56,6 @@ Makefile
 build
 bin
 lib
+
+# ctags
+tags
