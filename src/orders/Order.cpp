@@ -8,7 +8,7 @@ using std::ostream;
 // Order
 
 ostream& operator<<(ostream& os, const Order& order) {
-    os << &order;
+    os << order.toString();
     return os;
 }
 
@@ -40,6 +40,15 @@ bool Deploy::validate() const {
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
+
+string Deploy::toString() const {
+    return "DEPLOY:: " + to_string(this->armyCount) + " units |  -> " + this->target->getName();
+}
+
+ostream& operator<<(ostream& os, const Deploy& order) {
+    os << order.toString() << endl;
+    return os;
+}
 
 Deploy& Deploy::operator=(const Deploy& other) {
     Order::operator=(other);
@@ -85,6 +94,15 @@ bool Advance::validate() const {
 
 Advance::Advance(const Advance& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))) {};
 
+string Advance::toString() const {
+    return "ADVANCE:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
+}
+
+ostream& operator<<(ostream& os, const Advance& order) {
+    os << order.toString();
+    return os;
+}
+
 Advance& Advance::operator=(const Advance& other) {
     Order::operator=(other);
     this->source = other.source;
@@ -128,6 +146,15 @@ Bomb::~Bomb() {}
 
 Bomb::Bomb(const Bomb& order) : Order(order), target(new Territory(*(order.target))) {}
 
+string Bomb::toString() const {
+    return "BOMB:: " + this->target->getName();
+}
+
+ostream& operator<<(ostream& os, const Bomb& order) {
+    os << order.toString();
+    return os;
+}
+
 Bomb& Bomb::operator=(const Bomb& other) {
     Order::operator=(other);
     this->target = other.target;
@@ -163,6 +190,15 @@ Blockade::Blockade(Player* player, Territory* target) : Order(player, 3), target
 Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
 
 Blockade::~Blockade() {}
+
+string Blockade::toString() const {
+    return "BLOCKADE:: " + this->target->getName();
+}
+
+ostream& operator<<(ostream& os, const Blockade& order) {
+    os << order.toString();
+    return os;
+}
 
 Blockade& Blockade::operator=(const Blockade& other) {
     Order::operator=(other);
@@ -205,6 +241,15 @@ bool Airlift::validate() const {
 }
 
 Airlift::Airlift(const Airlift& order) : Order(order), source(new Territory(*(order.source))), target(new Territory(*(order.source))), armyCount(armyCount) {};
+
+string Airlift::toString() const {
+    return "AIRLIFT:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
+}
+
+ostream& operator<<(ostream& os, const Airlift& order) {
+    os << order.toString();
+    return os;
+}
 
 Airlift& Airlift::operator=(const Airlift& other) {
     Order::operator=(other);
@@ -252,6 +297,14 @@ Negotiate::Negotiate(Player* player, Player* target) : Order(player, 4), target(
 Negotiate::~Negotiate() {}
 
 Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
+
+string Negotiate::toString() const {
+    return "NEGOTIATE:: " + this->target->getName();
+}
+ostream& operator<<(ostream& os, const Negotiate& order) {
+    os << order.toString();
+    return os;
+}
 
 Negotiate& Negotiate::operator=(const Negotiate& other) {
     Order::operator=(other);

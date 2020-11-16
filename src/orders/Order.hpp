@@ -19,6 +19,8 @@ public:
      */
     friend ostream& operator<<(ostream& os, const Order& order);
 
+    virtual string toString() const = 0;
+
     /**
      * Parameter constructor.
      * @param player Owner of the order.
@@ -72,6 +74,8 @@ public:
     Deploy();
     Deploy(Player* player, Territory* target, int armyCount = 0);
     Deploy(const Deploy& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Deploy& order);
     Deploy& operator=(const Deploy& other);
     Deploy* clone() const;
     ~Deploy();
@@ -87,6 +91,8 @@ public:
     Advance();
     Advance(Player* player, Territory* source, Territory* target, int armyCount);
     Advance(const Advance& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Advance& order);
     Advance& operator=(const Advance& other);
     Advance* clone() const;
     ~Advance();
@@ -103,6 +109,8 @@ public:
     Bomb();
     Bomb(Player* player, Territory* target);
     Bomb(const Bomb& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Bomb& order);
     Bomb& operator=(const Bomb& other);
     ~Bomb();
     Bomb* clone() const;
@@ -117,6 +125,8 @@ public:
     Blockade();
     Blockade(Player* player, Territory* target);
     Blockade(const Blockade& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Blockade& order);
     Blockade& operator=(const Blockade& other);
     ~Blockade();
     Blockade* clone() const;
@@ -131,6 +141,8 @@ public:
     Airlift();
     Airlift(Player* player, Territory* source, Territory* target, int armyCount);
     Airlift(const Airlift& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Airlift& order);
     Airlift& operator=(const Airlift& other);
     ~Airlift();
     Airlift* clone() const;
@@ -147,6 +159,8 @@ public:
     Negotiate();
     Negotiate(Player* player, Player* target);
     Negotiate(const Negotiate& order);
+    string toString() const;
+    friend ostream& operator<<(ostream& os, const Negotiate& order);
     Negotiate& operator=(const Negotiate& other);
     ~Negotiate();
     Negotiate* clone() const;

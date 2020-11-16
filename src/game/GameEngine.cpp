@@ -225,14 +225,12 @@ void GameEngine::executeOrdersPhase() {
         for (auto player : this->players) {
             Order* nextDeployed = player->getNextOrder(1);
 
-            cout << "NEXT DEPLOYED" << endl;
-
-            cout << nextDeployed << endl;
-
             if (nextDeployed == nullptr) {
                 playersDoneDeploying++;
             }
             else {
+                cout << "NEXT DEPLOYED" << endl;
+                cout << *nextDeployed << endl;
                 nextDeployed->execute();
                 cout << "EXECUTE ORDERS" << endl;
                 player->removeOrder(nextDeployed);
