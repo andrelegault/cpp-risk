@@ -34,7 +34,7 @@ Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player)
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player;
+    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -60,6 +60,7 @@ bool Deploy::execute() {
     // cout << "Executing a deploy order!" << endl;
 
     if (validate()) {
+        this->player->armies -= this->armyCount;
         this->target->numberOfArmies += this->armyCount;
 
         return true;
@@ -80,8 +81,10 @@ Advance::Advance(Player* player, Territory* source, Territory* target, int armyC
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
+    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) throw runtime_error("Advance order missing parameters.");
     if (this->player != this->source->getOwner()) return false;
+    if (this->armyCount >= this->source->numberOfArmies) return false;
+    
 
     for (auto border : this->source->getBorders()) {
         if (border->has(target)) {
@@ -130,11 +133,11 @@ bool Advance::execute() {
             const bool successful = this->source->attack(this->target, this->armyCount);
 
             if (successful) {
-                // TODO: give a card to the player, but which one?
-
-                // player->hand->addCard()
+                this->source->getOwner()->hand->draw();
             }
         }
+
+        return true;
     }
 
     return false;

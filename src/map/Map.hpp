@@ -420,6 +420,11 @@ public:
     bool validate();
 
     /**
+     * Returns vector of territory that borders this that is owned by player.
+     */
+    vector<Territory*> getPlayerBorderTerritories(Player* player);
+
+    /**
      * Simulates an attack on a target territory using a specified number of units from this territory.
      *
      * The battle ends when one territory has no more armies.
@@ -430,12 +435,10 @@ public:
      * @param defender Defensive player.
      * @param attackerOdds Odds the attacker for each army (default 60).
      * @param defenderOdds Odds for each of the defender's army (default 70).
-     * @return whether the attacker was successful.
+     * @return Whether the attacker was successful.
      */
-    bool attack(Territory* target, int attackerArmies, int attackerOdds = DEFAULT_ATTACKER_ODDS, int defenderOdds = DEFAULT_DEFENDER_ODDS);
+    bool attack(Territory* target, int attackerArmies, int attackerOdds = 60, int defenderOdds = 70);
 private:
-    static const int DEFAULT_ATTACKER_ODDS = 60;
-    static const int DEFAULT_DEFENDER_ODDS = 70;
     // Current player that owns this country.
     Player* playerOwner;
 
