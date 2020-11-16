@@ -12,9 +12,7 @@ ostream& operator<<(ostream& os, const Order& order) {
 
 Order::Order(Player* player) : player(player) { }
 
-Order::~Order() {
-    cout << "Destroying Order" << endl;
-}
+Order::~Order() {}
 
 Order::Order(const Order& order) : player(order.player) { }
 
@@ -41,7 +39,7 @@ bool Deploy::validate() const {
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
 
 string Deploy::toString() const {
-    return "DEPLOY:: " + to_string(this->armyCount) + " units |  -> " + this->target->getName();
+    return "DEPLOY:: " + to_string(this->armyCount) + " units | " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Deploy& order) {
@@ -126,8 +124,6 @@ Advance& Advance::operator=(const Advance& other) {
 
 
 bool Advance::execute() {
-    // cout << "Executing an advance order!" << endl;
-
     if (validate()) {
         bool ownsTarget = this->target->getOwner() == this->player;
 
@@ -186,8 +182,6 @@ bool Bomb::validate() const {
 }
 
 bool Bomb::execute() {
-    // cout << "Executing a bomb order!" << endl;
-
     if (validate()) {
         // cant bomb if num is 1 or 0
         if (this->target->numberOfArmies > 1) {
@@ -238,8 +232,6 @@ bool Blockade::validate() const {
 }
 
 bool Blockade::execute() {
-    // cout << "Executing a blockade order!" << endl;
-
     if (validate()) {
         if (this->target->numberOfArmies > 0)
             this->target->numberOfArmies *= 2;
@@ -292,8 +284,6 @@ Airlift& Airlift::operator=(const Airlift& other) {
 }
 
 bool Airlift::execute() {
-    // cout << "Executing an airlift order!" << endl;
-
     if (validate()) {
         const bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
@@ -353,8 +343,6 @@ bool Negotiate::validate() const {
 }
 
 bool Negotiate::execute() {
-    // cout << "Executing a negotiate order!" << endl;
-
     if (validate()) {
         return true;
     }
@@ -387,8 +375,8 @@ OrdersList::~OrdersList() {
         delete order;
         order = nullptr;
     }
+
     orders.clear();
-    cout << "Destroying OrdersList" << endl;
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
@@ -470,4 +458,8 @@ Order* OrdersList::next(const int wantedPriority) const {
     }
 
     return nullptr;
+}
+
+vector<Order*> OrdersList::getOrders() const {
+    return this->orders;
 }

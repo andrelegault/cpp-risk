@@ -15,15 +15,25 @@ PhaseObserver::~PhaseObserver() {
 }
 
 void PhaseObserver::update() {
+    if (this->gameEngine->currentPlayer == nullptr) return;
+
     if (this->component != nullptr) delete this->component;
 
-    if(this->gameEngine->currentPlayer != nullptr) {
-        stringstream ss;
+    stringstream ss;
 
-        ss << this->gameEngine->currentPlayer->getName() << ": " << gamePhaseToString(this->gameEngine->gamePhase);
-
-        this->component = new Text(ss.str());
+    switch (this->gameEngine->gamePhase) {
+    case REINFORCEMENT_PHASE:
+        ss << "Available Armies: " << this->gameEngine->currentPlayer->armies << endl << endl;
+        ss << Territory::territoryTable(this->gameEngine->currentPlayer->getTerritories());
+        break;
+    case ISSUE_ORDER_PHASE:
+        for (auto order : this->gameEngine->currentPlayer->orders->getOrders()) {
+            ss << *order << endl;
+        }
+        break;
     }
+
+    this->component = new Grid({ {new Text(this->gameEngine->currentPlayer->getName() + ": " + gamePhaseToString(this->gameEngine->gamePhase))}, {new Text(ss.str())} });
 
     Component::update();
 
@@ -33,6 +43,9 @@ void PhaseObserver::update() {
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver) {
     if (phaseObserver.component != nullptr) {
         stream << *phaseObserver.component;
+    }
+    else {
+        stream << " ";
     }
 
     return stream;
@@ -56,13 +69,17 @@ GameStatisticsObserver::~GameStatisticsObserver() {
 void GameStatisticsObserver::update() {
     if (this->component != nullptr) delete this->component;
 
-    vector<vector<Component*>> rows;
+    if (this->gameEngine->players.size() > 1) {
+        vector<vector<Component*>> rows;
 
-    for (auto player : this->gameEngine->players) {
-        rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->map->getTerritories().size()) + "%") });
+        for (auto player : this->gameEngine->players) {
+            rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->map->getTerritories().size()) + "%") });
+        }
+
+        this->component = new Grid({ {new Text("Game Stats")}, {new Grid(rows)} });
+    } else {
+        this->component = new Grid({ {new Text("Game Stats")}, {new Text("Congrats " + this->gameEngine->players.front()->getName())} });
     }
-
-    this->component = new Grid(rows);
 
     Component::update();
 
@@ -72,6 +89,9 @@ void GameStatisticsObserver::update() {
 ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver) {
     if (gameStatisticsObserver.component != nullptr) {
         stream << *gameStatisticsObserver.component;
+    }
+    else {
+        stream << " ";
     }
 
     return stream;
@@ -83,7 +103,7 @@ ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatistic
 
 GameUI::GameUI() : component(new Text()) {};
 
-GameUI::GameUI(vector<Component*> observers) : component(new Grid({ observers })) {};
+GameUI::GameUI(vector<Component*> observers) : component(new Grid({ observers }, UI::Style{ .border = false })) {};
 
 GameUI::GameUI(const GameUI& gameUI) {
     this->component = gameUI.component;

@@ -259,7 +259,6 @@ Territory::~Territory() {
     if (continent != nullptr) this->continent->remove(this);
 }
 
-// TODO: Better print.
 ostream& operator<<(ostream& stream, const Territory& territory) {
     stream << territory.name << " (" << territory.continent->getName() << ")" << endl;
 
@@ -318,10 +317,10 @@ Player* Territory::getOwner() const {
 vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
     vector<Territory*> territories;
 
-    for(auto border : this->borders) {
-        Territory* otherTerritory = (Territory *) border->getOther(this);
+    for (auto border : this->borders) {
+        Territory* otherTerritory = (Territory*)border->getOther(this);
 
-        if(otherTerritory->playerOwner == player) {
+        if (otherTerritory->playerOwner == player) {
             territories.push_back(otherTerritory);
         }
     }
@@ -357,6 +356,34 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
     }
 }
 
+std::string Territory::territoryTable(std::vector<Territory*> territories) {
+    map<std::string, vector<Territory*>> continentTerritories;
+
+    for(auto territory : territories) {
+        continentTerritories[territory->continent->getName()].push_back(territory);
+    }
+
+    vector<vector<UI::Component*>> table;
+
+    for(auto pair : continentTerritories) {
+        table.push_back({ new UI::Text(pair.first) });
+
+        stringstream ss;
+
+        for(auto territory : pair.second) {
+            ss << territory->getName() << " -> " << territory->numberOfArmies << endl;
+        }
+
+        table.push_back({ new UI::Text(ss.str())});
+    }
+
+    stringstream ss;
+
+    ss << UI::Grid(table);
+
+    return ss.str();
+}
+
 /******************************************************
  * CONTIENT
  *****************************************************/
@@ -379,7 +406,6 @@ Continent::~Continent() {
     while (!this->territories.empty()) delete this->territories.back();
 }
 
-// TODO: Better print.
 ostream& operator<<(ostream& stream, const Continent& continent) {
     stream << continent.name << "(" << continent.bonus << ")" << endl;
 
