@@ -124,7 +124,17 @@ void Player::issueOrder() {
     }
 
     if (this->hand->getLength() > 0) {
-        this->hand->getCards().back()->play(*this);
+        Card* toPlay = this->hand->getCards().back();
+        CardType cardType = *(toPlay->cardType);
+        Territory* randomSource = this->toDefend().at(rand() % (this->toDefend().size()));
+        Territory* randomTargetTerritory = this->toAttack().at(rand() % (this->toAttack().size()));
+        switch (cardType) {
+        case CardType::BLOCKADE: toPlay->play(this, nullptr, randomSource); break;
+        case CardType::BOMB: toPlay->play(this, nullptr, nullptr, randomTargetTerritory); break;
+        case CardType::DIPLOMACY: toPlay->play(this, randomTargetTerritory->getOwner(), nullptr); break;
+        case CardType::REINFORCEMENT: toPlay->play(this, nullptr, randomSource, nullptr); break;
+        case CardType::AIRLIFT: toPlay->play(this, nullptr, randomSource, randomTargetTerritory, rand() % randomSource->numberOfArmies + 1); break;
+        }
     }
 
     this->notify();

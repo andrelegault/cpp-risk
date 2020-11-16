@@ -25,7 +25,7 @@ public:
     //default constructor
     Player();
 
-	Player(string name);
+    Player(string name);
 
     Player(Deck* deck);
 
@@ -115,6 +115,6 @@ private:
     vector<Territory*> territories;
 
     static int count;
-    
+
     string name;
 };
