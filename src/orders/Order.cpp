@@ -32,7 +32,7 @@ Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player)
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    if (this->player == nullptr || this->target == nullptr || this->armyCount < 1) throw runtime_error("Invalid deployment!");
+    if (this->player == nullptr || this->target == nullptr || this->armyCount < 0) throw runtime_error("Invalid deployment!");
     return this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
 }
 
@@ -372,7 +372,7 @@ OrdersList::~OrdersList() {
         delete order;
         order = nullptr;
     }
-    
+
     orders.clear();
 }
 
