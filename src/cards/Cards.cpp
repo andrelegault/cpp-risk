@@ -149,11 +149,7 @@ Hand::~Hand() {
     hand.clear();
 }
 
-Hand::Hand(Deck* deck) : deck(deck) {
-    for (int i = 0; i < 5; ++i) {
-        this->draw();
-    }
-}
+Hand::Hand(Deck* deck) : deck(deck) { }
 
 Hand::Hand(const Hand& other) {
     for (Card* card : other.hand) {
