@@ -66,27 +66,6 @@ void GameEngine::assignTerritories() {
     }
 }
 
-void GameEngine::printTerritories() {
-    vector<vector<UI::Component*>> table;
-
-    for (auto continent : this->map->getContinents()) {
-        table.push_back({ new UI::Text(continent->getName()) });
-
-        vector<string> territoryList;
-        for (auto territory : continent->getTerritories()) {
-            stringstream ss;
-
-            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->numberOfArmies;
-
-            territoryList.push_back(ss.str());
-        }
-
-        table.push_back({ new UI::List(territoryList) });
-    }
-
-    cout << Grid(table);
-}
-
 void GameEngine::init() {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
@@ -167,15 +146,16 @@ void GameEngine::init() {
 void GameEngine::startupPhase() {
     this->initPlayers();
     this->assignTerritories();
-    // this->printTerritories();
 
-    //TODO make sure that "all players have all the orders for playing in a turn"
+    //TODO: make sure that "all players have all the orders for playing in a turn"
 
     this->mainGameLoop();
 }
 
 void GameEngine::mainGameLoop() {
     while (true) {
+        // TODO: Not sure if this part needs to go in the execute phase...
+
         // Removes losing players.
         std::vector<Player*> playersWithTerritory;
 
@@ -204,8 +184,6 @@ void GameEngine::mainGameLoop() {
         this->reinforcementPhase();
         this->issueOrdersPhase();
         this->executeOrdersPhase();
-
-        // this->printTerritories();
     }
 }
 

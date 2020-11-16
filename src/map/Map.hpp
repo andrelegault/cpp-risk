@@ -438,6 +438,11 @@ public:
      * @return Whether the attacker was successful.
      */
     bool attack(Territory* target, int attackerArmies, int attackerOdds = 60, int defenderOdds = 70);
+
+    /**
+     * Creates a table string.
+     */
+    static std::string territoryTable(std::vector<Territory*> territories);
 private:
     // Current player that owns this country.
     Player* playerOwner;

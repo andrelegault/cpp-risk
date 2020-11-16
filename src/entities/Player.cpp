@@ -131,7 +131,7 @@ void Player::issueOrder() {
         case CardType::BOMB: toPlay->play(this, nullptr, nullptr, randomTargetTerritory); break;
         case CardType::DIPLOMACY: toPlay->play(this, randomTargetTerritory->getOwner(), nullptr); break;
         case CardType::REINFORCEMENT: toPlay->play(this, nullptr, randomSource, nullptr); break;
-        case CardType::AIRLIFT: toPlay->play(this, nullptr, randomSource, randomTargetTerritory, rand() % randomSource->numberOfArmies + 1); break;
+        case CardType::AIRLIFT: toPlay->play(this, nullptr, randomSource, randomTargetTerritory, rand() % (randomSource->numberOfArmies + 1)); break;
         }
     }
 

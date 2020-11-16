@@ -246,6 +246,8 @@ public:
      * @param second Second order.
      */
     void move(Order* first, Order* second);
+
+    vector<Order*> getOrders() const;
 private:
     /// Set of Order pointers.
     vector<Order*> orders;
