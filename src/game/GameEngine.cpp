@@ -179,6 +179,7 @@ void GameEngine::mainGameLoop() {
 }
 
 void GameEngine::reinforcementPhase() {
+    cout << "ENTERING REINFORCEMENT PHASE" << endl;
     for (auto player : this->players) {
         player->addArmies(std::max((int)floor(player->getNumTerritories() / 3), 3));
 
@@ -197,12 +198,15 @@ void GameEngine::reinforcementPhase() {
             }
         }
     }
+    cout << "EXITING REINFORCEMENT PHASE" << endl;
 }
 
 void GameEngine::issueOrdersPhase() {
+    cout << "ENTERING ISSUING PHASE" << endl;
     for (auto player : this->players) {
         player->issueOrder();
     }
+    cout << "EXITING ISSUING PHASE" << endl;
 }
 
 bool GameEngine::isExecutionDone() const {
@@ -216,11 +220,14 @@ bool GameEngine::isExecutionDone() const {
 }
 
 void GameEngine::executeOrdersPhase() {
+    cout << "ENTERING EXECUTION PHASE" << endl;
     int playersDoneDeploying = 0;
     int numPlayers = this->players.size();
 
     while (playersDoneDeploying < numPlayers) {
+        cout << playersDoneDeploying << " / " << numPlayers << endl;
         for (auto player : this->players) {
+            cout << player->getName() << endl;
             Order* nextDeployed = player->getNextOrder(1);
 
             if (nextDeployed == nullptr) {
@@ -231,6 +238,7 @@ void GameEngine::executeOrdersPhase() {
                 cout << *nextDeployed << endl;
                 nextDeployed->execute();
                 player->removeOrder(nextDeployed);
+                cout << "finished with p0" << endl;
             }
         }
     }
@@ -245,4 +253,5 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
+    cout << "EXITING EXECUTION PHASE" << endl;
 }
