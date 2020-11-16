@@ -243,7 +243,7 @@ bool operator== (const MapNode& m1, const MapNode& m2) {
 
 Territory::Territory() : Territory("") {}
 
-Territory::Territory(const string name) : continent(nullptr), playerOwner(nullptr), MapNode(name) {}
+Territory::Territory(const string name) : continent(nullptr), playerOwner(nullptr), MapNode(name), numberOfArmies(0) {}
 
 Territory::Territory(const Territory& territory) : MapNode(territory) {
     Map* m = new Map(*(territory.getMap()));
@@ -315,21 +315,35 @@ Player* Territory::getOwner() const {
     return this->playerOwner;
 }
 
+vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
+    vector<Territory*> territories;
+
+    for(auto border : this->borders) {
+        Territory* otherTerritory = (Territory *) border->getOther(this);
+
+        if(otherTerritory->playerOwner == player) {
+            territories.push_back(otherTerritory);
+        }
+    }
+
+    return territories;
+}
+
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
-    srand(time(NULL));
     this->numberOfArmies -= attackerArmies;
+
     while (attackerArmies > 0 && target->numberOfArmies > 0) {
-        const int attackRoll = rand() % 100;
-        if (attackRoll <= attackerOdds) {
+        if (rand() % 100 <= attackerOdds) {
             target->numberOfArmies--;
         }
+
         if (target->numberOfArmies > 0) {
-            const int defendRoll = rand() % 100;
-            if (defendRoll <= defenderOdds) {
+            if (rand() % 100 <= defenderOdds) {
                 attackerArmies--;
             }
         }
     }
+
     if (attackerArmies > 0) {
         // attacker won
         target->numberOfArmies = attackerArmies;

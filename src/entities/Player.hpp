@@ -20,6 +20,8 @@ using std::endl;
  */
 class Player : public Subject {
 public:
+    int armies;
+
     //default constructor
     Player();
 
@@ -70,11 +72,6 @@ public:
     vector<Territory*> toAttack();
 
     /**
-     * @return A list of the Territory that Player owns relative to this territory.
-     */
-    vector<Territory*> getNeighbourTerritories(Territory* territory);
-
-    /**
      * Creates an Order and adds it to the list of orders.
      */
     void issueOrder();
@@ -107,10 +104,6 @@ public:
     /// Gets the iterator of a territory.
     vector<Territory*>::iterator getTerritory(Territory* territory);
 
-    void addArmies(const int newArmies);
-
-    int getArmies();
-
     /**
      * Gets the player's next order.
      * @return the order with highest priority.
@@ -124,6 +117,4 @@ private:
     static int count;
 
     string name;
-
-    int armies;
 };

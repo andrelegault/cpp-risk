@@ -34,7 +34,7 @@ Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player)
 Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
-    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player;
+    return this->target != nullptr && this->player != nullptr && this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -60,6 +60,7 @@ bool Deploy::execute() {
     // cout << "Executing a deploy order!" << endl;
 
     if (validate()) {
+        this->player->armies -= this->armyCount;
         this->target->numberOfArmies += this->armyCount;
 
         return true;
@@ -80,8 +81,10 @@ Advance::Advance(Player* player, Territory* source, Territory* target, int armyC
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) throw runtime_error("Invalid Advance order!");
+    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) throw runtime_error("Advance order missing parameters.");
     if (this->player != this->source->getOwner()) return false;
+    if (this->armyCount >= this->source->numberOfArmies) return false;
+    
 
     vector<Border*> borders = this->source->getBorders();
     for (auto border : borders) {
@@ -134,6 +137,8 @@ bool Advance::execute() {
                 player->hand->draw();
             }
         }
+
+        return true;
     }
 
     return false;

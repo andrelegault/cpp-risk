@@ -57,33 +57,21 @@ int Player::getNumTerritories() const {
 }
 
 vector<Territory*> Player::toAttack() {
-    vector<Territory*> enemyTerritories;
+    set<Territory*> enemyTerritories;
 
     for (auto territory : this->territories) {
-        for (auto border : territory->getBorders()) {
-            Territory* neighbor = (Territory*)border->getOther(territory);
+        if(territory->numberOfArmies <= 1) continue;
 
-            if (std::find(this->territories.begin(), this->territories.end(), neighbor) != this->territories.end()) {
-                enemyTerritories.push_back(neighbor);
+        for (auto border : territory->getBorders()) {
+            Territory* neighbour = (Territory*)border->getOther(territory);
+
+            if (std::find(this->territories.begin(), this->territories.end(), neighbour) != this->territories.end()) {
+                enemyTerritories.insert(neighbour);
             }
         }
     }
 
-    return enemyTerritories;
-}
-
-vector<Territory*> Player::getNeighbourTerritories(Territory* territory) {
-    vector<Territory*> territories;
-
-    for (auto border : territory->getBorders()) {
-        Territory* otherTerritory = (Territory*)border->getOther(territory);
-
-        if (otherTerritory->getOwner() == this) {
-            territories.push_back(otherTerritory);
-        }
-    }
-
-    return territories;
+    return vector<Territory*> (enemyTerritories.begin(), enemyTerritories.end());
 }
 
 void Player::issueOrder() {
@@ -93,20 +81,26 @@ void Player::issueOrder() {
 
     int roundRobin = 0;
 
-    // generate deploy orders totaling the player's number of armies
-    while (this->armies > 0) {
-        int armyCount = rand() % (this->armies + 1);
+    int armiesAvailable = this->armies;
+
+    for(auto territory : this->territories) {
+        if(territory->numberOfArmies == 0 && armiesAvailable > 0) {
+            armiesAvailable -= 1;
+            this->addOrder(new Deploy(this, territory, 1));
+        }
+    }
+
+    while (armiesAvailable > 0) {
+        int armyCount = rand() % (armiesAvailable + 1);
 
         if (territories.size() > 0) {
-            this->armies -= armyCount;
+            armiesAvailable -= armyCount;
 
             this->addOrder(new Deploy(this, territories.at(roundRobin++ % static_cast<int>(territories.size())), armyCount));
         }
     }
 
-    int duration = rand() % 10;
-
-    for (int i = 0; i < duration; i++) {
+    for (int i = 0; i < 100; i++) {
         Territory* source = nullptr;
 
         if (rand() % 2 == 1 && this->toDefend().size() > 0) {
@@ -116,13 +110,13 @@ void Player::issueOrder() {
             source = this->toAttack().at(rand() % static_cast<int>(this->toAttack().size()));
         }
 
-        if (source != nullptr && source->numberOfArmies > 0) {
-            vector<Territory*> neighbours = this->getNeighbourTerritories(source);
+        if (source != nullptr && source->numberOfArmies > 1) {
+            int armyCount = rand() % static_cast<int>(source->numberOfArmies);
+
+            vector<Territory*> neighbours = source->getPlayerBorderTerritories(this);
 
             if (neighbours.size() > 0) {
                 Territory* target = neighbours.at(rand() % static_cast<int>(neighbours.size()));
-
-                int armyCount = rand() % (static_cast<int>(source->numberOfArmies) + 1);
 
                 this->addOrder(new Advance(this, source, target, armyCount));
             }
@@ -143,7 +137,7 @@ void Player::issueOrder() {
         }
     }
 
-    this->notify();
+    //this->notify();
 }
 
 void Player::addOrder(Order* order) {
@@ -188,16 +182,8 @@ string Player::getName() const {
     return name;
 }
 
-void Player::addArmies(const int newArmies) {
-    this->armies += newArmies;
-}
-
 vector<Territory*> Player::getTerritories() const {
     return this->territories;
-}
-
-int Player::getArmies() {
-    return armies;
 }
 
 Order* Player::getNextOrder(const int wantedPriority) const {

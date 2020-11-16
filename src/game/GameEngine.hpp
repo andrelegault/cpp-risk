@@ -48,7 +48,7 @@ public:
     /**
      * print territories with their owner names, grouped by continents
      */
-    void printTerritoryOwners();
+    void printTerritories();
 
     Player* getWinningPlayer();
 

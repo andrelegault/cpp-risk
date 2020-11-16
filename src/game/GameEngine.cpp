@@ -22,7 +22,7 @@ void GameEngine::initPlayers() {
     int armyCount = this->getPlayerArmyCount(this->players.size());
 
     for (auto player : this->players) {
-        player->addArmies(armyCount);
+        player->armies += armyCount;
     }
 }
 
@@ -40,7 +40,7 @@ void GameEngine::assignTerritories() {
     }
 }
 
-void GameEngine::printTerritoryOwners() {
+void GameEngine::printTerritories() {
     vector<vector<UI::Component*>> table;
 
     for (auto continent : this->map->getContinents()) {
@@ -50,7 +50,7 @@ void GameEngine::printTerritoryOwners() {
         for (auto territory : continent->getTerritories()) {
             stringstream ss;
 
-            ss << territory->getOwnerName() << " -> " << territory->getName();
+            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->numberOfArmies;
 
             territoryList.push_back(ss.str());
         }
@@ -137,9 +137,9 @@ void GameEngine::init() {
 }
 
 void GameEngine::startupPhase() {
-    initPlayers();
-    assignTerritories();
-    printTerritoryOwners();
+    this->initPlayers();
+    this->assignTerritories();
+    this->printTerritories();
 
     //TODO make sure that "all players have all the orders for playing in a turn"
 
@@ -175,13 +175,15 @@ void GameEngine::mainGameLoop() {
         this->reinforcementPhase();
         this->issueOrdersPhase();
         this->executeOrdersPhase();
+
+        this->printTerritories();
     }
 }
 
 void GameEngine::reinforcementPhase() {
     cout << "ENTERING REINFORCEMENT PHASE" << endl;
     for (auto player : this->players) {
-        player->addArmies(std::max((int)floor(player->getNumTerritories() / 3), 3));
+        player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
 
         for (auto continent : this->map->getContinents()) {
             bool hasAllTerritories = true;
@@ -194,7 +196,7 @@ void GameEngine::reinforcementPhase() {
             }
 
             if (hasAllTerritories) {
-                player->addArmies(continent->getBonus());
+                player->armies += continent->getBonus();
             }
         }
     }
@@ -233,8 +235,8 @@ void GameEngine::executeOrdersPhase() {
                 playersDoneDeploying++;
             }
             else {
-                cout << *nextDeployed << endl;
-                nextDeployed->execute();
+                if(nextDeployed->execute()) cout << *nextDeployed << endl;
+
                 player->removeOrder(nextDeployed);
             }
         }
@@ -245,8 +247,8 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
-                cout << *nextOrder << endl;
-                nextOrder->execute();
+                if(nextOrder->execute()) cout << *nextOrder << endl;
+
                 player->removeOrder(nextOrder);
             }
         }
