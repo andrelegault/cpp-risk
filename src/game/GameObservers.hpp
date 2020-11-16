@@ -25,15 +25,9 @@ public:
     virtual Component* clone() const override { return new PhaseObserver(*this); };
 
 protected:
-    virtual void update() override {
-        this->_update();
-
-        Component::update();
-    }
+    virtual void update();
 
 private:
-    void _update();
-
     Component* component = nullptr;
     GameEngine* gameEngine = nullptr;
 };
@@ -55,12 +49,9 @@ public:
     virtual Component* clone() const override { return new GameStatisticsObserver(*this); };
 
 protected:
-    // Defined in compilation unit; can't have inline functions.
     virtual void update();
 
 private:
-    void _update();
-
     Component* component = nullptr;
     GameEngine* gameEngine = nullptr;
 };

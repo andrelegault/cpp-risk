@@ -16,7 +16,16 @@
 using namespace filesystem;
 using namespace UI;
 
-class GameEngine {
+enum GamePhase {
+    STARTUP_PHASE,
+    REINFORCEMENT_PHASE,
+    ISSUE_ORDER_PHASE,
+    EXECUTE_ORDER_PHASE
+};
+
+string gamePhaseToString(GamePhase gamePhase);
+
+class GameEngine : public Subject {
 public:
     GameEngine();
 
@@ -52,11 +61,21 @@ public:
 
     Player* getWinningPlayer();
 
+    Player* getCurrentPlayer();
+
+    GamePhase getGamePhase();
+
     friend class PhaseObserver;
     friend class GameStatisticsObserver;
 private:
     vector<Player*> players;
+    Player* currentPlayer;
+    GamePhase gamePhase;
     Map* map;
     Deck* deck;
     GameUI* gameUI;
+
+    void setGamePhase(GamePhase gamePhase);
+
+    void setCurrentPlayer(Player* player);
 };

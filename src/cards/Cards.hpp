@@ -95,7 +95,7 @@ public:
      */
     void draw(Player& player, int count = 1);
 private:
-    static const int DEFAULT_DECK_SIZE = 20;
+    static const int DEFAULT_DECK_SIZE = 100;
     vector<Card*> cards;
 };
 
