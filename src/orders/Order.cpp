@@ -24,6 +24,7 @@ Order& Order::operator=(const Order& order) {
 }
 
 BlockableOrder::BlockableOrder() : Order(nullptr) { }
+BlockableOrder::~BlockableOrder() { }
 BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(other.player), target(other.target), armyCount(other.armyCount) { }
 BlockableOrder::BlockableOrder(Player* player, Territory* target) : Order(player), target(target) { }
 
@@ -407,7 +408,7 @@ OrdersList::OrdersList(const OrdersList& other) {
 }
 
 OrdersList::~OrdersList() {
-    while(!orders.empty()) delete orders.back();
+    while (!orders.empty()) delete orders.back();
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {

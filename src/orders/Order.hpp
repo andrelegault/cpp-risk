@@ -78,6 +78,7 @@ protected:
 class BlockableOrder : public Order {
 public:
     BlockableOrder();
+    ~BlockableOrder();
     BlockableOrder(const BlockableOrder& other);
     BlockableOrder(Player* player, Territory* target);
 protected:
