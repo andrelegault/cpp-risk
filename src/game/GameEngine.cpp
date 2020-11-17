@@ -217,12 +217,10 @@ void GameEngine::mainGameLoop() {
         for (auto entry : GameEngine::immunities) {
             if (entry.second) toErase.push_back(entry.first);
         }
+        
         for (auto tup : toErase) {
             GameEngine::immunities.erase(tup);
         }
-        // this->printTerritories();
-
-        // sleep(2);
     }
 }
 
@@ -233,7 +231,6 @@ void GameEngine::reinforcementPhase() {
         this->setCurrentPlayer(player);
 
         player->armies += std::max((player->getNumTerritories() / 3), 3);
-        // player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
 
         for (auto continent : this->warzoneMap->getContinents()) {
             bool hasAllTerritories = true;
@@ -290,7 +287,7 @@ void GameEngine::executeOrdersPhase() {
                 playersDoneDeploying++;
             }
             else {
-                cout << *nextDeployed << endl;
+                // cout << *nextDeployed << endl;
                 nextDeployed->execute();
 
                 player->removeOrder(nextDeployed);
@@ -305,7 +302,7 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
-                cout << *nextOrder << endl;
+                // cout << *nextOrder << endl;
                 nextOrder->execute();
 
                 player->removeOrder(nextOrder);

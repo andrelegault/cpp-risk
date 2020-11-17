@@ -355,8 +355,8 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
     if (attackerArmies > 0) {
         // attacker won
         target->setNumberOfArmies(attackerArmies);
-        this->playerOwner->addTerritory(target);
         target->playerOwner->removeTerritory(target);
+        this->playerOwner->addTerritory(target);
         return true;
     }
     else {

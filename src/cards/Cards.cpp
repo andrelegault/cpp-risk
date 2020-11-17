@@ -25,14 +25,14 @@ Deck::Deck(int size) {
 
     for (int i = 0; i < CardType::LENGTH; i++) {
         for (int j = 0; j < variantCount; j++) {
-            this->addCard(new Card(new CardType((CardType)i), this));
+            this->addCard(new Card(new CardType((CardType) i), this));
         }
     }
 
     for (int i = 0; i < size - variantCount * CardType::LENGTH; ++i) {
         int type = rand() % CardType::LENGTH;
 
-        this->addCard(new Card(new CardType((CardType)type), this));
+        this->addCard(new Card(new CardType((CardType) type), this));
     }
 
     cout << size << " -> " << this->cards.size() << endl;
@@ -83,6 +83,8 @@ ostream& operator<<(ostream& stream, const Deck& deck) {
 }
 
 void Deck::draw(Player& player, int count) {
+    if(this->cards.size() == 0) throw runtime_error("Trying to draw from empty deck.");
+
     player.hand->addCard(this->cards.back());
 
     this->cards.pop_back();
