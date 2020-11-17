@@ -1,13 +1,17 @@
 #include "Map.hpp"
 
-Map::Map() : Map("") {}
+Map::Map() : Map("") {
+    neutralP = new Player();
+}
 
 Map::Map(const string name) {
     this->name = name;
+    neutralP = new Player();
 }
 
 Map::Map(const Map& m) {
     this->name = m.name;
+    this->neutralP = m.neutralP;
 
     // Used for mapping name to object.
     map<string, Continent*> continentMap;
@@ -63,6 +67,8 @@ Map::Map(const Map& m) {
 
 Map::~Map() {
     while (!this->continents.empty()) delete this->continents.back();
+    delete neutralP;
+    neutralP = nullptr;
 }
 
 ostream& operator<<(ostream& stream, const Map& m) {
@@ -88,6 +94,7 @@ Map& Map::operator=(const Map& other) {
         this->~Map();
         this->name = other.name;
         this->continents = other.continents;
+        this->neutralP = other.neutralP;
     }
 
     return *this;
@@ -329,11 +336,13 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
 }
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
-    this->numberOfArmies -= attackerArmies;
+    if(attackerArmies < 0) throw std::runtime_error("Territory attack using invalid number of armies.");
 
-    while (attackerArmies > 0 && target->numberOfArmies > 0) {
+    this->setNumberOfArmies(this->getNumberOfArmies() - attackerArmies);
+
+    while (attackerArmies > 0 && target->getNumberOfArmies() > 0) {
         if (rand() % 100 <= attackerOdds) {
-            target->numberOfArmies--;
+            target->setNumberOfArmies(target->getNumberOfArmies() - 1);
         }
 
         if (target->numberOfArmies > 0) {
@@ -345,7 +354,8 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
 
     if (attackerArmies > 0) {
         // attacker won
-        target->numberOfArmies = attackerArmies;
+        target->setNumberOfArmies(attackerArmies);
+        target->playerOwner->removeTerritory(target);
         this->playerOwner->addTerritory(target);
         target->playerOwner->removeTerritory(target);
         return true;
@@ -382,6 +392,18 @@ std::string Territory::territoryTable(std::vector<Territory*> territories) {
     ss << UI::Grid(table);
 
     return ss.str();
+}
+
+void Territory::setNumberOfArmies(int numberOfArmies) {
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count is being set with invalid value " + std::to_string(numberOfArmies) + ".");
+
+    this->numberOfArmies = numberOfArmies;
+}
+
+int Territory::getNumberOfArmies() {
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count has invalid value " + std::to_string(numberOfArmies) + ".");
+
+    return this->numberOfArmies;
 }
 
 /******************************************************

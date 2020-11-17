@@ -17,6 +17,9 @@ using namespace std;
  */
 class Map {
 public:
+
+    Player* neutralP;
+
     /**
      * Default constructor.
      */
@@ -213,11 +216,15 @@ public:
      */
     vector<Border*> getBorders() const;
 
+    
+
 protected:
     // The name as defined in the Conquer Map file.
     string name;
     // Collection of Border edges.
     vector<Border*> borders;
+
+    
 };
 
 bool operator== (const MapNode& m1, const MapNode& m2);
@@ -335,9 +342,6 @@ ostream& operator<<(ostream& stream, const Continent& continent);
  */
 class Territory : public MapNode {
 public:
-    // Counter for number of armies that current player owns in this country.
-    int numberOfArmies;
-
     /**
      * Default constructor.
      */
@@ -443,7 +447,14 @@ public:
      * Creates a table string.
      */
     static std::string territoryTable(std::vector<Territory*> territories);
+
+    void setNumberOfArmies(int numberOfArmies);
+
+    int getNumberOfArmies();
 private:
+    // Counter for number of armies that current player owns in this country.
+    int numberOfArmies;
+
     // Current player that owns this country.
     Player* playerOwner;
 

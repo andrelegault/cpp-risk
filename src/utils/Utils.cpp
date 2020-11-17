@@ -63,8 +63,11 @@ std::string Utils::string_right(const std::string s, const int w) {
 }
 
 int Utils::getRandom(int min, int max) {
-    if (min < 0 || max < 0) {
-        throw std::runtime_error("what");
-    }
-    return min + (rand() % static_cast<int>(max - min + 1));
+    if (max - min + 1 <= 0) throw std::runtime_error("Random value from range " + std::to_string(min) + " to " + std::to_string(max) + " is invalid.");
+
+    int output = min + (rand() % static_cast<int>(max - min + 1));
+
+    if(output < min || output > max) throw std::runtime_error("Generated a random number outside of required range");
+
+    return output;
 }

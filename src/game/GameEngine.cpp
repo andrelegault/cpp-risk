@@ -76,7 +76,7 @@ void GameEngine::printTerritories() {
         for (auto territory : continent->getTerritories()) {
             stringstream ss;
 
-            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->numberOfArmies;
+            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->getNumberOfArmies();
 
             territoryList.push_back(ss.str());
         }
