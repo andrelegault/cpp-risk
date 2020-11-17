@@ -1,7 +1,5 @@
 #include "Grid.hpp"
 
-
-
 UI::Grid::Grid() : Grid({}, {}) {};
 
 UI::Grid::~Grid() {
@@ -50,14 +48,15 @@ std::ostream& operator<<(std::ostream& stream, const UI::Grid& grid) {
     if (grid.components.empty()) return stream;
 
     std::vector<std::vector<std::string>> data;
-    std::stringstream ss;
-
+    
     for (auto row : grid.components) {
         std::vector<std::string> dataRow;
 
         for (auto component : row) {
-            
+            std::stringstream ss;
+
             ss << *component;
+
             dataRow.push_back(ss.str());
         }
 
