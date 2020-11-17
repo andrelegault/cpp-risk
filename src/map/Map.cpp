@@ -395,13 +395,13 @@ std::string Territory::territoryTable(std::vector<Territory*> territories) {
 }
 
 void Territory::setNumberOfArmies(int numberOfArmies) {
-    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count is being set with invalid value " + std::to_string(numberOfArmies) + ".");
+    if(numberOfArmies > 100000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count is being set with invalid value " + std::to_string(numberOfArmies) + ".");
 
     this->numberOfArmies = numberOfArmies;
 }
 
 int Territory::getNumberOfArmies() {
-    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count has invalid value " + std::to_string(numberOfArmies) + ".");
+    if(numberOfArmies > 100000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count has invalid value " + std::to_string(numberOfArmies) + ".");
 
     return this->numberOfArmies;
 }
