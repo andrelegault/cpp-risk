@@ -76,6 +76,7 @@ bool Deploy::execute() {
         return true;
     }
     else {
+        // cout << "deploy not valid" << endl;
         return false;
     }
 }
@@ -96,9 +97,9 @@ Advance::~Advance() {}
 
 bool Advance::validate() const {
     if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
+    if (this->armyCount < 1) return false;
     if (this->player != this->source->getOwner()) return false;
-    if (this->armyCount >= this->source->getNumberOfArmies()) return false;
-    if (this->armyCount < 0) return false;
+    if (this->armyCount > this->source->getNumberOfArmies()) return false;
 
     vector<Border*> borders = this->source->getBorders();
     for (auto border : borders) {
@@ -210,6 +211,7 @@ bool Bomb::execute() {
         }
     }
     else {
+        // cout << "bomb not valid" << endl;
         return false;
     }
 }
@@ -264,6 +266,7 @@ bool Blockade::execute() {
         return true;
     }
     else {
+        // cout << "blockade not valid" << endl;
         return false;
     }
 }
@@ -330,6 +333,7 @@ bool Airlift::execute() {
         return true;
     }
     else {
+        // cout << "airlift not valid" << endl;
         return false;
     }
 }
@@ -351,7 +355,7 @@ Negotiate::~Negotiate() {}
 Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
 
 string Negotiate::toString() const {
-    return "NEGOTIATE:: " + this->target->getName();
+    return "NEGOTIATE:: ";// + this->target->getName();
 }
 ostream& operator<<(ostream& os, const Negotiate& order) {
     os << order.toString();
@@ -368,7 +372,8 @@ Negotiate& Negotiate::operator=(const Negotiate& other) {
 }
 
 bool Negotiate::validate() const {
-    return (this->player != nullptr && this->target != nullptr) && this->target != this->player;
+    if (this->player == nullptr || this->target == nullptr) return false;
+    return this->target != this->player;
 }
 
 bool Negotiate::execute() {
@@ -377,6 +382,7 @@ bool Negotiate::execute() {
         return true;
     }
     else {
+        // cout << "negotiate not valid" << endl;
         return false;
     }
 }

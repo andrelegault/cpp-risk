@@ -357,6 +357,7 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
         target->setNumberOfArmies(attackerArmies);
         target->playerOwner->removeTerritory(target);
         this->playerOwner->addTerritory(target);
+        target->playerOwner->removeTerritory(target);
         return true;
     }
     else {
@@ -368,22 +369,22 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
 std::string Territory::territoryTable(std::vector<Territory*> territories) {
     map<std::string, vector<Territory*>> continentTerritories;
 
-    for(auto territory : territories) {
+    for (auto territory : territories) {
         continentTerritories[territory->continent->getName()].push_back(territory);
     }
 
     vector<vector<UI::Component*>> table;
 
-    for(auto pair : continentTerritories) {
+    for (auto pair : continentTerritories) {
         table.push_back({ new UI::Text(pair.first) });
 
         stringstream ss;
 
-        for(auto territory : pair.second) {
+        for (auto territory : pair.second) {
             ss << territory->getName() << " -> " << territory->numberOfArmies << endl;
         }
 
-        table.push_back({ new UI::Text(ss.str())});
+        table.push_back({ new UI::Text(ss.str()) });
     }
 
     stringstream ss;
