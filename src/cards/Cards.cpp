@@ -131,13 +131,13 @@ void Card::play(Player* player, Player* targetPlayer, Territory* source, Territo
     case CardType::REINFORCEMENT: order = new Deploy(player, source, 5); break;
     }
 
-    if (order) {
+    if (order != nullptr) {
         player->addOrder(order);
+
+        player->hand->removeCard(this);
+
+        this->deck->addCard(this);
     }
-
-    player->hand->removeCard(this);
-
-    this->deck->addCard(this);
 }
 
 ostream& operator<<(ostream& stream, const Card& card) {
@@ -149,12 +149,7 @@ ostream& operator<<(ostream& stream, const Card& card) {
 Hand::Hand() { }
 
 Hand::~Hand() {
-    for (Card* c : hand) {
-        delete c;
-        c = nullptr;
-    }
-
-    hand.clear();
+    while(!this->hand.empty()) delete this->hand.back();
 }
 
 Hand::Hand(Deck* deck) : deck(deck) { }

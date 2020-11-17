@@ -3,11 +3,13 @@
 int Player::count = -1;
 
 //set armies to 0 by default
-Player::Player() : name("Player " + to_string(++count)), orders(new OrdersList()), hand(new Hand()), armies(0) {}
+Player::Player() : Player("Default Player", nullptr) {}
 
-Player::Player(string name) : name(name), orders(new OrdersList()), hand(nullptr), armies(0) {}
+Player::Player(string name) : Player(name, nullptr) {}
 
-Player::Player(Deck* deck) : name("Player " + to_string(++count)), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
+Player::Player(Deck* deck) : Player("Player " + to_string(++count), deck) {}
+
+Player::Player(string name, Deck* deck) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
 
 Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))) {
     for (Territory* t : player.territories) {
@@ -17,8 +19,6 @@ Player::Player(const Player& player) : name(player.name), orders(new OrdersList(
 
 Player::~Player() {
     delete orders;
-
-    // while (!this->territories.empty()) delete this->territories.back();
 
     delete hand;
 }
@@ -156,7 +156,9 @@ void Player::issueOrder() {
 }
 
 void Player::addOrder(Order* order) {
-    orders->add(order);
+    if(order != nullptr) {
+        orders->add(order);
+    }
 }
 
 void Player::removeOrder(Order* order) {

@@ -15,7 +15,7 @@ GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr
 GameEngine::~GameEngine() {
     delete this->deck;
 
-    for (auto player : this->players) delete player;
+    while(!this->players.empty()) delete this->players.back();
 
     delete this->warzoneMap;
 

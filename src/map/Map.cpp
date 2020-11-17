@@ -1,13 +1,8 @@
 #include "Map.hpp"
 
-Map::Map() : Map("") {
-    neutralP = new Player();
-}
+Map::Map() : Map("") {}
 
-Map::Map(const string name) {
-    this->name = name;
-    neutralP = new Player();
-}
+Map::Map(const string name) : name(name), neutralP(new Player("Neutral Player")) {}
 
 Map::Map(const Map& m) {
     this->name = m.name;

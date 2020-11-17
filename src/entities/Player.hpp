@@ -29,6 +29,8 @@ public:
 
     Player(Deck* deck);
 
+    Player(string name, Deck* deck);
+
     // Copy constructor
     Player(const Player& other);
 
