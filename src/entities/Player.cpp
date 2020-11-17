@@ -18,7 +18,7 @@ Player::Player(const Player& player) : name(player.name), orders(new OrdersList(
 Player::~Player() {
     delete orders;
 
-    while (!this->territories.empty()) delete this->territories.back();
+    // while (!this->territories.empty()) delete this->territories.back();
 
     delete hand;
 }

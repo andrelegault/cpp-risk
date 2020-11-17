@@ -407,12 +407,7 @@ OrdersList::OrdersList(const OrdersList& other) {
 }
 
 OrdersList::~OrdersList() {
-    for (Order* order : orders) {
-        delete order;
-        order = nullptr;
-    }
-
-    orders.clear();
+    while(!orders.empty()) delete orders.back();
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {

@@ -67,8 +67,8 @@ Map::Map(const Map& m) {
 
 Map::~Map() {
     while (!this->continents.empty()) delete this->continents.back();
+
     delete neutralP;
-    neutralP = nullptr;
 }
 
 ostream& operator<<(ostream& stream, const Map& m) {
@@ -189,7 +189,11 @@ MapNode::MapNode(const MapNode& mapNode) {
 }
 
 MapNode::~MapNode() {
-    while (!this->borders.empty()) delete this->borders.back();
+    while (!this->borders.empty()) {
+        Border* border = this->borders.back();
+        border->getOther(this)->remove(border);
+        delete border;
+    }
 }
 
 MapNode& MapNode::operator=(const MapNode& other) {
