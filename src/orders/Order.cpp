@@ -408,7 +408,7 @@ OrdersList::OrdersList(const OrdersList& other) {
 }
 
 OrdersList::~OrdersList() {
-    while (!orders.empty()) delete orders.back();
+    while (!this->orders.empty()) delete this->orders.back();
 }
 
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
