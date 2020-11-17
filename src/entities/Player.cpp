@@ -169,19 +169,19 @@ int Player::remainingOrders() const {
     return orders->getLength();
 }
 
-ostream& operator<<(ostream& strm, const Player& player) {
-    strm << "Player's name: " << player.name << ", Territories: [";
+ostream& operator<<(ostream& stream, const Player& player) {
+    stream << "Player's name: " << player.name << ", Territories: [";
 
     for (int i = 0; i < player.territories.size(); i++) {
         if (i != player.territories.size() - 1) {
-            strm << player.territories.at(i)->getName() + ", ";
+            stream << player.territories.at(i)->getName() + ", ";
         }
-        else strm << player.territories.at(i)->getName();
+        else stream << player.territories.at(i)->getName();
     }
 
-    strm << "]" << endl;
+    stream << "], Orders: " << *player.orders << ", " << *player.hand << endl;
 
-    return strm;
+    return stream;
 }
 
 Player& Player::operator=(const Player& other) {

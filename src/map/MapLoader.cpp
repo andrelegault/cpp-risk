@@ -13,7 +13,7 @@ ostream& operator<<(ostream& stream, const MapLoader& maploader) {
     return stream;
 }
 
-Map MapLoader::load(const string file_name) {
+Map* MapLoader::load(const string file_name) {
     ifstream file(file_name);
     if (!file) {
         throw logic_error("Unable to open file at " + file_name);
@@ -116,11 +116,11 @@ Map MapLoader::load(const string file_name) {
     }
 
     // Create a new map
-    Map map(map_name);
+    Map* map = new Map(map_name);
 
     // Connect Continent instances to Map instance.
     for (Continent* continent : continents) {
-        map.connect(continent);
+        map->connect(continent);
     }
 
     return map;

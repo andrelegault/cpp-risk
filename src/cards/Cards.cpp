@@ -12,12 +12,7 @@ string cardTypeToString(CardType cardType) {
 }
 
 Deck::~Deck() {
-    for (Card* card : cards) {
-        delete card;
-        card = nullptr;
-    }
-
-    cards.clear();
+    for(auto card : this->cards) delete card;
 }
 
 Deck::Deck(int size) {
@@ -149,15 +144,13 @@ ostream& operator<<(ostream& stream, const Card& card) {
 Hand::Hand() { }
 
 Hand::~Hand() {
-    while(!this->hand.empty()) delete this->hand.back();
+    for(auto card : this->hand) delete card;
 }
 
 Hand::Hand(Deck* deck) : deck(deck) { }
 
 Hand::Hand(const Hand& other) {
-    for (Card* card : other.hand) {
-        hand.push_back(new Card(*card));
-    }
+    for (Card* card : other.hand) hand.push_back(new Card(*card));
 }
 
 Hand& Hand::operator=(const Hand& other) {
@@ -180,9 +173,11 @@ Card* Hand::getAtIndex(int index) const {
 
 ostream& operator<<(ostream& stream, const Hand& hand) {
     stream << "Hand (" << hand.hand.size() << " cards)" << endl;
+    
     for (Card* card : hand.hand) {
         stream << "\t" << *card << endl;
     }
+
     return stream;
 }
 

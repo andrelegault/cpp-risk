@@ -15,7 +15,7 @@ GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr
 GameEngine::~GameEngine() {
     delete this->deck;
 
-    while(!this->players.empty()) delete this->players.back();
+    for (auto player : this->players) delete player;
 
     delete this->warzoneMap;
 
@@ -109,17 +109,15 @@ void GameEngine::init() {
 
     UI::clear();
 
-    Map mapObj = MapLoader::load(directory + maps.at(ask("Select Map", maps) - 1) + ".map");
+    this->warzoneMap = MapLoader::load(directory + maps.at(ask("Select Map", maps) - 1) + ".map");
 
-    if (!mapObj.validate()) {
+    if (!this->warzoneMap->validate()) {
         UI::clear();
 
         cout << Grid(new Text("Invalid Map"));
 
         return;
     }
-
-    this->warzoneMap = new Map(mapObj);
 
     int numberOfPlayers = range("Number of Players", 2, 5);
 
@@ -217,7 +215,7 @@ void GameEngine::mainGameLoop() {
         for (auto entry : GameEngine::immunities) {
             if (entry.second) toErase.push_back(entry.first);
         }
-        
+
         for (auto tup : toErase) {
             GameEngine::immunities.erase(tup);
         }
