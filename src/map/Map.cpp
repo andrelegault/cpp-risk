@@ -384,6 +384,18 @@ std::string Territory::territoryTable(std::vector<Territory*> territories) {
     return ss.str();
 }
 
+void Territory::setNumberOfArmies(int numberOfArmies) {
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory army count set with invalid number of armies.");
+
+    this->numberOfArmies = numberOfArmies;
+}
+
+int Territory::getNumberOfArmies() {
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory army count already has invalid number of armies.");
+
+    return this->numberOfArmies;
+}
+
 /******************************************************
  * CONTIENT
  *****************************************************/

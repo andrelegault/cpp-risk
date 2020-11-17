@@ -56,7 +56,7 @@ vector<Territory*> Player::toAttack() {
         for (auto border : territory->getBorders()) {
             Territory* neighbour = (Territory*)border->getOther(territory);
 
-            if (neighbour->getOwner() != this) {
+            if (neighbour != nullptr && neighbour->getOwner() != this) {
                 enemyTerritories.insert(neighbour);
             }
         }
@@ -70,6 +70,10 @@ void Player::issueOrder() {
 
     std::shuffle(defendTerritories.begin(), defendTerritories.end(), std::random_device{});
 
+    const int numberOfDef = defendTerritories.size();
+
+    const int numberOfAtt = this->toAttack().size();
+
     int roundRobin = 0;
 
     int armiesAvailable = this->armies;
@@ -79,41 +83,54 @@ void Player::issueOrder() {
         int armyCount = Utils::getRandom(1, armiesAvailable);
 
         // the player has at least 1 territory to deploy to
-        if (defendTerritories.size() > 0) {
+        if (numberOfDef > 0) {
             armiesAvailable -= armyCount;
 
-            this->addOrder(new Deploy(this, defendTerritories.at(roundRobin++ % static_cast<int>(defendTerritories.size())), armyCount));
-        } else {
+            Territory* target = defendTerritories.at(roundRobin++ % static_cast<int>(numberOfDef));
+
+            this->addOrder(new Deploy(this, target, armyCount));
+        }
+        else {
             throw runtime_error("Player with no territory to defend should have been removed.");
         }
     }
 
-    const int numberOfDef = defendTerritories.size();
-    const int numberOfAtt = this->toAttack().size();
-
     map<Territory*, int> issuingState;
+
     for (auto territory : defendTerritories) {
-        issuingState[territory] = territory->numberOfArmies;
+        if(territory != nullptr) {
+            issuingState[territory] = territory->getNumberOfArmies();
+        }
     }
 
-    // issue 10 advance orders
-    for (auto territory : defendTerritories) {
-        if (issuingState.at(territory) > 0) {
-            int rDef = Utils::getRandom(0, numberOfDef - 1);
-            Territory* source = defendTerritories.at(rDef);
+    for(int i = 0; i < 10; i++) {
+        Territory* target;
 
-            // there are enemy territories to attack
-            bool attacking = numberOfAtt > 0 && rand() % 2 == 0 ? true : false;
-            int rTarget = attacking ? Utils::getRandom(0, numberOfAtt - 1) : Utils::getRandom(0, numberOfDef - 1);
-            Territory* target = attacking ? toAttack().at(rTarget) : defendTerritories.at(rTarget);
+        bool attacking = numberOfAtt > 0 && rand() % 2 == 0;
 
-            if (target != source) {
-                int armyCount = Utils::getRandom(1, issuingState.at(territory));
-                issuingState[source] -= armyCount;
-
-                this->addOrder(new Advance(this, source, target, armyCount));
-            }
+        if(attacking) {
+            target = this->toAttack()[Utils::getRandom(0, numberOfAtt - 1)];
+        } else {
+            target = this->toDefend()[Utils::getRandom(0, numberOfDef - 1)];
         }
+
+        if(target == nullptr) continue;
+
+        vector<Territory*> neighbours = target->getPlayerBorderTerritories(this);
+
+        if(neighbours.size() == 0) continue;
+
+        Territory* source = neighbours[Utils::getRandom(0, neighbours.size() - 1)];
+
+        if(source == nullptr) continue;
+
+        int armyCount = Utils::getRandom(0, issuingState[source]);
+
+        issuingState[source] -= armyCount;
+
+        if(!attacking) issuingState[target] += armyCount;
+
+        this->addOrder(new Advance(this, source, target, armyCount));
     }
 
     if (this->hand->getLength() > 0) {
@@ -128,8 +145,8 @@ void Player::issueOrder() {
         case CardType::DIPLOMACY: toPlay->play(this, randomTargetTerritory == nullptr ? nullptr : randomTargetTerritory->getOwner(), nullptr); break;
         case CardType::REINFORCEMENT: toPlay->play(this, nullptr, randomSource, nullptr); break;
         case CardType::AIRLIFT:
-            if (randomSource->numberOfArmies > 0)
-                toPlay->play(this, nullptr, randomSource, randomTargetTerritory, randomSource == nullptr ? -1 : Utils::getRandom(1, randomSource->numberOfArmies));
+            if (randomSource->getNumberOfArmies() > 0)
+                toPlay->play(this, nullptr, randomSource, randomTargetTerritory, randomSource == nullptr ? -1 : Utils::getRandom(1, randomSource->getNumberOfArmies()));
             break;
         }
     }
