@@ -95,7 +95,7 @@ Advance::Advance(Player* player, Territory* source, Territory* target, int armyC
 Advance::~Advance() {}
 
 bool Advance::validate() const {
-    if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
+    if (this->player == nullptr || this->source == nullptr || this->target == nullptr || armyCount < 1) return false;
     // if (this->player != this->source->getOwner()) return false;
     if (this->armyCount >= this->source->numberOfArmies) return false;
 
