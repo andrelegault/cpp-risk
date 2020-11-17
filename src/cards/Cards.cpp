@@ -50,20 +50,6 @@ Deck& Deck::operator=(const Deck& other) {
 }
 
 void Deck::addCard(Card* const card) {
-    // if (this->cards.size() > 0) {
-    //     int index = rand() % (this->cards.size() + 1);
-
-    //     if (index >= cards.size()) {
-    //         this->cards.push_back(card);
-    //     }
-    //     else {
-    //         this->cards.insert(cards.begin() + index, card);
-    //     }
-    // }
-    // else {
-    //     this->cards.push_back(card);
-    // }
-
     this->cards.push_back(card);
 }
 

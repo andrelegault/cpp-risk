@@ -30,7 +30,7 @@ std::vector<std::string> Utils::split(const std::string& line, const std::string
 }
 
 std::string Utils::string_center(const std::string s, const int w) {
-    if(w < s.length()) return s;
+    if (w < s.length()) return s;
 
     std::stringstream ss, spaces;
     int pad = w - s.size();
@@ -43,7 +43,7 @@ std::string Utils::string_center(const std::string s, const int w) {
 }
 
 std::string Utils::string_left(const std::string s, const int w) {
-    if(w < s.length()) return s;
+    if (w < s.length()) return s;
 
     std::stringstream ss;
 
@@ -53,7 +53,7 @@ std::string Utils::string_left(const std::string s, const int w) {
 }
 
 std::string Utils::string_right(const std::string s, const int w) {
-    if(w < s.length()) return s;
+    if (w < s.length()) return s;
 
     std::stringstream ss;
 
@@ -67,7 +67,7 @@ int Utils::getRandom(int min, int max) {
 
     int output = min + (rand() % static_cast<int>(max - min + 1));
 
-    if(output < min || output > max) throw std::runtime_error("Generated a random number outside of required range");
+    if (output < min || output > max) throw std::runtime_error("Generated a random number outside of required range");
 
     return output;
 }

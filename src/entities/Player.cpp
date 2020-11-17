@@ -32,7 +32,7 @@ void Player::addTerritory(Territory* territory) {
 
 void Player::removeTerritory(Territory* territory) {
     auto t = getTerritory(territory);
-    
+
     if (t != this->territories.end()) territories.erase(t);
 }
 
@@ -97,39 +97,40 @@ void Player::issueOrder() {
     map<Territory*, int> issuingState;
 
     for (auto territory : defendTerritories) {
-        if(territory != nullptr) {
+        if (territory != nullptr) {
             issuingState[territory] = territory->getNumberOfArmies();
         }
     }
 
-    for(int i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; i++) {
         Territory* target;
 
         bool attacking = numberOfAtt > 0 && rand() % 2 == 0;
 
-        if(attacking) {
+        if (attacking) {
             target = this->toAttack()[Utils::getRandom(0, numberOfAtt - 1)];
-        } else {
+        }
+        else {
             target = this->toDefend()[Utils::getRandom(0, numberOfDef - 1)];
         }
 
-        if(target == nullptr) continue;
+        if (target == nullptr) continue;
 
         vector<Territory*> neighbours = target->getPlayerBorderTerritories(this);
 
-        if(neighbours.size() == 0) continue;
+        if (neighbours.size() == 0) continue;
 
         Territory* source = neighbours[Utils::getRandom(0, neighbours.size() - 1)];
 
-        if(source == nullptr) continue;
+        if (source == nullptr) continue;
 
         int armyCount = Utils::getRandom(0, issuingState[source]);
 
-        if(armyCount <= 0) continue;
+        if (armyCount <= 0) continue;
 
         issuingState[source] -= armyCount;
 
-        if(!attacking) issuingState[target] += armyCount;
+        if (!attacking) issuingState[target] += armyCount;
 
         this->addOrder(new Advance(this, source, target, armyCount));
     }
@@ -156,7 +157,7 @@ void Player::issueOrder() {
 }
 
 void Player::addOrder(Order* order) {
-    if(order != nullptr) {
+    if (order != nullptr) {
         orders->add(order);
     }
 }
