@@ -336,7 +336,7 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
 }
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
-    if(attackerArmies < 0) throw std::runtime_error("Territory attack using invalid number of armies.");
+    if(attackerArmies < 0) throw std::runtime_error("Territory attack using negative number of armies.");
 
     this->setNumberOfArmies(this->getNumberOfArmies() - attackerArmies);
 

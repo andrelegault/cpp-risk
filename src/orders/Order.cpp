@@ -136,30 +136,25 @@ Advance& Advance::operator=(const Advance& other) {
 
 
 bool Advance::execute() {
-    if (validate()) {
-        bool ownsTarget = this->target->getOwner() == this->player;
+    if (!validate()) return false;
 
-        if (ownsTarget) {
-            this->source->setNumberOfArmies(this->source->getNumberOfArmies() - this->armyCount);
-            this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
-        }
-        else {
-            if (!isBlocked()) {
-                // skip since immune
-                const bool successful = this->source->attack(this->target, this->armyCount);
-                if (successful) {
-                    this->player->hand->draw();
-                }
-            }
-            else {
-                cout << "blocked an advance order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
-            }
-        }
+    bool ownsTarget = this->target->getOwner() == this->player;
 
-        return true;
+    if (ownsTarget) {
+        this->source->setNumberOfArmies(this->source->getNumberOfArmies() - this->armyCount);
+        this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
+    }
+    else {
+        if (isBlocked()) return true;
+
+        const bool successful = this->source->attack(this->target, this->armyCount);
+
+        if (successful) {
+            this->player->hand->draw();
+        }
     }
 
-    return false;
+    return true;
 }
 
 Advance* Advance::clone() const {
@@ -288,7 +283,8 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armyC
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    if (player == nullptr || source == nullptr || target == nullptr || armyCount < 0) return false;
+    if (player == nullptr || source == nullptr || target == nullptr) return false;
+    if (armyCount < 0 || this->source->getNumberOfArmies() <= armyCount) return false;
     return this->source->getOwner() == this->player;
 }
 
