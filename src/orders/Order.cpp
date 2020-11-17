@@ -279,7 +279,7 @@ int Blockade::getPriority() {
 
 // Airlift
 Airlift::Airlift() : BlockableOrder(nullptr, nullptr), source(nullptr), armyCount(-1) {}
-Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armyCount) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
 Airlift::~Airlift() {}
 
@@ -288,7 +288,7 @@ bool Airlift::validate() const {
     return this->source->getOwner() == this->player;
 }
 
-Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(armyCount) {};
+Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(order.armyCount) {};
 
 string Airlift::toString() const {
     return "AIRLIFT:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();

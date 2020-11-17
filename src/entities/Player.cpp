@@ -32,9 +32,8 @@ void Player::addTerritory(Territory* territory) {
 
 void Player::removeTerritory(Territory* territory) {
     auto t = getTerritory(territory);
-    if (t != this->territories.end()) {
-        territories.erase(t);
-    }
+    
+    if (t != this->territories.end()) territories.erase(t);
 }
 
 vector<Territory*>::iterator Player::getTerritory(Territory* territory) {

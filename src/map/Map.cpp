@@ -329,11 +329,13 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
 }
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
-    this->numberOfArmies -= attackerArmies;
+    if(attackerArmies < 0) throw std::runtime_error("Territory attack using invalid number of armies.");
 
-    while (attackerArmies > 0 && target->numberOfArmies > 0) {
+    this->setNumberOfArmies(this->getNumberOfArmies() - attackerArmies);
+
+    while (attackerArmies > 0 && target->getNumberOfArmies() > 0) {
         if (rand() % 100 <= attackerOdds) {
-            target->numberOfArmies--;
+            target->setNumberOfArmies(target->getNumberOfArmies() - 1);
         }
 
         if (target->numberOfArmies > 0) {
@@ -345,7 +347,7 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
 
     if (attackerArmies > 0) {
         // attacker won
-        target->numberOfArmies = attackerArmies;
+        target->setNumberOfArmies(attackerArmies);
         target->playerOwner->removeTerritory(target);
         this->playerOwner->addTerritory(target);
         return true;
@@ -385,13 +387,13 @@ std::string Territory::territoryTable(std::vector<Territory*> territories) {
 }
 
 void Territory::setNumberOfArmies(int numberOfArmies) {
-    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory army count set with invalid number of armies.");
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count is being set with invalid value " + std::to_string(numberOfArmies) + ".");
 
     this->numberOfArmies = numberOfArmies;
 }
 
 int Territory::getNumberOfArmies() {
-    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory army count already has invalid number of armies.");
+    if(numberOfArmies > 1000 || numberOfArmies < 0) throw runtime_error("Territory " + this->getName() + " army count has invalid value " + std::to_string(numberOfArmies) + ".");
 
     return this->numberOfArmies;
 }
