@@ -19,7 +19,7 @@ namespace UI {
          */
         UI::Style style;
 
-        UI::Component* parent = NULL;
+        UI::Component* parent;
 
         Component();
 

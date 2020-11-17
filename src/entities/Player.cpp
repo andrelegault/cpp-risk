@@ -17,17 +17,10 @@ Player::Player(const Player& player) : name(player.name), orders(new OrdersList(
 
 Player::~Player() {
     delete orders;
-    orders = nullptr;
 
-    for (Territory* territory : territories) {
-        delete territory;
-        territory = nullptr;
-    }
-
-    territories.clear();
+    while (!this->territories.empty()) delete this->territories.back();
 
     delete hand;
-    hand = nullptr;
 }
 
 void Player::addTerritory(Territory* territory) {
@@ -73,52 +66,46 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    vector<Territory*> def = this->toDefend();
+    vector<Territory*> defendTerritories = this->toDefend();
 
-    std::shuffle(def.begin(), def.end(), std::random_device{});
+    std::shuffle(defendTerritories.begin(), defendTerritories.end(), std::random_device{});
 
     int roundRobin = 0;
 
     int armiesAvailable = this->armies;
-
-    // for (auto territory : this->territories) {
-    //     if (territory->numberOfArmies == 0 && armiesAvailable > 0) {
-    //         armiesAvailable -= 1;
-    //         this->addOrder(new Deploy(this, territory, 1));
-    //     }
-    // }
 
     // issue deployments to territories in a round robin fashion until no more armies
     while (armiesAvailable > 0) {
         int armyCount = Utils::getRandom(1, armiesAvailable);
 
         // the player has at least 1 territory to deploy to
-        if (def.size() > 0) {
+        if (defendTerritories.size() > 0) {
             armiesAvailable -= armyCount;
 
-            this->addOrder(new Deploy(this, def.at(roundRobin++ % static_cast<int>(def.size())), armyCount));
+            this->addOrder(new Deploy(this, defendTerritories.at(roundRobin++ % static_cast<int>(defendTerritories.size())), armyCount));
+        } else {
+            throw runtime_error("Player with no territory to defend should have been removed.");
         }
     }
 
-    const int numberOfDef = def.size();
+    const int numberOfDef = defendTerritories.size();
     const int numberOfAtt = this->toAttack().size();
 
     map<Territory*, int> issuingState;
-    for (auto territory : def) {
+    for (auto territory : defendTerritories) {
         issuingState[territory] = territory->numberOfArmies;
     }
 
     // issue 10 advance orders
-    for (auto territory : def) {
+    for (auto territory : defendTerritories) {
         if (issuingState.at(territory) > 0) {
             int rDef = Utils::getRandom(0, numberOfDef - 1);
-            Territory* source = def.at(rDef);
-
+            Territory* source = defendTerritories.at(rDef);
 
             // there are enemy territories to attack
             bool attacking = numberOfAtt > 0 && rand() % 2 == 0 ? true : false;
             int rTarget = attacking ? Utils::getRandom(0, numberOfAtt - 1) : Utils::getRandom(0, numberOfDef - 1);
-            Territory* target = attacking ? toAttack().at(rTarget) : def.at(rTarget);
+            Territory* target = attacking ? toAttack().at(rTarget) : defendTerritories.at(rTarget);
 
             if (target != source) {
                 int armyCount = Utils::getRandom(1, issuingState.at(territory));
@@ -127,13 +114,12 @@ void Player::issueOrder() {
                 this->addOrder(new Advance(this, source, target, armyCount));
             }
         }
-
     }
 
     if (this->hand->getLength() > 0) {
         Card* toPlay = this->hand->getCards().back();
         CardType cardType = *(toPlay->cardType);
-        Territory* randomSource = numberOfDef > 0 ? def.at(Utils::getRandom(0, numberOfDef - 1)) : nullptr;
+        Territory* randomSource = numberOfDef > 0 ? defendTerritories.at(Utils::getRandom(0, numberOfDef - 1)) : nullptr;
         Territory* randomTargetTerritory = numberOfAtt > 0 ? this->toAttack().at(Utils::getRandom(0, this->toAttack().size() - 1)) : nullptr;
 
         switch (cardType) {
