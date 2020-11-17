@@ -97,7 +97,7 @@ Advance::~Advance() {}
 
 bool Advance::validate() const {
     if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
-    if (this->armyCount < 0) return false;
+    if (this->armyCount < 1) return false;
     if (this->player != this->source->getOwner()) return false;
     if (this->armyCount > this->source->getNumberOfArmies()) return false;
 
@@ -295,7 +295,7 @@ Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
     if (player == nullptr || source == nullptr || target == nullptr || armyCount < 1) return false;
-    return this->source->numberOfArmies >= armyCount && this->source->getOwner() == this->player;
+    return this->source->getNumberOfArmies() >= armyCount && this->source->getOwner() == this->player;
 }
 
 Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(order.armyCount) {};
