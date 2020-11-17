@@ -194,6 +194,7 @@ void GameEngine::mainGameLoop() {
 
         // Checks win condition.
         if (this->players.size() == 1) {
+            cout << this->players.front()->getName() << " wins!" << endl;
             this->notify();
 
             return;
@@ -213,10 +214,10 @@ void GameEngine::mainGameLoop() {
 
         vector<tuple<Player*, Player*>> toErase;
 
-        for(auto entry : GameEngine::immunities) {
+        for (auto entry : GameEngine::immunities) {
             if (entry.second) toErase.push_back(entry.first);
         }
-        for(auto tup : toErase) {
+        for (auto tup : toErase) {
             GameEngine::immunities.erase(tup);
         }
         // this->printTerritories();
@@ -231,7 +232,8 @@ void GameEngine::reinforcementPhase() {
     for (auto player : this->players) {
         this->setCurrentPlayer(player);
 
-        player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
+        player->armies += std::max((player->getNumTerritories() / 3), 3);
+        // player->armies += std::max((int)floor(player->getNumTerritories() / 3), 3);
 
         for (auto continent : this->warzoneMap->getContinents()) {
             bool hasAllTerritories = true;
@@ -288,6 +290,7 @@ void GameEngine::executeOrdersPhase() {
                 playersDoneDeploying++;
             }
             else {
+                cout << *nextDeployed << endl;
                 nextDeployed->execute();
 
                 player->removeOrder(nextDeployed);
@@ -302,6 +305,7 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
+                cout << *nextOrder << endl;
                 nextOrder->execute();
 
                 player->removeOrder(nextOrder);

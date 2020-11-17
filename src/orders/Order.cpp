@@ -76,6 +76,7 @@ bool Deploy::execute() {
         return true;
     }
     else {
+        // cout << "deploy not valid" << endl;
         return false;
     }
 }
@@ -96,7 +97,6 @@ Advance::~Advance() {}
 
 bool Advance::validate() const {
     if (this->player == nullptr || this->source == nullptr || this->target == nullptr || armyCount < 1) return false;
-    // if (this->player != this->source->getOwner()) return false;
     if (this->armyCount >= this->source->numberOfArmies) return false;
 
 
@@ -158,8 +158,11 @@ bool Advance::execute() {
 
         return true;
     }
+    else {
+        // cout << "advance not valid" << endl;
 
-    return false;
+        return false;
+    }
 }
 
 Advance* Advance::clone() const {
@@ -215,6 +218,7 @@ bool Bomb::execute() {
         }
     }
     else {
+        // cout << "bomb not valid" << endl;
         return false;
     }
 }
@@ -257,14 +261,16 @@ bool Blockade::validate() const {
 
 bool Blockade::execute() {
     if (validate()) {
-        if (this->target->numberOfArmies > 0)
+        if (this->target->numberOfArmies > 0) {
             this->target->numberOfArmies *= 2;
+        }
         this->player->removeTerritory(this->target);
         // TODO: transfer ownership to neutral player
 
         return true;
     }
     else {
+        // cout << "blockade not valid" << endl;
         return false;
     }
 }
@@ -279,16 +285,16 @@ int Blockade::getPriority() {
 
 // Airlift
 Airlift::Airlift() : BlockableOrder(nullptr, nullptr), source(nullptr), armyCount(-1) {}
-Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armyCount) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) return false;
-    return this->source->getOwner() == this->player;
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount < 1) return false;
+    return this->source->numberOfArmies >= armyCount && this->source->getOwner() == this->player;
 }
 
-Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(armyCount) {};
+Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(order.armyCount) {};
 
 string Airlift::toString() const {
     return "AIRLIFT:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
@@ -330,6 +336,7 @@ bool Airlift::execute() {
         return true;
     }
     else {
+        // cout << "airlift not valid" << endl;
         return false;
     }
 }
@@ -351,7 +358,7 @@ Negotiate::~Negotiate() {}
 Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
 
 string Negotiate::toString() const {
-    return "NEGOTIATE:: " + this->target->getName();
+    return "NEGOTIATE:: ";// + this->target->getName();
 }
 ostream& operator<<(ostream& os, const Negotiate& order) {
     os << order.toString();
@@ -368,7 +375,8 @@ Negotiate& Negotiate::operator=(const Negotiate& other) {
 }
 
 bool Negotiate::validate() const {
-    return (this->player != nullptr && this->target != nullptr) && this->target != this->player;
+    if (this->player == nullptr || this->target == nullptr) return false;
+    return this->target != this->player;
 }
 
 bool Negotiate::execute() {
@@ -377,6 +385,7 @@ bool Negotiate::execute() {
         return true;
     }
     else {
+        // cout << "negotiate not valid" << endl;
         return false;
     }
 }

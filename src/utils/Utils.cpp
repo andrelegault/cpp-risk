@@ -63,5 +63,8 @@ std::string Utils::string_right(const std::string s, const int w) {
 }
 
 int Utils::getRandom(int min, int max) {
+    if (min < 0 || max < 0) {
+        throw std::runtime_error("what");
+    }
     return min + (rand() % static_cast<int>(max - min + 1));
 }
