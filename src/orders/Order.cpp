@@ -45,7 +45,7 @@ Deploy::~Deploy() {}
 
 bool Deploy::validate() const {
     if (this->player == nullptr || this->target == nullptr || this->armyCount < 1) return false;
-    return this->target->getOwner() == this->player && this->player->armies >= this->armyCount;
+    return this->target->getOwner() == this->player && this->player->armies >= this->armyCount && this->armyCount > 0;
 }
 
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -71,7 +71,7 @@ bool Deploy::execute() {
     // cout << "Executing a deploy order!" << endl;
     if (validate()) {
         this->player->armies -= this->armyCount;
-        this->target->numberOfArmies += this->armyCount;
+        this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
 
         return true;
     }
@@ -96,9 +96,9 @@ Advance::~Advance() {}
 
 bool Advance::validate() const {
     if (this->player == nullptr || this->source == nullptr || this->target == nullptr) return false;
-    // if (this->player != this->source->getOwner()) return false;
-    if (this->armyCount >= this->source->numberOfArmies) return false;
-
+    if (this->player != this->source->getOwner()) return false;
+    if (this->armyCount >= this->source->getNumberOfArmies()) return false;
+    if (this->armyCount < 0) return false;
 
     vector<Border*> borders = this->source->getBorders();
     for (auto border : borders) {
@@ -140,8 +140,8 @@ bool Advance::execute() {
         bool ownsTarget = this->target->getOwner() == this->player;
 
         if (ownsTarget) {
-            this->source->numberOfArmies -= this->armyCount;
-            this->target->numberOfArmies += this->armyCount;
+            this->source->setNumberOfArmies(this->source->getNumberOfArmies() - this->armyCount);
+            this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
         }
         else {
             if (!isBlocked()) {
@@ -203,8 +203,8 @@ bool Bomb::execute() {
     if (validate()) {
         // cant bomb if num is 1 or 0
         if (!isBlocked()) {
-            if (this->target->numberOfArmies > 1) {
-                this->target->numberOfArmies /= 2;
+            if (this->target->getNumberOfArmies() > 1) {
+                this->target->setNumberOfArmies(this->target->getNumberOfArmies() / 2);
             }
 
             return true;
@@ -257,8 +257,8 @@ bool Blockade::validate() const {
 
 bool Blockade::execute() {
     if (validate()) {
-        if (this->target->numberOfArmies > 0)
-            this->target->numberOfArmies *= 2;
+        if (this->target->getNumberOfArmies() > 0)
+            this->target->setNumberOfArmies(this->target->getNumberOfArmies() * 2);
         this->player->removeTerritory(this->target);
         // TODO: transfer ownership to neutral player
         //transfer ownership to the neutral player
@@ -288,7 +288,7 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armie
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) return false;
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount < 0) return false;
     return this->source->getOwner() == this->player;
 }
 
@@ -317,8 +317,8 @@ bool Airlift::execute() {
         const bool ownsTarget = this->target->getOwner() == this->player;
         if (ownsTarget) {
             // move armies from source to target
-            this->target->numberOfArmies += this->source->numberOfArmies;
-            this->source->numberOfArmies = 0;
+            this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->source->getNumberOfArmies());
+            this->source->setNumberOfArmies(0);
         }
         else {
             if (!isBlocked()) {

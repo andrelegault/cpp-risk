@@ -342,9 +342,6 @@ ostream& operator<<(ostream& stream, const Continent& continent);
  */
 class Territory : public MapNode {
 public:
-    // Counter for number of armies that current player owns in this country.
-    int numberOfArmies;
-
     /**
      * Default constructor.
      */
@@ -450,7 +447,14 @@ public:
      * Creates a table string.
      */
     static std::string territoryTable(std::vector<Territory*> territories);
+
+    void setNumberOfArmies(int numberOfArmies);
+
+    int getNumberOfArmies();
 private:
+    // Counter for number of armies that current player owns in this country.
+    int numberOfArmies;
+
     // Current player that owns this country.
     Player* playerOwner;
 
