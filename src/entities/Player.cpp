@@ -102,7 +102,7 @@ void Player::issueOrder() {
         }
     }
 
-    for(int i = 0; i < 10; i++) {
+    for(int i = 0; i < 50; i++) {
         Territory* target;
 
         bool attacking = numberOfAtt > 0 && rand() % 2 == 0;
@@ -124,6 +124,8 @@ void Player::issueOrder() {
         if(source == nullptr) continue;
 
         int armyCount = Utils::getRandom(0, issuingState[source]);
+
+        if(armyCount == 0) continue;
 
         issuingState[source] -= armyCount;
 
