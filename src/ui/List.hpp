@@ -2,6 +2,7 @@
 
 #include "List.fwd.hpp"
 #include "UI.hpp"
+#include <sstream>
 
 std::ostream& operator<<(std::ostream& stream, const UI::List& list);
 

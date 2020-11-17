@@ -2,6 +2,7 @@
 
 #include "Grid.fwd.hpp"
 #include "UI.hpp"
+#include <sstream>
 
 std::ostream& operator<<(std::ostream& stream, const UI::Grid& grid);
 
