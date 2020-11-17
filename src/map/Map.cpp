@@ -1,13 +1,17 @@
 #include "Map.hpp"
 
-Map::Map() : Map("") {}
+Map::Map() : Map("") {
+    neutralP = new Player();
+}
 
 Map::Map(const string name) {
     this->name = name;
+    neutralP = new Player();
 }
 
 Map::Map(const Map& m) {
     this->name = m.name;
+    this->neutralP = m.neutralP;
 
     // Used for mapping name to object.
     map<string, Continent*> continentMap;
@@ -63,6 +67,8 @@ Map::Map(const Map& m) {
 
 Map::~Map() {
     while (!this->continents.empty()) delete this->continents.back();
+    delete neutralP;
+    neutralP = nullptr;
 }
 
 ostream& operator<<(ostream& stream, const Map& m) {
@@ -88,6 +94,7 @@ Map& Map::operator=(const Map& other) {
         this->~Map();
         this->name = other.name;
         this->continents = other.continents;
+        this->neutralP = other.neutralP;
     }
 
     return *this;

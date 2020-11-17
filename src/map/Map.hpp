@@ -17,6 +17,9 @@ using namespace std;
  */
 class Map {
 public:
+
+    Player* neutralP;
+
     /**
      * Default constructor.
      */
@@ -213,11 +216,15 @@ public:
      */
     vector<Border*> getBorders() const;
 
+    
+
 protected:
     // The name as defined in the Conquer Map file.
     string name;
     // Collection of Border edges.
     vector<Border*> borders;
+
+    
 };
 
 bool operator== (const MapNode& m1, const MapNode& m2);

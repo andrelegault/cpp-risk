@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-int Player::count = 0;
+int Player::count = -1;
 
 //set armies to 0 by default
 Player::Player() : name("Player " + to_string(++count)), orders(new OrdersList()), hand(new Hand()), armies(0) {}
