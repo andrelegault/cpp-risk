@@ -15,7 +15,7 @@ GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr
 GameEngine::~GameEngine() {
     delete this->deck;
 
-    while(!this->players.empty()) delete this->players.back();
+    while (!this->players.empty()) delete this->players.back();
 
     delete this->warzoneMap;
 
@@ -217,7 +217,7 @@ void GameEngine::mainGameLoop() {
         for (auto entry : GameEngine::immunities) {
             if (entry.second) toErase.push_back(entry.first);
         }
-        
+
         for (auto tup : toErase) {
             GameEngine::immunities.erase(tup);
         }
