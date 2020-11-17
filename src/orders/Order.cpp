@@ -284,7 +284,7 @@ Airlift::Airlift(Player* player, Territory* source, Territory* target, int armie
 Airlift::~Airlift() {}
 
 bool Airlift::validate() const {
-    if (player == nullptr || source == nullptr || target == nullptr || armyCount != -1) return false;
+    if (player == nullptr || source == nullptr || target == nullptr || armyCount == -1) return false;
     return this->source->getOwner() == this->player;
 }
 
