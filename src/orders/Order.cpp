@@ -264,7 +264,7 @@ bool Blockade::execute() {
         //transfer ownership to the neutral player
         this->target->getMap()->neutralP->addTerritory(this->target);
         //neutral territories have 2 armies each
-        this->target->numberOfArmies = 2;
+        this->target->setNumberOfArmies(2);
 
         return true;
     }
