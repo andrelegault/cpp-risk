@@ -12,18 +12,22 @@ string cardTypeToString(CardType cardType) {
 }
 
 Deck::~Deck() {
-    for(auto card : this->cards) delete card;
+    for (auto card : this->cards) delete card;
 }
 
 Deck::Deck(int size) {
+    assert(size > 0);
+
     int variantCount = size / CardType::LENGTH;
 
+    // at least 1 of each
     for (int i = 0; i < CardType::LENGTH; i++) {
         for (int j = 0; j < variantCount; j++) {
             this->addCard(new Card(new CardType((CardType)i), this));
         }
     }
 
+    // random cards
     for (int i = 0; i < size - variantCount * CardType::LENGTH; ++i) {
         int type = rand() % CardType::LENGTH;
 
@@ -40,13 +44,16 @@ Deck::Deck(const Deck& other) {
 }
 
 Deck& Deck::operator=(const Deck& other) {
-    if (&other == this) {
-        return *this;
+    if (&other != this) {
+        if (!this->cards.empty()) {
+            for (auto card : cards) delete card;
+        }
+
+        for (Card* card : other.cards) {
+            cards.push_back(new Card(*card));
+        }
     }
-    else {
-        cards = other.cards;
-        return *this;
-    }
+    return *this;
 }
 
 void Deck::addCard(Card* const card) {
@@ -61,10 +68,6 @@ ostream& operator<<(ostream& stream, const Deck& deck) {
     }
 
     return stream;
-}
-
-void Deck::draw(Player* player) {
-    this->draw(player->hand);
 }
 
 void Deck::draw(Hand* hand) {
@@ -83,22 +86,26 @@ Card* Deck::getAtIndex(int index) {
     return cards.at(index);
 }
 
-Card::Card(const CardType* cardType, Deck* deck) : cardType(cardType), deck(deck) { }
+Card::Card(const CardType* cardType, Deck* deck) : cardType(cardType), deck(deck) {
+    assert(cardType != nullptr);
+    assert(deck != nullptr);
+}
 
 Card::~Card() {
     delete cardType;
 }
 
-Card::Card(const Card& other) : cardType(new CardType(*(other.cardType))) { }
+Card::Card(const Card& other) : cardType(new CardType(*(other.cardType))) { assert(cardType != nullptr); }
 
 Card& Card::operator=(const Card& other) {
-    if (&other == this) {
-        return *this;
+    if (&other != this) {
+        if (this->cardType != nullptr) {
+            delete cardType;
+        }
+
+        cardType = new CardType(*(other.cardType));
     }
-    else {
-        cardType = other.cardType;
-        return *this;
-    }
+    return *this;
 }
 
 void Card::play(Player* player, Player* targetPlayer, Territory* source, Territory* targetTerritory, int armyCount) {
@@ -130,7 +137,7 @@ ostream& operator<<(ostream& stream, const Card& card) {
 Hand::Hand() { }
 
 Hand::~Hand() {
-    for(auto card : this->hand) delete card;
+    for (auto card : this->hand) delete card;
 }
 
 Hand::Hand(Deck* deck) : deck(deck) { }
@@ -140,13 +147,15 @@ Hand::Hand(const Hand& other) {
 }
 
 Hand& Hand::operator=(const Hand& other) {
-    if (&other == this) {
-        return *this;
+    if (&other != this) {
+        if (!this->hand.empty()) {
+            for (auto card : this->hand) delete card;
+        }
+
+        for (auto card : other.hand)
+            hand.push_back(new Card(*card));
     }
-    else {
-        hand = other.hand;
-        return *this;
-    }
+    return *this;
 }
 
 void Hand::draw() {
@@ -159,7 +168,7 @@ Card* Hand::getAtIndex(int index) const {
 
 ostream& operator<<(ostream& stream, const Hand& hand) {
     stream << "Hand (" << hand.hand.size() << " cards)" << endl;
-    
+
     for (Card* card : hand.hand) {
         stream << "\t" << *card << endl;
     }

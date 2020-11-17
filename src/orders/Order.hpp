@@ -269,7 +269,7 @@ private:
      * @param order Order pointer to find.
      * @return orders.end() if not found
      */
-    vector<Order*>::iterator findOrder(Order* order);
+    vector<Order*>::iterator getOrder(Order* order);
 
     /**
      * Gets the next order, taking into account priority.

@@ -186,14 +186,11 @@ ostream& operator<<(ostream& stream, const Player& player) {
 }
 
 Player& Player::operator=(const Player& other) {
-    if (&other == this) {
-        return *this;
-    }
-    else {
+    if (&other != this) {
         territories = other.territories;
         name = other.name;
-        return *this;
     }
+    return *this;
 }
 
 string Player::getName() const {

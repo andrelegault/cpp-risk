@@ -7,7 +7,9 @@
 #include <stdlib.h>
 #include <iterator>
 #include <random>
-#include <Cards.fwd.hpp>
+#include <cassert>
+
+#include "Cards.fwd.hpp"
 #include "Player.hpp"
 
 using std::vector;
@@ -88,13 +90,6 @@ public:
      * @return Number of cards in the deck.
      */
     int getLength() const;
-
-    /*
-     * 1. Takes a card at random from the deck
-     * 2. Places it in the player's hand.
-     * @param player Player whose hand will be modified to include the card drawn from the deck.
-     */
-    void draw(Player* player);
 
     void draw(Hand* hand);
 private:

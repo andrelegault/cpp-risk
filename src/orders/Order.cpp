@@ -422,6 +422,9 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
 
 OrdersList& OrdersList::operator=(const OrdersList& other) {
     if (&other != this) {
+        if (!this->orders.empty()) {
+            for (auto order : orders) delete order;
+        }
         for (auto o : other.orders) {
             Order* temp = o->clone();
             orders.push_back(temp);
@@ -435,12 +438,12 @@ void OrdersList::add(Order* what) {
 }
 
 void OrdersList::remove(Order* order) {
-    auto o = findOrder(order);
+    auto o = getOrder(order);
 
     if (o != orders.end()) orders.erase(o);
 }
 
-vector<Order*>::iterator OrdersList::findOrder(Order* order) {
+vector<Order*>::iterator OrdersList::getOrder(Order* order) {
     return find(orders.begin(), orders.end(), order);
 }
 
@@ -453,8 +456,8 @@ int OrdersList::getLength() const {
 }
 
 void OrdersList::move(Order* first, Order* second) {
-    auto firstIt = findOrder(first);
-    auto secondIt = findOrder(second);
+    auto firstIt = getOrder(first);
+    auto secondIt = getOrder(second);
     iter_swap(firstIt, secondIt);
 }
 
