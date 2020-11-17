@@ -94,7 +94,9 @@ public:
      * 2. Places it in the player's hand.
      * @param player Player whose hand will be modified to include the card drawn from the deck.
      */
-    void draw(Player& player, int count = 1);
+    void draw(Player* player);
+
+    void draw(Hand* hand);
 private:
     static const int DEFAULT_DECK_SIZE = 100;
     vector<Card*> cards;

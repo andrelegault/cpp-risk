@@ -25,14 +25,14 @@ Deck::Deck(int size) {
 
     for (int i = 0; i < CardType::LENGTH; i++) {
         for (int j = 0; j < variantCount; j++) {
-            this->addCard(new Card(new CardType((CardType) i), this));
+            this->addCard(new Card(new CardType((CardType)i), this));
         }
     }
 
     for (int i = 0; i < size - variantCount * CardType::LENGTH; ++i) {
         int type = rand() % CardType::LENGTH;
 
-        this->addCard(new Card(new CardType((CardType) type), this));
+        this->addCard(new Card(new CardType((CardType)type), this));
     }
 
     cout << size << " -> " << this->cards.size() << endl;
@@ -82,12 +82,16 @@ ostream& operator<<(ostream& stream, const Deck& deck) {
     return stream;
 }
 
-void Deck::draw(Player& player, int count) {
-    if(this->cards.size() == 0) throw runtime_error("Trying to draw from empty deck.");
+void Deck::draw(Player* player) {
+    this->draw(player->hand);
+}
 
-    player.hand->addCard(this->cards.back());
+void Deck::draw(Hand* hand) {
+    if (this->cards.size() > 0) {
+        hand->addCard(this->cards.back());
 
-    this->cards.pop_back();
+        this->cards.pop_back();
+    }
 }
 
 int Deck::getLength() const {
@@ -172,8 +176,7 @@ Hand& Hand::operator=(const Hand& other) {
 }
 
 void Hand::draw() {
-    this->hand.push_back(this->deck->cards.back());
-    this->deck->cards.pop_back();
+    this->deck->draw(this);
 }
 
 Card* Hand::getAtIndex(int index) const {
