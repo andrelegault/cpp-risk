@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         gpp-version: [g++-8]
-        # cc-version: [gcc-8]
+        cc-version: [gcc-8]
 
     steps:
     - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
       shell: bash
       env:
         CXX: ${{matrix.gpp-version}}
-        # CC: ${{matrix.cc-version}}
+        CC: ${{matrix.cc-version}}
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE --target WarZone_GameEngineDriver
 
