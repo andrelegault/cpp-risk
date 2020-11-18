@@ -85,7 +85,6 @@ public:
 protected:
     bool isBlocked();
     Territory* target;
-    int armyCount;
 };
 
 class Deploy : public Order {
