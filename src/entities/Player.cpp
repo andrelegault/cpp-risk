@@ -94,24 +94,25 @@ void Player::issueOrder() {
         }
     }
 
-    map<Territory*, int> issuingState;
 
+    // create map to keep track of how many armies each player has issued
+    map<Territory*, int> issuingState;
     for (auto territory : defendTerritories) {
         if (territory != nullptr) {
             issuingState[territory] = territory->getNumberOfArmies();
         }
     }
 
-    for (int i = 0; i < 50; i++) {
+    // issue 50 advance orders
         Territory* target;
 
         bool attacking = numberOfAtt > 0 && rand() % 2 == 0;
 
         if (attacking) {
-            target = this->toAttack()[Utils::getRandom(0, numberOfAtt - 1)];
+            target = this->toAttack().at(Utils::getRandom(0, numberOfAtt - 1));
         }
         else {
-            target = this->toDefend()[Utils::getRandom(0, numberOfDef - 1)];
+            target = this->toDefend().at(Utils::getRandom(0, numberOfDef - 1));
         }
 
         if (target == nullptr) continue;

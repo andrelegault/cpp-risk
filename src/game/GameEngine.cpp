@@ -61,8 +61,13 @@ void GameEngine::assignTerritories() {
 
     int numberOfPlayers = this->players.size();
 
+    // every territory is assigned to a player (with a 20% chance of every territory being assigned to the neutral player)
     for (auto territory : territories) {
-        this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
+        // give the neutral player some territories
+        if (Utils::getRandom(1, 10) < 3)
+            Map::neutralP.addTerritory(territory);
+        else
+            this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
     }
 }
 
@@ -171,6 +176,7 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
+    const int totalTerritories = this->warzoneMap->getTerritories().size();
     while (true) {
         for (auto& entry : GameEngine::immunities) {
             entry.second = true;
@@ -191,13 +197,16 @@ void GameEngine::mainGameLoop() {
         this->players = playersWithTerritory;
 
         // Checks win condition.
-        if (this->players.size() == 1) {
+
+        // remaining player has to have conquered the whole map to win
+        if (this->players.size() == 1 && this->players.front()->getTerritories().size() == totalTerritories) {
             cout << this->players.front()->getName() << " wins!" << endl;
             this->notify();
 
             return;
         }
         else if (this->players.size() == 0) {
+            cout << "no players left" << endl;
             return;
         }
 
@@ -209,6 +218,8 @@ void GameEngine::mainGameLoop() {
         for (auto player : this->players) {
             cout << player->getName() << " has " << player->getTerritories().size() << " territories" << endl;
         }
+
+        cout << Map::neutralP.getName() << " has " << Map::neutralP.getTerritories().size() << " territories" << endl;
 
         vector<tuple<Player*, Player*>> toErase;
 
@@ -243,9 +254,9 @@ void GameEngine::reinforcementPhase() {
             if (hasAllTerritories) {
                 player->armies += continent->getBonus();
             }
-        }
 
-        this->notify();
+            this->notify();
+        }
     }
 }
 
@@ -254,16 +265,14 @@ void GameEngine::issueOrdersPhase() {
 
     for (auto player : this->players) {
         this->setCurrentPlayer(player);
-
         player->issueOrder();
     }
 }
 
 bool GameEngine::isExecutionDone() const {
     for (auto player : this->players) {
-        if (player->remainingOrders() > 0) {
+        if (player->remainingOrders() > 0)
             return false;
-        }
     }
 
     return true;

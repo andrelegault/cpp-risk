@@ -100,7 +100,7 @@ Map* MapLoader::load(const string file_name) {
                 if (words.size() < 2) {
                     throw logic_error("Invalid Border Format");
                 }
-                
+
                 // 0  - parent country #
                 // 1+ - adjacent country #
 
