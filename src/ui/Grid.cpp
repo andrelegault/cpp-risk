@@ -40,7 +40,7 @@ std::ostream& operator<<(std::ostream& stream, const UI::Grid& grid) {
     if (grid.components.empty()) return stream;
 
     std::vector<std::vector<std::string>> data;
-    
+
     for (auto row : grid.components) {
         std::vector<std::string> dataRow;
 
@@ -75,7 +75,7 @@ std::ostream& operator<<(std::ostream& stream, const UI::Grid& grid) {
 
             rowHeights[i] = std::max(rowHeights[i], (int)eSplit.size());
 
-            if(eSplit.size() > 0) {
+            if (eSplit.size() > 0) {
                 std::string maxString = *std::max_element(eSplit.begin(), eSplit.end(), [](std::string l, std::string r) { return l.size() < r.size();});
 
                 columnWidths[j] = std::max(columnWidths[j], (int)maxString.size());

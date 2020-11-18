@@ -4,8 +4,8 @@ void Subject::attach(Observer* observer) {
     this->observers.push_back(observer);
 }
 
-void Subject::attach(vector<Observer*> &observers) {
-    for(auto observer : observers) {
+void Subject::attach(vector<Observer*>& observers) {
+    for (auto observer : observers) {
         this->attach(observer);
     }
 }
@@ -17,7 +17,7 @@ void Subject::detach(Observer* observer) {
 }
 
 void Subject::notify() {
-    for(auto observer : this->observers) {
+    for (auto observer : this->observers) {
         observer->update();
     }
 }

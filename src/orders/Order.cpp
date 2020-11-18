@@ -34,8 +34,8 @@ Order& Order::operator=(const Order& order) {
 
 BlockableOrder::BlockableOrder() : Order(nullptr) { }
 BlockableOrder::~BlockableOrder() { }
-BlockableOrder::BlockableOrder(const BlockableOrder & other) : Order(new Player(*(other.player))), target(new Territory(*(other.target))) { }
-BlockableOrder::BlockableOrder(Player * player, Territory * target) : Order(player), target(target) { }
+BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(new Player(*(other.player))), target(new Territory(*(other.target))) { }
+BlockableOrder::BlockableOrder(Player* player, Territory* target) : Order(player), target(target) { }
 
 BlockableOrder& BlockableOrder::operator=(const BlockableOrder& other) {
     Order::operator=(other);
