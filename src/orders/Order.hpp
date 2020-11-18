@@ -118,6 +118,7 @@ public:
     bool validate() const;
     bool execute();
     virtual int getPriority() override;
+    static const int ADVANCE_ORDERS_ISSUED_PER_TURN = 50;
 private:
     Territory* source;
     int armyCount;
@@ -152,6 +153,7 @@ public:
     bool execute();
     virtual int getPriority() override;
 private:
+    static const int MULTIPLY_RATIO = 2;
     Territory* target;
 };
 

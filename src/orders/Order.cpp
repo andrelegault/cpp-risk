@@ -255,8 +255,9 @@ bool Blockade::validate() const {
 
 bool Blockade::execute() {
     if (validate()) {
+        // TODO: remove the if, 0*2 = 0
         if (this->target->getNumberOfArmies() > 0)
-            this->target->setNumberOfArmies(this->target->getNumberOfArmies() * 2);
+            this->target->setNumberOfArmies(this->target->getNumberOfArmies() * Blockade::MULTIPLY_RATIO);
         this->player->removeTerritory(this->target);
         Map::neutralP.addTerritory(this->target);
 

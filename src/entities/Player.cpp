@@ -103,7 +103,8 @@ void Player::issueOrder() {
         }
     }
 
-    // issue 50 advance orders
+    // issue advance orders
+    for (int i = 0; i < Advance::ADVANCE_ORDERS_ISSUED_PER_TURN; i++) {
         Territory* target;
 
         bool attacking = numberOfAtt > 0 && rand() % 2 == 0;
