@@ -272,25 +272,21 @@ bool GameEngine::isExecutionDone() const {
 void GameEngine::executeOrdersPhase() {
     this->setGamePhase(EXECUTE_ORDER_PHASE);
 
-    int playersDoneDeploying = 0;
-    int numPlayers = this->players.size();
+    // Deploys don't affect other players so we can just deploy them all for each player one shot.
+    for(auto player : this->players) {
+        this->setCurrentPlayer(player);
 
-    while (playersDoneDeploying < numPlayers) {
-        for (auto player : this->players) {
-            this->setCurrentPlayer(player);
+        Order* nextDeployed = player->getNextOrder(1);
 
-            Order* nextDeployed = player->getNextOrder(1);
+        while(nextDeployed != nullptr) {
+            nextDeployed->execute();
 
-            if (nextDeployed == nullptr) {
-                playersDoneDeploying++;
-            }
-            else {
-                // cout << *nextDeployed << endl;
-                nextDeployed->execute();
+            player->removeOrder(nextDeployed);
 
-                player->removeOrder(nextDeployed);
-            }
+            nextDeployed = player->getNextOrder(1);
         }
+
+        this->notify();
     }
 
     while (!this->isExecutionDone()) {
@@ -300,7 +296,6 @@ void GameEngine::executeOrdersPhase() {
             Order* nextOrder = player->getNextOrder();
 
             if (nextOrder != nullptr) {
-                // cout << *nextOrder << endl;
                 nextOrder->execute();
 
                 player->removeOrder(nextOrder);

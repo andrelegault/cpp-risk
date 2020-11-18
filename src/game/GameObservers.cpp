@@ -24,12 +24,15 @@ void PhaseObserver::update() {
     switch (this->gameEngine->gamePhase) {
     case REINFORCEMENT_PHASE:
         ss << "Available Armies: " << this->gameEngine->currentPlayer->armies << endl << endl;
-        ss << Territory::territoryTable(this->gameEngine->currentPlayer->getTerritories());
+        ss << Territory::territoryTable(this->gameEngine->currentPlayer->getTerritories(), 4);
         break;
     case ISSUE_ORDER_PHASE:
         for (auto order : this->gameEngine->currentPlayer->orders->getOrders()) {
             ss << *order << endl;
         }
+        break;
+    case EXECUTE_ORDER_PHASE:
+        ss << "Executing orders!" << endl;
         break;
     }
 
