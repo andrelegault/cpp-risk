@@ -10,6 +10,8 @@ string gamePhaseToString(GamePhase gamePhase) {
     }
 }
 
+map<tuple<Player*, Player*>, bool> GameEngine::immunities;
+
 GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {}
 
 GameEngine::~GameEngine() {
@@ -32,7 +34,7 @@ void GameEngine::initPlayers() {
     int armyCount = this->getPlayerArmyCount(this->players.size());
 
     for (auto player : this->players) {
-        player->armies += armyCount;
+        player->armies = armyCount;
     }
 }
 
@@ -312,5 +314,3 @@ void GameEngine::executeOrdersPhase() {
         }
     }
 }
-
-map<tuple<Player*, Player*>, bool> GameEngine::immunities;

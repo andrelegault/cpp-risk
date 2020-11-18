@@ -22,6 +22,9 @@
 using namespace filesystem;
 using namespace UI;
 
+/**
+ * Enum for states (phases) that the GameEngine can be in.
+ */
 enum GamePhase {
     STARTUP_PHASE,
     REINFORCEMENT_PHASE,
@@ -29,31 +32,87 @@ enum GamePhase {
     EXECUTE_ORDER_PHASE
 };
 
+/**
+ * Converts the GamePhase enum to string.
+ *
+ * @param gamePhase The enum to convert.
+ * @return The string version of the enum.
+ */
 string gamePhaseToString(GamePhase gamePhase);
 
 class GameEngine : public Subject {
 public:
+    /**
+     * The first player of the tuple is immune to the attacks of the second.
+     */
+    static map<tuple<Player*, Player*>, bool> immunities;
+
     GameEngine();
 
     ~GameEngine();
 
-    void startupPhase();
+    /**
+     * The entrypoint for the GameEngine. Should be called to start the game.
+     */
+    void init();
 
-    void mainGameLoop();
-
-    void reinforcementPhase();
-
-    void issueOrdersPhase();
-
-    void executeOrdersPhase();
-
-    bool isExecutionDone() const;
-
-    int getPlayerArmyCount(int numberOfPlayers) const;
-
+    /**
+     * Shuffles the players and sets their initial armyCount.
+     */
     void initPlayers();
 
-    void init();
+    /**
+     * Startup Phase.
+     *
+     * - Orders players randomly.
+     * - Territories are assigned randomly.
+     * - Players are assigned initial armies as described in rules.
+     */
+    void startupPhase();
+
+    /**
+     * Loop that englobes all recurring GamePhases.
+     */
+    void mainGameLoop();
+
+    /**
+     * Reinforcement Phase.
+     *
+     * - Give players number of armies according to terrtiory/continent owned.
+     */
+    void reinforcementPhase();
+
+    /**
+     * Issue Order Phase.
+     * 
+     * - Deploys armies according to number held by player.
+     * - Attacks/defends territories.
+     */
+    void issueOrdersPhase();
+
+    /**
+     * Execute Order Phase.
+     * 
+     * - Executes orders from issueOrder.
+     * 
+     * Should maybe be the one handling win state?
+     */
+    void executeOrdersPhase();
+
+    /**
+     * Checks if players still have orders to play.
+     * 
+     * @return Players don't have orders?
+     */
+    bool isExecutionDone() const;
+
+    /**
+     * Returns the armyCount for each player according to player side.
+     * 
+     * @param numberOfPlayers
+     * @return Number of armies.
+     */
+    int getPlayerArmyCount(int numberOfPlayers) const;
 
     /**
      * Assigns territories to players in a round-robin fashion.
@@ -61,21 +120,27 @@ public:
     void assignTerritories();
 
     /**
-     * print territories with their owner names, grouped by continents
+     * Print territories with their owner names, grouped by continents.
+     *
+     * @deprecated Should move to Territory::territoryTable() instead.
      */
     void printTerritories();
 
-    Player* getWinningPlayer();
-
+    /**
+     * Getter for Current Player.
+     * @return Current Player.
+     */
     Player* getCurrentPlayer();
 
+    /**
+     * Getter for GamePhase.
+     * @return GamePhase.
+     */
     GamePhase getGamePhase();
 
     friend class PhaseObserver;
-    friend class GameStatisticsObserver;
 
-    /// first is immune to any attacks by second
-    static map<tuple<Player*, Player*>, bool> immunities;
+    friend class GameStatisticsObserver;
 private:
     vector<Player*> players;
     Player* currentPlayer;
@@ -84,7 +149,15 @@ private:
     Deck* deck;
     GameUI* gameUI;
 
+    /**
+     * GamePhase setter.
+     * @param gamePhase
+     */
     void setGamePhase(GamePhase gamePhase);
 
+    /**
+     * CurrentPlayer setter.
+     * @param player
+     */
     void setCurrentPlayer(Player* player);
 };

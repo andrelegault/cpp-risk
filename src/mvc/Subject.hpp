@@ -12,16 +12,22 @@ class Subject {
     public:
         /**
          * Attaches an observer to subject for update.
+         * 
+         * @param observer Observer to attach.
          */
         void attach(Observer* observer);
 
         /**
          * Attaches many observer to subject.
+         * 
+         * @param observers Observers to attach.
          */
         void attach(vector<Observer*> &observers);
 
         /**
          * Detaches an observer from subject.
+         * 
+         * @param observer Observer to detach.
          */
         void detach(Observer* observer);
 

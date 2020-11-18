@@ -1,5 +1,9 @@
 #include "Cards.hpp"
 
+/******************************************************
+ * CARD TYPE
+ *****************************************************/
+
 string cardTypeToString(CardType cardType) {
     switch (cardType) {
     case 0: return "Airlift";
@@ -10,6 +14,10 @@ string cardTypeToString(CardType cardType) {
     default: return "";
     }
 }
+
+/******************************************************
+ * DECK
+ *****************************************************/
 
 Deck::~Deck() {
     for (auto card : this->cards) delete card;
@@ -86,6 +94,10 @@ Card* Deck::getAtIndex(int index) {
     return cards.at(index);
 }
 
+/******************************************************
+ * CARD
+ *****************************************************/
+
 Card::Card(const CardType* cardType, Deck* deck) : cardType(cardType), deck(deck) {
     assert(cardType != nullptr);
     assert(deck != nullptr);
@@ -133,6 +145,10 @@ ostream& operator<<(ostream& stream, const Card& card) {
     stream << " @ " << &card;
     return stream;
 }
+
+/******************************************************
+ * HAND
+ *****************************************************/
 
 Hand::Hand() { }
 

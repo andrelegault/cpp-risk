@@ -20,7 +20,7 @@ public:
 
     friend ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver);
 
-    virtual ostream& print(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
 
     virtual Component* clone() const override { return new PhaseObserver(*this); };
 
@@ -44,7 +44,7 @@ public:
 
     friend ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver);
 
-    virtual ostream& print(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
 
     virtual Component* clone() const override { return new GameStatisticsObserver(*this); };
 
@@ -70,7 +70,7 @@ public:
 
     friend ostream& operator<<(ostream& stream, const GameUI& gameUI);
 
-    virtual ostream& print(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
 
     virtual Component* clone() const override { return new GameUI(*this); };
 

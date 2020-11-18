@@ -11,9 +11,7 @@ Player::Player(Deck* deck) : Player("Player " + to_string(++count), deck) {}
 Player::Player(string name, Deck* deck) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
 
 Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))) {
-    for (Territory* t : player.territories) {
-        this->territories.push_back(new Territory(*t));
-    }
+    for (Territory* t : player.territories) this->territories.push_back(new Territory(*t));
 }
 
 Player::~Player() {

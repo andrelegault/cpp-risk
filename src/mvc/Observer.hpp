@@ -15,8 +15,6 @@ class Observer {
     protected:
         /**
          * Updates the observer.
-         * 
-         * @param subject The subject that is updated.
          */
         virtual void update() = 0;
 };

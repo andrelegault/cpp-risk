@@ -1,14 +1,15 @@
 #include "Map.hpp"
 
+/******************************************************
+ * MAP
+ *****************************************************/
 
 Map::Map() : Map("") {}
 
-// Map::Map(const string name) : name(name), neutralP(new Player("Neutral Player")) {}
 Map::Map(const string name) : name(name) {}
 
 Map::Map(const Map& m) {
     this->name = m.name;
-    // this->neutralP = m.neutralP;
 
     // Used for mapping name to object.
     map<string, Continent*> continentMap;

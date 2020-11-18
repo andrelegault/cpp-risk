@@ -3,7 +3,9 @@
 using std::endl;
 using std::ostream;
 
-// Order
+/******************************************************
+ * ORDER
+ *****************************************************/
 
 ostream& operator<<(ostream& os, const Order& order) {
     os << order.toString();
@@ -25,6 +27,10 @@ Order& Order::operator=(const Order& order) {
     }
     return *this;
 }
+
+/******************************************************
+ * BLOCKABLE ORDER
+ *****************************************************/
 
 BlockableOrder::BlockableOrder() : Order(nullptr) { }
 BlockableOrder::~BlockableOrder() { }
@@ -50,8 +56,10 @@ bool BlockableOrder::isBlocked() {
     return blocked;
 }
 
+/******************************************************
+ * DEPLOY
+ *****************************************************/
 
-// Deploy
 Deploy::Deploy() : Order(nullptr) {}
 
 Deploy::Deploy(Player* player, Territory* target, int armyCount) : Order(player), target(target), armyCount(armyCount) {}
@@ -104,7 +112,10 @@ int Deploy::getPriority() {
     return 1;
 }
 
-// Advance
+/******************************************************
+ * ADVANCE
+ *****************************************************/
+
 Advance::Advance() : BlockableOrder(nullptr, nullptr), armyCount(-1) {}
 Advance::Advance(Player* player, Territory* source, Territory* target, int armyCount) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
@@ -152,7 +163,6 @@ Advance& Advance::operator=(const Advance& other) {
     return *this;
 }
 
-
 bool Advance::execute() {
     if (!validate()) return false;
 
@@ -184,7 +194,10 @@ int Advance::getPriority() {
     return 4;
 }
 
-// Bomb
+/******************************************************
+ * BOMB
+ *****************************************************/
+
 Bomb::Bomb() : BlockableOrder(nullptr, nullptr) {}
 Bomb::Bomb(Player* player, Territory* target) : BlockableOrder(player, target) {}
 
@@ -230,7 +243,10 @@ int Bomb::getPriority() {
     return 3;
 }
 
-// Blockade
+/******************************************************
+ * BLOCKADE
+ *****************************************************/
+
 Blockade::Blockade(Player* player, Territory* target) : Order(player), target(target) {}
 
 Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*(order.target))) {}
@@ -285,7 +301,10 @@ int Blockade::getPriority() {
     return 2;
 }
 
-// Airlift
+/******************************************************
+ * AIRLIFT
+ *****************************************************/
+
 Airlift::Airlift() : BlockableOrder(nullptr, nullptr), source(nullptr), armyCount(-1) {}
 Airlift::Airlift(Player* player, Territory* source, Territory* target, int armyCount) : BlockableOrder(player, target), source(source), armyCount(armyCount) {}
 
@@ -348,7 +367,10 @@ int Airlift::getPriority() {
     return 2;
 }
 
-// Negotiate
+/******************************************************
+ * NEGOTIATE
+ *****************************************************/
+
 Negotiate::Negotiate() : Order(nullptr) {}
 Negotiate::Negotiate(Player* player, Player* target) : Order(player), target(target) {}
 
@@ -398,7 +420,9 @@ int Negotiate::getPriority() {
     return 2;
 }
 
-// OrdersList
+/******************************************************
+ * ORDERSLIST
+ *****************************************************/
 
 OrdersList::OrdersList() { }
 
