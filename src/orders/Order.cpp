@@ -14,19 +14,33 @@ Order::Order(Player* player) : player(player) { }
 
 Order::~Order() {}
 
-Order::Order(const Order& order) : player(order.player) { }
+Order::Order(const Order& order) : player(new Player(*(order.player))) { }
 
 Order& Order::operator=(const Order& order) {
-    if (this != NULL) {
-        this->player = order.player;
+    if (&order != this) {
+        if(this->player != nullptr){
+            delete player;
+        }
+        this->player = new Player(*(order.player));
     }
     return *this;
 }
 
 BlockableOrder::BlockableOrder() : Order(nullptr) { }
 BlockableOrder::~BlockableOrder() { }
-BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(other.player), target(other.target), armyCount(other.armyCount) { }
+BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(new Player(*(other.player))), target(new Territory(*(other.target))) { }
 BlockableOrder::BlockableOrder(Player* player, Territory* target) : Order(player), target(target) { }
+
+BlockableOrder& BlockableOrder::operator=(const BlockableOrder& other) {
+    Order::operator=(other);
+    if (&other != this) {
+        if(this->target != nullptr){
+            delete target;
+        }
+        this->target = new Territory(*(other.target));
+    }
+    return *this;
+}
 
 bool BlockableOrder::isBlocked() {
     tuple<Player*, Player*> current = make_tuple(this->target->getOwner(), this->player);
@@ -52,30 +66,38 @@ bool Deploy::validate() const {
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
 
 string Deploy::toString() const {
-    return "Deploy " + to_string(this->armyCount) + " unit(s) to " + this->target->getName();
+    return "DEPLOY:: " + to_string(this->armyCount) + " units | " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Deploy& order) {
-    os << order.toString();
+    os << order.toString() << endl;
     return os;
 }
 
 Deploy& Deploy::operator=(const Deploy& other) {
     Order::operator=(other);
-    this->target = other.target;
-
+    if(&other != this){
+        if(this->target != nullptr){
+            delete target;
+        }
+        this->target = new Territory(*(other.target));
+    }
     return *this;
 }
 
 
 bool Deploy::execute() {
-    if (!this->validate()) return false;
+    // cout << "Executing a deploy order!" << endl;
+    if (validate()) {
+        this->player->armies -= this->armyCount;
+        this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
 
-    this->player->armies -= this->armyCount;
-    this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->armyCount);
-
-    cout << *this << endl;
-    return true;
+        return true;
+    }
+    else {
+        // cout << "deploy not valid" << endl;
+        return false;
+    }
 }
 
 Deploy* Deploy::clone() const {
@@ -108,12 +130,15 @@ bool Advance::validate() const {
     return false;
 }
 
-Advance::Advance(const Advance& other) : BlockableOrder(other) {};
+Advance::Advance(const Advance& other) : BlockableOrder(other), source(new Territory(*(other.source))), armyCount(other.armyCount) {};
 
 string Advance::toString() const {
-    if (this->source == nullptr || this->target == nullptr) throw std::runtime_error("Invalid Advance Order.");
-
-    return "Advance " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
+    if (this->source != nullptr && this->target != nullptr) {
+        return "ADVANCE:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
+    }
+    else {
+        throw "ADVANCE:: Invalid Advance";
+    }
 }
 
 ostream& operator<<(ostream& os, const Advance& order) {
@@ -122,10 +147,15 @@ ostream& operator<<(ostream& os, const Advance& order) {
 }
 
 Advance& Advance::operator=(const Advance& other) {
-    Order::operator=(other);
-    this->source = other.source;
-    this->target = other.target;
-
+    BlockableOrder::operator=(other);
+    if (&other != this){
+        if(this->source != nullptr){
+            delete source;
+        }
+        this->source = new Territory(*(other.source));
+        this->armyCount = other.armyCount;
+    }
+    
     return *this;
 }
 
@@ -149,7 +179,6 @@ bool Advance::execute() {
         }
     }
 
-    cout << *this << endl;
     return true;
 }
 
@@ -167,10 +196,10 @@ Bomb::Bomb(Player* player, Territory* target) : BlockableOrder(player, target) {
 
 Bomb::~Bomb() {}
 
-Bomb::Bomb(const Bomb& order) : BlockableOrder(order.player, order.target) {}
+Bomb::Bomb(const Bomb& order) : BlockableOrder(order) {}
 
 string Bomb::toString() const {
-    return "Bomb " + this->target->getName();
+    return "BOMB:: " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Bomb& order) {
@@ -179,9 +208,7 @@ ostream& operator<<(ostream& os, const Bomb& order) {
 }
 
 Bomb& Bomb::operator=(const Bomb& other) {
-    Order::operator=(other);
-    this->target = other.target;
-
+    BlockableOrder::operator=(other);
     return *this;
 }
 
@@ -191,14 +218,24 @@ bool Bomb::validate() const {
 }
 
 bool Bomb::execute() {
-    if (!this->validate() || this->isBlocked()) return false;
+    if (validate()) {
+        // cant bomb if num is 1 or 0
+        if (!isBlocked()) {
+            if (this->target->getNumberOfArmies() > 1) {
+                this->target->setNumberOfArmies(this->target->getNumberOfArmies() / 2);
+            }
 
-    if (this->target->getNumberOfArmies() > 1) {
-        this->target->setNumberOfArmies(this->target->getNumberOfArmies() / 2);
+            return true;
+        }
+        else {
+            cout << "blocked a bomb order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
+            return false;
+        }
     }
-
-    cout << *this << endl;
-    return true;
+    else {
+        // cout << "bomb not valid" << endl;
+        return false;
+    }
 }
 
 Bomb* Bomb::clone() const {
@@ -217,7 +254,7 @@ Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*
 Blockade::~Blockade() {}
 
 string Blockade::toString() const {
-    return "Blockade " + this->target->getName();
+    return "BLOCKADE:: " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Blockade& order) {
@@ -227,8 +264,13 @@ ostream& operator<<(ostream& os, const Blockade& order) {
 
 Blockade& Blockade::operator=(const Blockade& other) {
     Order::operator=(other);
-    this->target = other.target;
-
+    if (&other != this){
+        if(this->target != nullptr){
+            delete target;
+        }
+        this->target = new Territory(*(other.target));
+    }
+    
     return *this;
 }
 
@@ -274,7 +316,7 @@ bool Airlift::validate() const {
 Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(order.armyCount) {};
 
 string Airlift::toString() const {
-    return "Airlift " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
+    return "AIRLIFT:: " + to_string(this->armyCount) + " units | " + this->source->getName() + " -> " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Airlift& order) {
@@ -284,33 +326,42 @@ ostream& operator<<(ostream& os, const Airlift& order) {
 
 Airlift& Airlift::operator=(const Airlift& other) {
     Order::operator=(other);
-    this->source = other.source;
-    this->target = other.target;
-    this->armyCount = other.armyCount;
-
+    if (&other != this){
+        if(this->source != nullptr){
+            delete source;
+        }
+        this->source = new Territory(*(other.source));
+        this->armyCount = other.armyCount;
+    }
+    
     return *this;
 }
 
 bool Airlift::execute() {
-    if (!this->validate()) return false;
-
-    const bool ownsTarget = this->target->getOwner() == this->player;
-
-    if (ownsTarget) {
-        // move armies from source to target
-        this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->source->getNumberOfArmies());
-        this->source->setNumberOfArmies(0);
+    if (validate()) {
+        const bool ownsTarget = this->target->getOwner() == this->player;
+        if (ownsTarget) {
+            // move armies from source to target
+            this->target->setNumberOfArmies(this->target->getNumberOfArmies() + this->source->getNumberOfArmies());
+            this->source->setNumberOfArmies(0);
+        }
+        else {
+            if (!isBlocked()) {
+                const bool successful = this->source->attack(this->target, this->armyCount);
+                if (successful) {
+                    this->player->hand->draw();
+                }
+            }
+            else {
+                cout << "blocked an airlift order from " << this->player->getName() << " to " << this->target->getOwner()->getName() << endl;
+            }
+        }
+        return true;
     }
     else {
-        if (this->isBlocked()) return false;
-
-        const bool successful = this->source->attack(this->target, this->armyCount);
-
-        if (successful) this->player->hand->draw();
+        // cout << "airlift not valid" << endl;
+        return false;
     }
-
-    cout << *this << endl;
-    return true;
 }
 
 Airlift* Airlift::clone() const {
@@ -330,7 +381,7 @@ Negotiate::~Negotiate() {}
 Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
 
 string Negotiate::toString() const {
-    return "Negotiate with " + this->target->getName();
+    return "NEGOTIATE:: ";// + this->target->getName();
 }
 ostream& operator<<(ostream& os, const Negotiate& order) {
     os << order.toString();
@@ -339,7 +390,10 @@ ostream& operator<<(ostream& os, const Negotiate& order) {
 
 Negotiate& Negotiate::operator=(const Negotiate& other) {
     Order::operator=(other);
-    if (this != NULL) {
+    if (&other != this){
+        if(this->target != nullptr){
+            delete target;
+        }
         this->target = new Player(*(other.target));
     }
 
@@ -352,12 +406,14 @@ bool Negotiate::validate() const {
 }
 
 bool Negotiate::execute() {
-    if (!this->validate()) return false;
-
-    GameEngine::immunities[make_tuple(this->player, this->target)] = false;
-
-    cout << *this << endl;
-    return true;
+    if (validate()) {
+        GameEngine::immunities[make_tuple(this->player, this->target)] = false;
+        return true;
+    }
+    else {
+        // cout << "negotiate not valid" << endl;
+        return false;
+    }
 }
 
 Negotiate* Negotiate::clone() const {
