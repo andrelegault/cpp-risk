@@ -75,7 +75,7 @@ void GameStatisticsObserver::update() {
     vector<Player*> players = this->gameEngine->players;
 
     if (players.size() > 1) {
-        players.push_back(this->gameEngine->warzoneMap->neutralP);
+        players.push_back(&(Map::neutralP));
 
         vector<vector<Component*>> rows;
 

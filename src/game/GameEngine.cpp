@@ -282,12 +282,12 @@ void GameEngine::executeOrdersPhase() {
     this->setGamePhase(EXECUTE_ORDER_PHASE);
 
     // Deploys don't affect other players so we can just deploy them all for each player one shot.
-    for(auto player : this->players) {
+    for (auto player : this->players) {
         this->setCurrentPlayer(player);
 
         Order* nextDeployed = player->getNextOrder(1);
 
-        while(nextDeployed != nullptr) {
+        while (nextDeployed != nullptr) {
             nextDeployed->execute();
 
             player->removeOrder(nextDeployed);
