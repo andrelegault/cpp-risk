@@ -10,6 +10,7 @@
 using namespace UI;
 using namespace std;
 
+ //Observer displaying information for the current game phase 
 class PhaseObserver : public Observer, public Component {
 public:
     PhaseObserver(GameEngine* gameEngine);
@@ -25,6 +26,7 @@ public:
     virtual Component* clone() const override { return new PhaseObserver(*this); };
 
 protected:
+    //Updates the observer with current phase info.
     virtual void update();
 
 private:
@@ -34,6 +36,7 @@ private:
 
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver);
 
+//Observer displaying current game statistics
 class GameStatisticsObserver : public Observer, public Component {
 public:
     GameStatisticsObserver(GameEngine* gameEngine);
@@ -49,6 +52,7 @@ public:
     virtual Component* clone() const override { return new GameStatisticsObserver(*this); };
 
 protected:
+    //Update the observer with stats for all players.
     virtual void update();
 
 private:
