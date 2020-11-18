@@ -393,8 +393,8 @@ std::string Territory::territoryTable(std::vector<Territory*> territories, int w
 
     vector<UI::Component*> row;
 
-    for(auto component : data) {
-        if(row.size() == width) {
+    for (auto component : data) {
+        if (row.size() == width) {
             table.push_back(row);
             row = vector<UI::Component*>();
         }
