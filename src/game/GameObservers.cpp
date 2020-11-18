@@ -24,12 +24,15 @@ void PhaseObserver::update() {
     switch (this->gameEngine->gamePhase) {
     case REINFORCEMENT_PHASE:
         ss << "Available Armies: " << this->gameEngine->currentPlayer->armies << endl << endl;
-        ss << Territory::territoryTable(this->gameEngine->currentPlayer->getTerritories());
+        ss << Territory::territoryTable(this->gameEngine->currentPlayer->getTerritories(), 4);
         break;
     case ISSUE_ORDER_PHASE:
         for (auto order : this->gameEngine->currentPlayer->orders->getOrders()) {
             ss << *order << endl;
         }
+        break;
+    case EXECUTE_ORDER_PHASE:
+        ss << "Executing orders!" << endl;
         break;
     }
 
@@ -69,17 +72,21 @@ GameStatisticsObserver::~GameStatisticsObserver() {
 void GameStatisticsObserver::update() {
     if (this->component != nullptr) delete this->component;
 
-    if (this->gameEngine->players.size() > 1) {
+    vector<Player*> players = this->gameEngine->players;
+
+    if (players.size() > 1) {
+        players.push_back(this->gameEngine->warzoneMap->neutralP);
+
         vector<vector<Component*>> rows;
 
-        for (auto player : this->gameEngine->players) {
+        for (auto player : players) {
             rows.push_back(vector<Component*>{ new Text(player->getName()), new Text(to_string(player->getTerritories().size() * 100.0 / this->gameEngine->warzoneMap->getTerritories().size()) + "%") });
         }
 
         this->component = new Grid({ {new Text("Game Stats")}, {new Grid(rows)} });
     }
     else {
-        this->component = new Grid({ {new Text("Game Stats")}, {new Text("Congrats " + this->gameEngine->players.front()->getName())} });
+        this->component = new Grid({ {new Text("Game Stats")}, {new Text("Congrats " + players.front()->getName())} });
     }
 
     Component::update();

@@ -2,7 +2,6 @@
 
 int Player::count = -1;
 
-//set armies to 0 by default
 Player::Player() : Player("Default Player", nullptr) {}
 
 Player::Player(string name) : Player(name, nullptr) {}

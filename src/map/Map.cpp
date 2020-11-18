@@ -368,17 +368,17 @@ bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, 
     }
 }
 
-std::string Territory::territoryTable(std::vector<Territory*> territories) {
+std::string Territory::territoryTable(std::vector<Territory*> territories, int width) {
     map<std::string, vector<Territory*>> continentTerritories;
 
     for (auto territory : territories) {
         continentTerritories[territory->continent->getName()].push_back(territory);
     }
 
-    vector<vector<UI::Component*>> table;
+    vector<UI::Component*> data;
 
     for (auto pair : continentTerritories) {
-        table.push_back({ new UI::Text(pair.first) });
+        data.push_back(new UI::Text(pair.first));
 
         stringstream ss;
 
@@ -386,8 +386,23 @@ std::string Territory::territoryTable(std::vector<Territory*> territories) {
             ss << territory->getName() << " -> " << territory->numberOfArmies << endl;
         }
 
-        table.push_back({ new UI::Text(ss.str()) });
+        data.push_back(new UI::Text(ss.str()));
     }
+
+    vector<vector<UI::Component*>> table;
+
+    vector<UI::Component*> row;
+
+    for(auto component : data) {
+        if(row.size() == width) {
+            table.push_back(row);
+            row = vector<UI::Component*>();
+        }
+
+        row.push_back(component);
+    }
+
+    table.push_back(row);
 
     stringstream ss;
 

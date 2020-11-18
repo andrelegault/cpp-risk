@@ -80,6 +80,7 @@ public:
     BlockableOrder();
     ~BlockableOrder();
     BlockableOrder(const BlockableOrder& other);
+    BlockableOrder& operator=(const BlockableOrder& other);
     BlockableOrder(Player* player, Territory* target);
 protected:
     bool isBlocked();

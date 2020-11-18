@@ -444,7 +444,7 @@ public:
     /**
      * Creates a table string.
      */
-    static std::string territoryTable(std::vector<Territory*> territories);
+    static std::string territoryTable(std::vector<Territory*> territories, int width = 1);
 
     void setNumberOfArmies(int numberOfArmies);
 
