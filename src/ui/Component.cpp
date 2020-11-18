@@ -9,7 +9,7 @@ UI::Component::Component(UI::Style style) : style(style), parent(nullptr) {};
 UI::Component::Component(const Component& component) : Component(component.style) {};
 
 std::ostream& operator<<(std::ostream& stream, const UI::Component& component) {
-    return component.print(stream);
+    return component.toString(stream);
 }
 
 void UI::Component::update() {

@@ -1,11 +1,9 @@
 #include "Viewport.hpp"
 
-UI::Viewport::Viewport() : Viewport(0, {}) {};
+UI::Viewport::Viewport() : Viewport(nullptr, {}) {};
 
 UI::Viewport::~Viewport() {
-    if (this->component) {
-        delete this->component;
-    }
+    if (this->component != nullptr) delete this->component;
 };
 
 UI::Viewport::Viewport(UI::Component* component, UI::Style style) : component(component), UI::Component(style) {

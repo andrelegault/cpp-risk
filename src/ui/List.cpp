@@ -3,7 +3,7 @@
 UI::List::List() : List(std::vector<std::string>{}, {}) {};
 
 UI::List::~List() {
-    while (!this->components.empty()) delete this->components.back();
+    for(auto component : this->components) delete component;
 };
 
 UI::List::List(std::vector<UI::Component*> components, UI::Style style) : components(components), UI::Component(style) {

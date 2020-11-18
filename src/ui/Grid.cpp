@@ -3,18 +3,10 @@
 UI::Grid::Grid() : Grid({}, {}) {};
 
 UI::Grid::~Grid() {
-    while (!this->components.empty()) {
-        std::vector<UI::Component*> row = this->components.back();
-
-        while (!row.empty()) {
-            auto component = row.back();
-
+    for(auto row : this->components) {
+        for(auto component : row) {
             delete component;
-
-            row.pop_back();
         }
-
-        this->components.pop_back();
     }
 }
 

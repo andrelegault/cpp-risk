@@ -6,26 +6,24 @@
 
 std::ostream& operator<<(std::ostream& stream, const UI::Viewport& viewport);
 
-namespace UI {
-    /**
-     * A UI viewing component (alot like HTML div).
-     */
-    class Viewport : public UI::Component {
-    public:
-        Viewport();
+/**
+ * A UI viewing component (alot like HTML div).
+ */
+class UI::Viewport : public UI::Component {
+public:
+    Viewport();
 
-        ~Viewport();
+    ~Viewport();
 
-        Viewport(UI::Component* component, UI::Style style = {});
+    Viewport(UI::Component* component, UI::Style style = {});
 
-        Viewport(const UI::Viewport& viewport);
+    Viewport(const UI::Viewport& viewport);
 
-        friend std::ostream& ::operator<<(std::ostream& stream, const UI::Viewport& viewport);
+    friend std::ostream& ::operator<<(std::ostream& stream, const UI::Viewport& viewport);
 
-        virtual std::ostream& print(std::ostream& stream) const override { stream << *this; return stream; };
+    virtual std::ostream& toString(std::ostream& stream) const override { stream << *this; return stream; };
 
-        virtual UI::Component* clone() const override { return new UI::Viewport(*this); };
-    private:
-        UI::Component* component;
-    };
-}
+    virtual UI::Component* clone() const override { return new Viewport(*this); };
+private:
+    UI::Component* component;
+};

@@ -8,42 +8,40 @@
 
 std::ostream& operator<<(std::ostream& stream, const UI::Component& component);
 
-namespace UI {
+/**
+ * Generic UI Component.
+ */
+class UI::Component {
+public:
     /**
-     * Generic UI Component.
+     * The component style.
      */
-    class Component {
-    public:
-        /**
-         * The component style.
-         */
-        UI::Style style;
+    UI::Style style;
 
-        UI::Component* parent;
+    UI::Component* parent;
 
-        Component();
+    Component();
 
-        ~Component();
+    ~Component();
 
-        Component(Style style);
+    Component(Style style);
 
-        Component(const Component& component);
+    Component(const Component& component);
 
-        friend std::ostream& ::operator<<(std::ostream& stream, const Component& component);
+    /**
+     * Virtual operator<<.
+     */
+    virtual std::ostream& toString(std::ostream& stream) const = 0;
 
-        /**
-         * Used for virtual operator<<.
-         */
-        virtual std::ostream& print(std::ostream& stream) const = 0;
+    /**
+     * Virtual clone constructor.
+     */
+    virtual UI::Component* clone() const = 0;
 
-        /**
-         * Used for virtual clone constructor.
-         */
-        virtual UI::Component* clone() const = 0;
+    /**
+     * Updates component (and parent hierachy).
+     */
+    void update();
 
-        /**
-         * Updates the component (and it's parent hierachy).
-         */
-        void update();
-    };
-}
+    friend std::ostream& ::operator<<(std::ostream& stream, const Component& component);
+};
