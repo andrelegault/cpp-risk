@@ -25,7 +25,7 @@ Order& Order::operator=(const Order& order) {
 
 BlockableOrder::BlockableOrder() : Order(nullptr) { }
 BlockableOrder::~BlockableOrder() { }
-BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(other.player), target(other.target), armyCount(other.armyCount) { }
+BlockableOrder::BlockableOrder(const BlockableOrder& other) : Order(other.player), target(other.target) { }
 BlockableOrder::BlockableOrder(Player* player, Territory* target) : Order(player), target(target) { }
 
 bool BlockableOrder::isBlocked() {
