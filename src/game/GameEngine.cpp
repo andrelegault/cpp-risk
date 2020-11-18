@@ -293,6 +293,7 @@ void GameEngine::executeOrdersPhase() {
             nextDeployed->execute();
 
             player->removeOrder(nextDeployed);
+            delete nextDeployed;
 
             nextDeployed = player->getNextOrder(1);
         }
@@ -310,6 +311,7 @@ void GameEngine::executeOrdersPhase() {
                 nextOrder->execute();
 
                 player->removeOrder(nextOrder);
+                delete nextOrder;
             }
         }
     }
