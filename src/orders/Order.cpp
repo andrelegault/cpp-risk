@@ -407,6 +407,7 @@ bool Negotiate::execute() {
     if (!this->validate()) return false;
 
     GameEngine::immunities[make_tuple(this->player, this->target)] = false;
+    GameEngine::immunities[make_tuple(this->target, this->player)] = false;
 
     cout << *this << endl;
     return true;
