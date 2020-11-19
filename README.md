@@ -6,7 +6,7 @@ NOTE: Press `<enter>` if using observers to refresh the screen.
 ## Building Dependencies
 
 * cmake >= 3.17.0
-* make (mingw-cmake if on Windows)
+* make (mingw-make if on Windows)
 * gcc >= 8
 
 NOTE: Use `cmake -DCXX_COMPILER_VERSION=g++-8` to explicitly use a supported compiler version. This should be done if errors related to the `filesystem` module appear.
