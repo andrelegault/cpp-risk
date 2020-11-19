@@ -48,6 +48,9 @@ public:
     // Number of territories owned by the player.
     int getNumTerritories() const;
 
+    /**
+     * Returns player territories.
+     */
     vector<Territory*> getTerritories() const;
 
     /**
@@ -116,7 +119,9 @@ private:
     // The territories owned by the players.
     vector<Territory*> territories;
 
+    // The static player count.
     static int count;
 
+    // The name of the player.
     string name;
 };

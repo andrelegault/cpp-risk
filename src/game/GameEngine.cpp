@@ -256,9 +256,9 @@ void GameEngine::reinforcementPhase() {
             if (hasAllTerritories) {
                 player->armies += continent->getBonus();
             }
-
-            this->notify();
         }
+
+        this->notify();
     }
 }
 

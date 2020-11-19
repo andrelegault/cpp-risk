@@ -10,7 +10,9 @@
 using namespace UI;
 using namespace std;
 
- //Observer displaying information for the current game phase 
+/**
+ * Observer displaying information for the current game phase. 
+ */
 class PhaseObserver : public Observer, public Component {
 public:
     PhaseObserver(GameEngine* gameEngine);
@@ -36,7 +38,9 @@ private:
 
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver);
 
-//Observer displaying current game statistics
+/**
+ * Observer displaying current game statistics
+ */
 class GameStatisticsObserver : public Observer, public Component {
 public:
     GameStatisticsObserver(GameEngine* gameEngine);
@@ -56,8 +60,8 @@ protected:
     virtual void update();
 
 private:
-    Component* component = nullptr;
-    GameEngine* gameEngine = nullptr;
+    Component* component;
+    GameEngine* gameEngine;
 };
 
 ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver);
@@ -79,7 +83,7 @@ public:
     virtual Component* clone() const override { return new GameUI(*this); };
 
 private:
-    Component* component = nullptr;
+    Component* component;
 };
 
 ostream& operator<<(ostream& stream, const GameUI& gameUI);

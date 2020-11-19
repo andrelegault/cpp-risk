@@ -53,12 +53,6 @@ public:
      */
     Deck(const Deck& other);
 
-    /// Used to make it have access to cards.
-    friend Hand;
-
-    /// Used to make it have access to cards.
-    friend Player;
-
     /**
      * Assignment operator.
      * @param other Reference to deck object used for assignment.
@@ -91,7 +85,18 @@ public:
      */
     int getLength() const;
 
+    /**
+     * Takes a random card from the deck and places it in hand.
+     * 
+     * @param hand Hand to draw with.
+     */
     void draw(Hand* hand);
+
+    /// Used to make it have access to cards.
+    friend Hand;
+
+    /// Used to make it have access to cards.
+    friend Player;
 private:
     static const int DEFAULT_DECK_SIZE = 100;
     vector<Card*> cards;
@@ -154,6 +159,7 @@ class Hand {
 public:
     // Default constructor.
     Hand();
+    
     // Destructor.
     ~Hand();
 
@@ -207,13 +213,19 @@ public:
      */
     void removeCard(Card* card);
 
+    /**
+     * Returns raw list of cards.
+     */
     vector<Card*> getCards() const;
 
+    /**
+     * Draws a card from parent deck.
+     */
     void draw();
-
 private:
     // Holds the card pointers.
     vector<Card*> hand;
+
+    // Parent deck.
     Deck* deck;
-    static const int MAX_HAND_SIZE = 5;
 };

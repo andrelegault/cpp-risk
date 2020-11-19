@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Subject.fwd.hpp"
 #include "Observer.hpp"
 
 using namespace std;
