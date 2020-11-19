@@ -113,7 +113,7 @@ public:
      */
     bool validate();
 
-    static Player neutralP;
+    static Player* neutralP;
 private:
     // Collection of continents.
     vector<Continent*> continents;

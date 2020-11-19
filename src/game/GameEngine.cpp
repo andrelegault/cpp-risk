@@ -67,7 +67,7 @@ void GameEngine::assignTerritories() {
     for (auto territory : territories) {
         // give the neutral player some territories
         if (Utils::getRandom(1, 10) < 3)
-            Map::neutralP.addTerritory(territory);
+            Map::neutralP->addTerritory(territory);
         else
             this->players.at(roundRobin++ % numberOfPlayers)->addTerritory(territory);
     }
@@ -221,7 +221,7 @@ void GameEngine::mainGameLoop() {
             cout << player->getName() << " has " << player->getTerritories().size() << " territories" << endl;
         }
 
-        cout << Map::neutralP.getName() << " has " << Map::neutralP.getTerritories().size() << " territories" << endl;
+        cout << Map::neutralP->getName() << " has " << Map::neutralP->getTerritories().size() << " territories" << endl;
 
         vector<tuple<Player*, Player*>> toErase;
 

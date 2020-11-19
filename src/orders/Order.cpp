@@ -287,7 +287,7 @@ bool Blockade::execute() {
 
     this->player->removeTerritory(this->target);
 
-    Map::neutralP.addTerritory(this->target);
+    Map::neutralP->addTerritory(this->target);
 
     cout << *this << endl;
     return true;

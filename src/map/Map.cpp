@@ -66,6 +66,7 @@ Map::Map(const Map& m) {
 Map::~Map() {
     while (!this->continents.empty()) delete this->continents.back();
 
+    delete Map::neutralP;
 }
 
 ostream& operator<<(ostream& stream, const Map& m) {
@@ -91,7 +92,6 @@ Map& Map::operator=(const Map& other) {
         this->~Map();
         this->name = other.name;
         this->continents = other.continents;
-        this->neutralP = other.neutralP;
     }
 
     return *this;
@@ -170,7 +170,7 @@ Border* Map::get(const Border& border) {
     return nullptr;
 }
 
-Player Map::neutralP("Neutral Player");
+Player* Map::neutralP = new Player("Neutral Player");
 
 /******************************************************
  * MAPNODE
@@ -339,7 +339,7 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
 }
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
-    if (this->getOwner() == &(Map::neutralP)) throw std::runtime_error("neutral player should not be attacking!");
+    if (this->getOwner() == Map::neutralP) throw std::runtime_error("neutral player should not be attacking!");
     if (attackerArmies < 0) throw std::runtime_error("Territory attack using negative number of armies.");
 
     this->setNumberOfArmies(this->getNumberOfArmies() - attackerArmies);

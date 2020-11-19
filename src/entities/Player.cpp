@@ -144,7 +144,7 @@ void Player::issueOrder() {
         case CardType::BLOCKADE: toPlay->play(this, nullptr, randomSource); break;
         case CardType::BOMB: if (randomTargetTerritory != nullptr) toPlay->play(this, nullptr, nullptr, randomTargetTerritory); break;
         case CardType::DIPLOMACY:
-            if (randomTargetTerritory != nullptr && randomTargetTerritory->getOwner() != &(Map::neutralP))
+            if (randomTargetTerritory != nullptr && randomTargetTerritory->getOwner() != Map::neutralP)
                 toPlay->play(this, randomTargetTerritory == nullptr ? nullptr : randomTargetTerritory->getOwner(), nullptr);
             break;
         case CardType::REINFORCEMENT: toPlay->play(this, nullptr, randomSource, nullptr); break;
