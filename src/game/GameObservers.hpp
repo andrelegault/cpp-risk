@@ -11,7 +11,7 @@ using namespace UI;
 using namespace std;
 
 /**
- * Observer displaying information for the current game phase. 
+ * Observer displaying information for the current game phase.
  */
 class PhaseObserver : public Observer, public Component {
 public:
@@ -23,9 +23,9 @@ public:
 
     friend ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver);
 
-    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override;
 
-    virtual Component* clone() const override { return new PhaseObserver(*this); };
+    virtual Component* clone() const override;
 
 protected:
     //Updates the observer with current phase info.
@@ -51,9 +51,9 @@ public:
 
     friend ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver);
 
-    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override;
 
-    virtual Component* clone() const override { return new GameStatisticsObserver(*this); };
+    virtual Component* clone() const override;
 
 protected:
     //Update the observer with stats for all players.
@@ -78,9 +78,9 @@ public:
 
     friend ostream& operator<<(ostream& stream, const GameUI& gameUI);
 
-    virtual ostream& toString(ostream& stream) const override { stream << *this; return stream; };
+    virtual ostream& toString(ostream& stream) const override;
 
-    virtual Component* clone() const override { return new GameUI(*this); };
+    virtual Component* clone() const override;
 
 private:
     Component* component;

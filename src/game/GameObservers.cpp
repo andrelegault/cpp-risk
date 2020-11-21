@@ -43,6 +43,14 @@ void PhaseObserver::update() {
     UI::waitForInput();
 }
 
+ostream& PhaseObserver::toString(ostream& stream) const {
+    stream << *this; return stream;
+}
+
+Component* PhaseObserver::clone() const {
+    return new PhaseObserver(*this);
+}
+
 ostream& operator<<(ostream& stream, const PhaseObserver& phaseObserver) {
     if (phaseObserver.component != nullptr) {
         stream << *phaseObserver.component;
@@ -105,6 +113,14 @@ ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatistic
     return stream;
 }
 
+ostream& GameStatisticsObserver::toString(ostream& stream) const {
+    stream << *this; return stream;
+}
+
+Component* GameStatisticsObserver::clone() const {
+    return new GameStatisticsObserver(*this);
+}
+
 /******************************************************
  * GAME UI
  *****************************************************/
@@ -127,4 +143,14 @@ ostream& operator<<(ostream& stream, const GameUI& gameUI) {
     }
 
     return stream;
+}
+
+ostream& GameUI::toString(ostream& stream) const {
+    stream << *this; return stream;
+
+    return stream;
+}
+
+Component* GameUI::clone() const {
+    return new GameUI(*this);
 }
