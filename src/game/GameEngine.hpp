@@ -84,7 +84,7 @@ public:
 
     /**
      * Issue Order Phase.
-     * 
+     *
      * - Deploys armies according to number held by player.
      * - Attacks/defends territories.
      */
@@ -92,23 +92,23 @@ public:
 
     /**
      * Execute Order Phase.
-     * 
+     *
      * - Executes orders from issueOrder.
-     * 
+     *
      * Should maybe be the one handling win state?
      */
     void executeOrdersPhase();
 
     /**
      * Checks if players still have orders to play.
-     * 
+     *
      * @return Players don't have orders?
      */
     bool isExecutionDone() const;
 
     /**
      * Returns the armyCount for each player according to player side.
-     * 
+     *
      * @param numberOfPlayers
      * @return Number of armies.
      */

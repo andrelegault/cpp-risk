@@ -71,3 +71,4 @@ int Utils::getRandom(int min, int max) {
 
     return output;
 }
+

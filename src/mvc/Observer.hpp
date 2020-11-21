@@ -12,9 +12,9 @@ public:
      */
     friend class Subject;
 
-    protected:
-        /**
-         * Updates the observer.
-         */
-        virtual void update() = 0;
+protected:
+    /**
+     * Updates the observer.
+     */
+    virtual void update() = 0;
 };

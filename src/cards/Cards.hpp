@@ -87,7 +87,7 @@ public:
 
     /**
      * Takes a random card from the deck and places it in hand.
-     * 
+     *
      * @param hand Hand to draw with.
      */
     void draw(Hand* hand);
@@ -159,7 +159,7 @@ class Hand {
 public:
     // Default constructor.
     Hand();
-    
+
     // Destructor.
     ~Hand();
 

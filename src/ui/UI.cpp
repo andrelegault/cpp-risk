@@ -83,3 +83,4 @@ void UI::waitForInput() {
 
     std::cin.get();
 }
+
