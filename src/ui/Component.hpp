@@ -22,7 +22,7 @@ public:
 
     Component();
 
-    ~Component();
+    virtual ~Component();
 
     Component(Style style);
 

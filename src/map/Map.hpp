@@ -149,7 +149,7 @@ public:
     /**
      * Destructor.
      */
-    ~MapNode();
+    virtual ~MapNode();
 
     /**
      * Name getter.
@@ -251,7 +251,7 @@ public:
     /**
      * Destructor.
      */
-    ~Continent();
+    virtual ~Continent() override;
 
     /**
      * Stream operator to describe Continent in string format.
@@ -360,7 +360,7 @@ public:
     /**
      * Destructor.
      */
-    ~Territory();
+    virtual ~Territory() override;
 
     /**
      * Stream operator to describe Territory in string format.
