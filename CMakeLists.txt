@@ -16,4 +16,4 @@ add_subdirectory(src)
 
 add_subdirectory(drivers)
 
-file(COPY maps DESTINATION bin)
+file(COPY maps DESTINATION ${PROJECT_SOURCE_DIR}/bin)
