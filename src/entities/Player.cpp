@@ -6,19 +6,47 @@ Player::Player() : Player("Default Player", nullptr) {}
 
 Player::Player(string name) : Player(name, nullptr) {}
 
-Player::Player(Deck* deck) : Player("Player " + to_string(++count), deck) {}
+Player::Player(Deck* deck, PlayerStrategy* initStrategy) : Player("Player " + to_string(++count), deck, initStrategy) {}
 
-Player::Player(string name, Deck* deck) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0) {}
+Player::Player(string name, Deck* deck, PlayerStrategy* initStrategy) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0), ps(initStrategy) {}
 
-Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))) {
-    for (Territory* t : player.territories) this->territories.push_back(new Territory(*t));
+Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))), deck(player.deck) {
+    for (Territory* t : player.territories) {
+        this->territories.push_back(new Territory(*t));
+    }
+    //should be okay since strategy doesn't have any class member objects?
+    this->ps = player.ps;
+}
+
+Player& Player::operator=(const Player& other) {
+    if (&other != this) {
+        //TODO clear old territories list properly
+        if (this->territories != nullptr) {
+            delete territories;
+        }
+        for (Territory* t : other.territories) {
+            this->territories.push_back(new Territory(*t));
+        }
+        deck = other.deck;
+        name = other.name;
+        ps = player.ps;
+    }
+    return *this;
 }
 
 Player::~Player() {
     delete orders;
 
     delete hand;
+
+    delete ps;
 }
+
+void Player::setStrategy(PlayerStrategy *newStrategy) {
+        delete this->ps;
+        this->ps = newStrategy;
+        cout << this->getName() << ": player strategy changed." << endl;
+    }
 
 void Player::addTerritory(Territory* territory) {
     this->territories.push_back(territory);
@@ -38,7 +66,8 @@ vector<Territory*>::iterator Player::getTerritory(Territory* territory) {
 }
 
 vector<Territory*> Player::toDefend() {
-    return this->getTerritories();
+    return ps.toDefend();
+    //return this->getTerritories();
 }
 
 int Player::getNumTerritories() const {
@@ -46,6 +75,9 @@ int Player::getNumTerritories() const {
 }
 
 vector<Territory*> Player::toAttack() {
+    
+    return ps.toAttack();
+    /*
     set<Territory*> enemyTerritories;
 
     for (auto territory : this->territories) {
@@ -59,9 +91,12 @@ vector<Territory*> Player::toAttack() {
     }
 
     return vector<Territory*>(enemyTerritories.begin(), enemyTerritories.end());
+    */
 }
 
 void Player::issueOrder() {
+    ps.issueOrder();
+    /*
     vector<Territory*> defendTerritories = this->toDefend();
 
     std::shuffle(defendTerritories.begin(), defendTerritories.end(), std::random_device{});
@@ -144,7 +179,7 @@ void Player::issueOrder() {
         case CardType::BLOCKADE: toPlay->play(this, nullptr, randomSource); break;
         case CardType::BOMB: if (randomTargetTerritory != nullptr) toPlay->play(this, nullptr, nullptr, randomTargetTerritory); break;
         case CardType::DIPLOMACY:
-            if (randomTargetTerritory != nullptr && randomTargetTerritory->getOwner() != Map::neutralP)
+            if (randomTargetTerritory != nullptr && randomTargetTerritory->getOwner() != &(Map::neutralP))
                 toPlay->play(this, randomTargetTerritory == nullptr ? nullptr : randomTargetTerritory->getOwner(), nullptr);
             break;
         case CardType::REINFORCEMENT: toPlay->play(this, nullptr, randomSource, nullptr); break;
@@ -156,6 +191,7 @@ void Player::issueOrder() {
     }
 
     this->notify();
+    */
 }
 
 void Player::addOrder(Order* order) {
@@ -185,14 +221,6 @@ ostream& operator<<(ostream& stream, const Player& player) {
     stream << "], Orders: " << *player.orders << ", " << *player.hand << endl;
 
     return stream;
-}
-
-Player& Player::operator=(const Player& other) {
-    if (&other != this) {
-        territories = other.territories;
-        name = other.name;
-    }
-    return *this;
 }
 
 string Player::getName() const {

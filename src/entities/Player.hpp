@@ -27,9 +27,9 @@ public:
 
     Player(string name);
 
-    Player(Deck* deck);
+    Player(Deck* deck, PlayerStrategy* initStrategy);
 
-    Player(string name, Deck* deck);
+    Player(string name, Deck* deck, PlayerStrategy* initStrategy);
 
     // Copy constructor
     Player(const Player& other);
@@ -115,6 +115,12 @@ public:
      */
     Order* getNextOrder(const int wantedPriority = -1) const;
 
+    /**
+     * Change the strategy type the player uses
+     * @param newStrategy New player strategy.
+     */
+    void setStrategy(PlayerStrategy *newStrategy);
+
 private:
     // The territories owned by the players.
     vector<Territory*> territories;
@@ -124,4 +130,8 @@ private:
 
     // The name of the player.
     string name;
+
+    //strategy 
+    //TODO add to constructors
+    PlayerStrategies *ps;
 };
