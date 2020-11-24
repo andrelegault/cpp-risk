@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerStrategies.fwd.hpp"
+#include "PlayerStrategies.fwd.cpp"
 #include "Map.hpp"
 #include "Player.hpp"
 

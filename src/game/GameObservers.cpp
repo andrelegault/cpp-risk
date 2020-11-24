@@ -40,7 +40,7 @@ void PhaseObserver::update() {
 
     Component::update();
 
-    UI::waitForInput();
+    // UI::waitForInput();
 }
 
 ostream& PhaseObserver::toString(ostream& stream) const {
@@ -99,7 +99,7 @@ void GameStatisticsObserver::update() {
 
     Component::update();
 
-    UI::waitForInput();
+    // UI::waitForInput();
 }
 
 ostream& operator<<(ostream& stream, const GameStatisticsObserver& gameStatisticsObserver) {

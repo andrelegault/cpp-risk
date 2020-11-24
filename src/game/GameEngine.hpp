@@ -13,6 +13,7 @@
 #include "GameEngine.fwd.hpp"
 #include "UI.hpp"
 #include "Player.hpp"
+#include "PlayerStrategies.hpp"
 #include "Utils.hpp"
 #include "MapLoader.hpp"
 #include "Map.hpp"

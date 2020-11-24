@@ -4,11 +4,29 @@
  * HUMAN STRATEGY
  *****************************************************/
 
-void HumanPlayerStrategy::issueOrder(Player* player){}
+void HumanPlayerStrategy::issueOrder(Player* player){
+    
+}
 
-vector<Territory*>  HumanPlayerStrategy::toAttack(Player* player){}
+vector<Territory*>  HumanPlayerStrategy::toAttack(Player* player){
+    set<Territory*> enemyTerritories;
 
-vector<Territory*>  HumanPlayerStrategy::toDefend(Player* player){}
+    for (auto territory : player->getTerritories()) {
+        for (auto border : territory->getBorders()) {
+            Territory* neighbour = (Territory*)border->getOther(territory);
+
+            if (neighbour != nullptr && neighbour->getOwner() != player) {
+                enemyTerritories.insert(neighbour);
+            }
+        }
+    }
+
+    return vector<Territory*>(enemyTerritories.begin(), enemyTerritories.end());
+}
+
+vector<Territory*>  HumanPlayerStrategy::toDefend(Player* player){
+    return player->getTerritories();
+}
 
 /******************************************************
  * AGGRESIVE STRATEGY
@@ -38,4 +56,4 @@ void NeutralPlayerStrategy::issueOrder(Player* player){}
 
 vector<Territory*>  NeutralPlayerStrategy::toAttack(Player* player){}
 
-vector<Territory*>  NeutralPlayerStrategy::toDefend(Player* player){}
+vector<Territory*>  NeutralPlayerStrategy::toDefend(Player* playeu){}

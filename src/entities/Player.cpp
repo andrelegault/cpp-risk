@@ -2,15 +2,15 @@
 
 int Player::count = -1;
 
-Player::Player() : Player("Default Player", nullptr) {}
+Player::Player() : Player("Default Player", nullptr, nullptr) {}
 
-Player::Player(string name) : Player(name, nullptr) {}
+Player::Player(string name) : Player(name, nullptr, nullptr) {}
 
 Player::Player(Deck* deck, PlayerStrategy* initStrategy) : Player("Player " + to_string(++count), deck, initStrategy) {}
 
 Player::Player(string name, Deck* deck, PlayerStrategy* initStrategy) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0), ps(initStrategy) {}
 
-Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))), deck(player.deck) {
+Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))), hand(player.hand) {
     for (Territory* t : player.territories) {
         this->territories.push_back(new Territory(*t));
     }
@@ -20,17 +20,15 @@ Player::Player(const Player& player) : name(player.name), orders(new OrdersList(
 
 Player& Player::operator=(const Player& other) {
     if (&other != this) {
-        //TODO clear old territories list properly
-        if (this->territories != nullptr) {
-            delete territories;
-        }
         for (Territory* t : other.territories) {
             this->territories.push_back(new Territory(*t));
         }
-        deck = other.deck;
-        name = other.name;
-        ps = player.ps;
+
+        this->hand = other.hand;
+        this->name = other.name;
+        this->ps = other.ps;
     }
+
     return *this;
 }
 
@@ -66,7 +64,7 @@ vector<Territory*>::iterator Player::getTerritory(Territory* territory) {
 }
 
 vector<Territory*> Player::toDefend() {
-    return ps.toDefend(this);
+    return this->ps->toDefend(this);
     //return this->getTerritories();
 }
 
@@ -75,7 +73,7 @@ int Player::getNumTerritories() const {
 }
 
 vector<Territory*> Player::toAttack() {
-    return ps.toAttack(this);
+    return this->ps->toAttack(this);
     /*
     set<Territory*> enemyTerritories;
 
@@ -94,7 +92,7 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    ps.issueOrder(this);
+    this->ps->issueOrder(this);
     /*
     vector<Territory*> defendTerritories = this->toDefend();
 

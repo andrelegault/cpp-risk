@@ -129,7 +129,7 @@ void GameEngine::init() {
     int numberOfPlayers = range("Number of Players", 2, 5);
 
     for (int i = 0; i < numberOfPlayers; ++i) {
-        Player* player = new Player(this->deck);
+        Player* player = new Player(this->deck, new HumanPlayerStrategy());
 
         this->players.push_back(player);
     }
