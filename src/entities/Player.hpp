@@ -106,7 +106,9 @@ public:
      */
     void removeTerritory(Territory* territory);
 
-    /// Gets the iterator of a territory.
+    /**
+     *  Gets the iterator of a territory.
+     */
     vector<Territory*>::iterator getTerritory(Territory* territory);
 
     /**
@@ -131,7 +133,6 @@ private:
     // The name of the player.
     string name;
 
-    //strategy 
-    //TODO add to constructors
-    PlayerStrategies *ps;
+    // Strategy.
+    PlayerStrategy* ps;
 };

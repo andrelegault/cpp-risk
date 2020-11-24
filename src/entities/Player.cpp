@@ -66,7 +66,7 @@ vector<Territory*>::iterator Player::getTerritory(Territory* territory) {
 }
 
 vector<Territory*> Player::toDefend() {
-    return ps.toDefend();
+    return ps.toDefend(this);
     //return this->getTerritories();
 }
 
@@ -75,8 +75,7 @@ int Player::getNumTerritories() const {
 }
 
 vector<Territory*> Player::toAttack() {
-    
-    return ps.toAttack();
+    return ps.toAttack(this);
     /*
     set<Territory*> enemyTerritories;
 
@@ -95,7 +94,7 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    ps.issueOrder();
+    ps.issueOrder(this);
     /*
     vector<Territory*> defendTerritories = this->toDefend();
 
