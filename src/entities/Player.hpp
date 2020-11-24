@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "Player.fwd.hpp"
+#include "PlayerStrategies.hpp"
 #include "Map.hpp"
 #include "Order.hpp"
 #include "Cards.hpp"

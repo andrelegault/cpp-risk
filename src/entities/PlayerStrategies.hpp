@@ -3,12 +3,15 @@
 #include "PlayerStrategies.fwd.cpp"
 #include "Map.hpp"
 #include "Player.hpp"
+#include "UI.hpp"
+#include "Order.hpp"
+#include "Utils.hpp"
 
 using namespace std;
 
 class PlayerStrategy{
 public:
-    virtual ~PlayerStrategy();
+    ~PlayerStrategy();
     virtual void issueOrder(Player* player) = 0;
     virtual vector<Territory*> toAttack(Player* player) = 0;
     virtual vector<Territory*> toDefend(Player* player) = 0;
@@ -22,9 +25,9 @@ public:
     vector<Territory*> toDefend(Player* player);
 };
 
-class AgressivePlayerStrategy : public PlayerStrategy {
+class AggressivePlayerStrategy : public PlayerStrategy {
 public:
-    ~AgressivePlayerStrategy();
+    ~AggressivePlayerStrategy();
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);

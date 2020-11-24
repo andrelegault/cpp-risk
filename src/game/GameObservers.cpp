@@ -40,7 +40,7 @@ void PhaseObserver::update() {
 
     Component::update();
 
-    // UI::waitForInput();
+    UI::waitForInput();
 }
 
 ostream& PhaseObserver::toString(ostream& stream) const {

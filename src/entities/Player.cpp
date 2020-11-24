@@ -10,7 +10,7 @@ Player::Player(Deck* deck, PlayerStrategy* initStrategy) : Player("Player " + to
 
 Player::Player(string name, Deck* deck, PlayerStrategy* initStrategy) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0), ps(initStrategy) {}
 
-Player::Player(const Player& player) : name(player.name), orders(new OrdersList(*(player.orders))), hand(player.hand) {
+Player::Player(const Player& player) : armies(player.armies), name(player.name), orders(new OrdersList(*(player.orders))), hand(player.hand) {
     for (Territory* t : player.territories) {
         this->territories.push_back(new Territory(*t));
     }
