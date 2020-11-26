@@ -205,7 +205,13 @@ void BenevolentPlayerStrategy::issueOrder(Player* player) {}
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack(Player* player) {}
 
-vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {}
+vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {
+    // sort territories in ascending order (according to numberOfArmies)
+    // a copy is made to not alter the player's territory vector
+    vector<Territory*> copyToSort = player->getTerritories();
+    sort(copyToSort.begin(), copyToSort.end());
+    return copyToSort;
+}
 
 /******************************************************
  * NEUTRAL PLAYER STRATEGY

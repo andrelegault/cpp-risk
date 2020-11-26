@@ -371,6 +371,13 @@ public:
     friend ostream& operator<<(ostream& stream, const Territory& territory);
 
     /**
+     * Comparison operator to check if a territory has more armies than another territory.
+     * @param other Reference to object to compare to.
+     * @return True if this has less armies than other. False otherwise.
+     */
+    bool operator<(const Territory& other);
+
+    /**
      * Assignment operator overload.
      * @param other Other Territory used for assignment.
      */
@@ -410,6 +417,13 @@ public:
      * @return Map.
      */
     Map* getMap() const;
+
+    /**
+     * Checks if this territory has `t` as its neighbour.
+     * @param t Potential neighbour.
+     * @return Whether or not t is a neighbour of this territory.
+     */
+    bool isNeighbour(Territory* t);
 
     /// Gets the player owning this territory.
     Player* getOwner() const;

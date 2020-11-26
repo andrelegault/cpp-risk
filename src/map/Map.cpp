@@ -338,6 +338,10 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
     return territories;
 }
 
+bool Territory::operator<(const Territory& other) {
+    return this->numberOfArmies < other.numberOfArmies;
+}
+
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
     if (this->getOwner() == Map::neutralP) throw std::runtime_error("neutral player should not be attacking!");
     if (attackerArmies < 0) throw std::runtime_error("Territory attack using negative number of armies.");
