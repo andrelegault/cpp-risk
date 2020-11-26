@@ -338,11 +338,18 @@ vector<Territory*> Territory::getPlayerBorderTerritories(Player* player) {
     return territories;
 }
 
+bool Territory::isNeighbour(Territory* t) {
+    for (auto border : this->getBorders())
+        if (t == (Territory*)border->getOther(this)) return true;
+    return false;
+}
+
 bool Territory::operator<(const Territory& other) {
     return this->numberOfArmies < other.numberOfArmies;
 }
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
+    // TODO: replace with a player whose strategy is NeutralPlayerStrategy
     if (this->getOwner() == Map::neutralP) throw std::runtime_error("neutral player should not be attacking!");
     if (attackerArmies < 0) throw std::runtime_error("Territory attack using negative number of armies.");
 

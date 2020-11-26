@@ -201,9 +201,47 @@ vector<Territory*> AggressivePlayerStrategy::toDefend(Player* player) {
  * BENEVOLENT STRATEGY
  *****************************************************/
 
-void BenevolentPlayerStrategy::issueOrder(Player* player) {}
+void BenevolentPlayerStrategy::issueOrder(Player* player) {
+    // reinforces weakest territories first
+    // never attacks therefore will never have cards
+    vector<Territory*> ascending = toDefend(player);
 
-vector<Territory*> BenevolentPlayerStrategy::toAttack(Player* player) {}
+    const int numberToDefend = ascending.size();
+    if (numberToDefend < 1) return;
+    else if (numberToDefend == 1) {
+        player->addOrder(new Deploy(player, ascending.front(), player->armies));
+        return;
+    }
+
+    int armiesInTerritories = 0;
+    for (auto t : ascending) armiesInTerritories += t->getNumberOfArmies();
+
+    // territories with more armies get less deployments and vice versa
+    for (int i = 0; i < numberToDefend; i++) {
+        Territory* mirror = ascending.at(i == numberToDefend / 2 ? i : numberToDefend - i - 1);
+        if (armiesInTerritories < 0) throw runtime_error("Why is this under 0?");
+        if (armiesInTerritories < 1) break;
+        const double ratio = (double)ascending.at(numberToDefend - i - 1)->getNumberOfArmies() / armiesInTerritories;
+        const int toGive = ratio * player->armies;
+        player->addOrder(new Deploy(player, ascending.at(i), toGive));
+        armiesInTerritories -= toGive;
+    }
+
+    // issue defensive advance/airlift orders to fortify weaker territories
+    Territory* weakest = ascending.front();
+    Territory* strongest = ascending.back();
+
+    const bool useAdvance = weakest->isNeighbour(strongest);
+
+    const int difference = abs(strongest->getNumberOfArmies() - weakest->getNumberOfArmies());
+    const int armies = difference / 2;
+    Order* fortify = nullptr;
+    if (useAdvance) fortify = new Advance(player, strongest, weakest, armies);
+    else fortify = new Airlift(player, strongest, weakest, armies);
+    player->addOrder(fortify);
+}
+
+vector<Territory*> BenevolentPlayerStrategy::toAttack(Player* player) { return {}; }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {
     // sort territories in ascending order (according to numberOfArmies)
@@ -219,6 +257,6 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {
 
 void NeutralPlayerStrategy::issueOrder(Player* player) {}
 
-vector<Territory*> NeutralPlayerStrategy::toAttack(Player* player) {}
+vector<Territory*> NeutralPlayerStrategy::toAttack(Player* player) { return {}; }
 
-vector<Territory*> NeutralPlayerStrategy::toDefend(Player* player) {}
+vector<Territory*> NeutralPlayerStrategy::toDefend(Player* player) { return {}; }

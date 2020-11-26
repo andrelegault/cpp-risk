@@ -1,5 +1,8 @@
 #pragma once
 
+#include <algorithm>
+#include <cmath>
+
 #include "PlayerStrategies.fwd.cpp"
 #include "Map.hpp"
 #include "Player.hpp"
