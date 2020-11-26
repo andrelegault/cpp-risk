@@ -40,11 +40,11 @@ Player::~Player() {
     delete ps;
 }
 
-void Player::setStrategy(PlayerStrategy *newStrategy) {
-        delete this->ps;
-        this->ps = newStrategy;
-        cout << this->getName() << ": player strategy changed." << endl;
-    }
+void Player::setStrategy(PlayerStrategy* newStrategy) {
+    delete this->ps;
+    this->ps = newStrategy;
+    cout << this->getName() << ": player strategy changed." << endl;
+}
 
 void Player::addTerritory(Territory* territory) {
     this->territories.push_back(territory);

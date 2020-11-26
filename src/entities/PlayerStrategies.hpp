@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class PlayerStrategy{
+class PlayerStrategy {
 public:
     ~PlayerStrategy();
     virtual void issueOrder(Player* player) = 0;

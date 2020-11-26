@@ -122,7 +122,7 @@ public:
      * Change the strategy type the player uses
      * @param newStrategy New player strategy.
      */
-    void setStrategy(PlayerStrategy *newStrategy);
+    void setStrategy(PlayerStrategy* newStrategy);
 
 private:
     // The territories owned by the players.
