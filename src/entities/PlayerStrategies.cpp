@@ -234,6 +234,8 @@ void BenevolentPlayerStrategy::issueOrder(Player* player) {
     const bool useAdvance = weakest->isNeighbour(strongest);
 
     const int difference = abs(strongest->getNumberOfArmies() - weakest->getNumberOfArmies());
+    if (!difference) return;
+
     const int armies = difference / 2;
     Order* fortify = nullptr;
     if (useAdvance) fortify = new Advance(player, strongest, weakest, armies);
