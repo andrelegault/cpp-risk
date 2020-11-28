@@ -128,8 +128,10 @@ void GameEngine::init() {
 
     int numberOfPlayers = range("Number of Players", 2, 5);
 
+    vector<PlayerStrategy*> strategies = { new HumanPlayerStrategy(), new AggressivePlayerStrategy(), new BenevolentPlayerStrategy() };
+
     for (int i = 0; i < numberOfPlayers; ++i) {
-        Player* player = new Player(this->deck, new AggressivePlayerStrategy());
+        Player* player = new Player(this->deck, strategies[rand() % strategies.size()]);
 
         this->players.push_back(player);
     }

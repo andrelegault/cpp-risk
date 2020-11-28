@@ -118,11 +118,59 @@ nextState:;
 
     int cardIndex = UI::ask("Choose a card to play.", cardTypeStrings) - 1;
 
-    Card* card = cardTypeMap[cardTypeVector[cardIndex]];
+    CardType cardType = cardTypeVector[cardIndex];
 
-    // TODO: UI for playing card.
+    Card* card = cardTypeMap[cardType];
 
-    //card->play(player);
+    Territory* source = nullptr;
+    Territory* target = nullptr;
+    Player* targetPlayer = nullptr;
+    std::pair<Territory*, int> territoryPair;
+    int armyCount = 0;
+
+    switch(cardType) {
+        case CardType::AIRLIFT:
+            territoryPair = territoriesDefend[UI::ask("Which source territory?", territoryArmies(territoriesDefend)) - 1];
+
+            source = territoryPair.first;
+
+            armyCount = UI::range("How many armies?", 0, territoryPair.second);
+
+            target = territoriesDefend[UI::ask("Which target territory?", territoryArmies(territoriesDefend)) - 1].first;
+
+            break;
+        case CardType::REINFORCEMENT:
+        case CardType::BLOCKADE:
+            source = territoriesDefend[UI::ask("Which territory?", territoryArmies(territoriesDefend)) - 1].first;
+
+            break;
+       case CardType::BOMB:
+            target = territoriesAttack[UI::ask("Which territory?", territoryArmies(territoriesAttack)) - 1].first;
+
+            break;
+        case CardType::DIPLOMACY:
+            break;
+    }
+
+    if(cardType == CardType::DIPLOMACY) {
+        std::set<Player*> enemySet;
+
+        for(auto territory : player->getTerritories()) {
+            enemySet.insert(territory->getOwner());
+        }
+
+        std::vector<Player*> enemies;
+        std::vector<string> enemyNames;
+
+        for(auto enemy : enemySet) {
+            enemies.push_back(enemy);
+            enemyNames.push_back(enemy->getName());
+        }
+
+        targetPlayer = enemies[UI::ask("Which player?", enemyNames) - 1];
+    }
+
+    card->play(player, targetPlayer, source, target, armyCount);
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack(Player* player) {
@@ -163,8 +211,6 @@ void AggressivePlayerStrategy::issueOrder(Player* player) {
     for (auto target : player->toAttack()) {
         player->addOrder(new Advance(player, source, target, armyCount));
     }
-
-    // TODO?: fortifies in order to maximize aggregation of forces in one country.
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack(Player* player) {

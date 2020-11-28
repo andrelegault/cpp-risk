@@ -80,9 +80,11 @@ ostream& operator<<(ostream& stream, const Deck& deck) {
 
 void Deck::draw(Hand* hand) {
     if (this->cards.size() > 0) {
-        hand->addCard(this->cards.back());
+        int cardIndex = rand() % this->cards.size();
 
-        this->cards.pop_back();
+        hand->addCard(this->cards.at(cardIndex));
+
+        this->cards.erase(this->cards.begin() + cardIndex);
     }
 }
 
@@ -175,7 +177,7 @@ Hand& Hand::operator=(const Hand& other) {
 }
 
 void Hand::draw() {
-    this->deck->draw(this);
+    if(this->deck != nullptr) this->deck->draw(this);
 }
 
 Card* Hand::getAtIndex(int index) const {

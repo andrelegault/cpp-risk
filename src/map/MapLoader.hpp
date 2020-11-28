@@ -47,7 +47,7 @@ public:
      * @return A Map graph represenation of the Conquest Map file.
      * @throw If the file does not exist or the file is invalid.
      */
-    virtual Map* load(const string fileName);
+    static Map* load(const string fileName);
 };
 
 class ConquestFileReader {
