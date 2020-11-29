@@ -118,7 +118,7 @@ void GameEngine::init() {
     vector<string> maps;
     vector<string> mapNames;
 
-    for (const auto& entry : directory_iterator(directory)) {
+    for (const auto& entry : recursive_directory_iterator(directory)) {
         const path& mapPath = entry.path();
 
         if (mapPath.extension() == ".map") {
