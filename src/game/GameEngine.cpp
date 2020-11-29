@@ -136,8 +136,9 @@ void GameEngine::init() {
     }
 
     if (!this->warzoneMap->validate()) {
+        UI::clear();
+        cout << *this->warzoneMap << endl;
         cout << Grid(new Text("Invalid Map"));
-        cout << this->warzoneMap << endl;
 
         throw logic_error("Map Validation Failed");
     }

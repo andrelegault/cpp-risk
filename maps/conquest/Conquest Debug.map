@@ -1,0 +1,26 @@
+
+
+[Map]
+author=Andrew
+warn=no
+image=no
+wrap=no
+scroll=no
+
+[Continents]
+Continent 1=2
+Continent 2=3
+Continent 3=2
+
+[Territories]
+
+Territory 1,0,0,Continent 1,Territory 2,Territory 3,Territory 4,Territory 5,Territory 6
+Territory 2,0,0,Continent 1,Territory 1
+Territory 3,0,0,Continent 1,Territory 1
+Territory 4,0,0,Continent 1,Territory 1
+Territory 5,0,0,Continent 1,Territory 1
+Territory 6,0,0,Continent 1,Territory 1
+
+Territory 2,0,0,Continent 2,Territory 3
+
+Territory 7,0,0,Continent 1

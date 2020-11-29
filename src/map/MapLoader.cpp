@@ -193,7 +193,7 @@ Map *ConquestFileReader::load(const string file_name) {
         } else if (mode == TERRITORIES) { // Territories Section (territory with continent and list of bordering territories)
             vector<string> words = Utils::split(line, ",");
 
-            if (words.size() < 4) {
+            if (words.size() < 5) {
                 throw logic_error("Invalid Territory Format: name, x, y, continent, borders...");
             }
 
