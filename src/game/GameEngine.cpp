@@ -103,7 +103,10 @@ void GameEngine::init() {
     }
 
     string directory;
-    switch (ask(Banner(), { "Domination Maps", "Conquest Maps" })) {
+    switch (ask(Banner(), { "Domination Maps", "Conquest Maps", "All Maps" })) {
+        case 1:
+            directory = "maps/domination/";
+            break;
         case 2:
             directory = "maps/conquest/";
             break;
@@ -126,7 +129,7 @@ void GameEngine::init() {
 
     UI::clear();
 
-    if (directory == "maps/") {
+    if (directory == "maps/dominion/") {
         this->warzoneMap = MapLoader::load(maps.at(ask("Select Map", mapNames) - 1));
     } else { // The Adapter is capable of falling back to the parent MapLoader if it detects a Dominion map
         this->warzoneMap = ConquestFileReaderAdapter::load(maps.at(ask("Select Map", mapNames) - 1));

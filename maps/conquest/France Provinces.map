@@ -1,0 +1,52 @@
+[Map]
+author=Franswa Tournier
+image=France provinces.bmp
+wrap=no
+scroll=none
+warn=yes
+
+[Continents]
+NORD=4
+OUEST=6
+EST=4
+CENTRE=7
+SUD-OUEST=5
+SUD-EST=7
+SUD=4
+
+[Territories]
+Flandre Hainaut,338,17,NORD,Artois,Ile-de-France
+Artois,335,46,NORD,Flandre Hainaut,Picardie,Ile-de-France
+Picardie,309,68,NORD,Artois,Normandie,Ile-de-France
+Ile-de-France,343,154,NORD,Artois,Picardie,Normandie,Orléanais,Champagne,Flandre Hainaut
+Normandie,228,152,NORD,Picardie,Ile-de-France,Orléanais,Maine,Bretagne
+Champagne,418,147,EST,Orléanais,Ile-de-France,Lorraine,Franche-Comté,Bourgogne
+Lorraine,506,167,EST,Champagne,Alsace,Franche-Comté
+Alsace,560,177,EST,Lorraine,Franche-Comté
+Bourgogne,436,290,EST,Orléanais,Champagne,Franche-Comté,Nivernais,Bourbonnais,Dauphiné,Savoie,Lyonnais
+Franche-Comté,500,281,EST,Champagne,Alsace,Bourgogne,Lorraine
+Bretagne,114,216,OUEST,Normandie,Maine,Anjou,Poitou
+Maine,214,215,OUEST,Normandie,Bretagne,Anjou,Touraine,Orléanais
+Anjou,195,261,OUEST,Bretagne,Maine,Touraine,Poitou
+Touraine,252,249,OUEST,Anjou,Maine,Orléanais,Berry,Poitou
+Orléanais,298,230,OUEST,Normandie,Maine,Ile-de-France,Champagne,Bourgogne,Nivernais,Berry,Touraine
+Berry,305,296,CENTRE,Orléanais,Nivernais,Bourbonnais,Limousin,Marche,Poitou,Touraine
+Nivernais,380,278,CENTRE,Orléanais,Bourbonnais,Bourgogne,Berry
+Limousin,298,398,CENTRE,Auvergne,Marche,Berry,Poitou,Angoumois,Guyenne Gascogne
+Marche,315,347,CENTRE,Bourbonnais,Limousin,Auvergne,Berry
+Bourbonnais,350,304,CENTRE,Lyonnais,Nivernais,Bourgogne,Auvergne,Marche,Berry
+Auvergne,362,396,SUD-EST,Lyonnais,Bourbonnais,Limousin,Languedoc,Marche,Guyenne Gascogne
+Lyonnais,425,370,SUD-EST,Bourgogne,Dauphiné,Languedoc,Auvergne,Bourbonnais
+Dauphiné,490,423,SUD-EST,Lyonnais,Languedoc,Venaissin,Savoie,Bourgogne,Provence
+Savoie,529,372,SUD-EST,Dauphiné,Bourgogne
+Venaissin,471,488,SUD-EST,Languedoc,Dauphiné,Provence
+Nice,566,493,SUD,Provence
+Provence,517,494,SUD,Languedoc,Nice,Venaissin,Dauphiné
+Languedoc,404,474,SUD,Lyonnais,Guyenne Gascogne,Foix,Roussillon,Venaissin,Provence,Dauphiné,Auvergne
+Roussillon,334,570,SUD,Foix,Languedoc
+Foix,287,563,SUD,Roussillon,Languedoc
+Béarn,175,541,SUD-OUEST,Guyenne Gascogne
+Guyenne Gascogne,236,485,SUD-OUEST,Limousin,Aunis Saintonge,Angoumois,Béarn,Languedoc,Auvergne
+Angoumois,220,378,SUD-OUEST,Limousin,Aunis Saintonge,Guyenne Gascogne,Poitou
+Aunis Saintonge,177,337,SUD-OUEST,Poitou,Angoumois,Guyenne Gascogne
+Poitou,204,315,SUD-OUEST,Limousin,Aunis Saintonge,Berry,Touraine,Anjou,Bretagne,Angoumois
