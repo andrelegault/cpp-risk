@@ -27,7 +27,7 @@ Map* MapLoader::load(const string file_name) {
     vector<Continent*> continents;
     vector<Territory*> countries;
 
-    while (getline(file, line) && !file.eof()) {
+    while (!file.eof() && getline(file, line)) {
         // trim leading and training whitespaces
         line = Utils::trim(line);
 
@@ -119,7 +119,7 @@ ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(cons
     }
 
     string line;
-    while (getline(file, line) && !file.eof()) {
+    while ( !file.eof() && getline(file, line)) {
         if (line.rfind(';', 0) == 0 || line.empty()) {
             continue;
         } else if (line.find("[Map]") == 0 || line.find("[Continents]") == 0) {
@@ -157,7 +157,7 @@ Map *ConquestFileReader::load(const string file_name) {
     vector<Territory*> territories;
     vector<vector<string> > borders;
 
-    while (getline(file, line) && !file.eof()) {
+    while (!file.eof() && getline(file, line)) {
         // trim leading and training whitespaces
         Utils::trim(line);
 
