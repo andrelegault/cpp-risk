@@ -18,88 +18,84 @@ Map* MapLoader::load(const string file_name) {
     }
 
     string line;
+    enum mode {FILES, CONTINENTS, COUNTRIES, BORDERS};
+    mode mode;
+
 
     string map_name;
     vector<vector<string> > files;
     vector<Continent*> continents;
     vector<Territory*> countries;
 
-    while (getline(file, line)) {
+    while (getline(file, line) && !file.eof()) {
         // trim leading and training whitespaces
         line = Utils::trim(line);
 
         // When you read useless lines, skip them
         if (line.rfind(';', 0) == 0 || line.empty()) {
             continue;
-        }
-
-        // Find the name of the map
-        if (line.rfind("name", 0) == 0) {
+        } else if (line.rfind("name", 0) == 0) {
             map_name = line.substr(line.find_first_of(" \t") + 1);
+            continue;
+        } else if (line.find("[files]") == 0) {
+            mode = FILES;
+            continue;
+        } else if (line.find("[continents]") == 0) {
+            mode = CONTINENTS;
+            continue;
+        } else if (line.find("[countries]") == 0) {
+            mode = COUNTRIES;
+            continue;
+        } else if (line.find("[borders]") == 0) {
+            mode = BORDERS;
+            continue;
         }
 
-        // Find related files save to 2d vector for now...
-        if (line.find("[files]") == 0) {
-            while (getline(file, line) && !Utils::trim(line).empty()) {
-                vector<string> words = Utils::split(line);
-                files.push_back(words);
+
+        if (mode == FILES) {  // Find related files save to 2d vector for now...
+            vector<string> words = Utils::split(line);
+            files.push_back(words);
+        } else if (mode == CONTINENTS) { // Create Continents
+            vector<string> words = Utils::split(line);
+            if (!(words.size() == 3 || words.empty())) {
+                throw logic_error("Invalid Continent Format");
             }
-        }
 
-        // Create Continents
-        if (line.find("[continents]") == 0) {
-            while (getline(file, line) && !Utils::trim(line).empty()) {
-                vector<string> words = Utils::split(line);
-                if (!(words.size() == 3 || words.empty())) {
-                    throw logic_error("Invalid Continent Format");
-                }
+            // 0 - name
+            // 1 - army value
+            // 2 - color
 
-                // 0 - name
-                // 1 - army value
-                // 2 - color
-
-                continents.push_back(new Continent(words[0], stoi(words[1])));
+            continents.push_back(new Continent(words[0], stoi(words[1])));
+        } else if (mode == COUNTRIES) { // Create Territories and connect them to their Continents
+            vector<string> words = Utils::split(line);
+            if (!(words.size() == 5 || words.empty())) {
+                throw logic_error("Invalid Country Format");
             }
-        }
 
-        // Create Territories and connect them to their Continents
-        if (line.find("[countries]") == 0) {
-            while (getline(file, line) && !Utils::trim(line).empty()) {
-                vector<string> words = Utils::split(line);
-                if (!(words.size() == 5 || words.empty())) {
-                    throw logic_error("Invalid Country Format");
-                }
+            // 0 - country #
+            // 1 - name
+            // 2 - continent #
+            // 3 - x
+            // 4 - y
 
-                // 0 - country #
-                // 1 - name
-                // 2 - continent #
-                // 3 - x
-                // 4 - y
+            Territory* country = new Territory(words[1]);
+            Continent* continent = continents[stoi(words[2]) - 1];
+            continent->connect(country);
 
-                Territory* country = new Territory(words[1]);
-                Continent* continent = continents[stoi(words[2]) - 1];
-                continent->connect(country);
-
-                countries.push_back(country);
+            countries.push_back(country);
+        } else if (mode == BORDERS) { // Connect MapNodes with eachother to form Borders between Territories
+            vector<string> words = Utils::split(line);
+            if (words.size() < 2) {
+                throw logic_error("Invalid Border Format");
             }
-        }
 
-        // Connect MapNodes with eachother to form Borders between Territories
-        if (line.find("[borders]") == 0) {
-            while (getline(file, line) && !Utils::trim(line).empty()) {
-                vector<string> words = Utils::split(line);
-                if (words.size() < 2) {
-                    throw logic_error("Invalid Border Format");
-                }
+            // 0  - parent country #
+            // 1+ - adjacent country #
 
-                // 0  - parent country #
-                // 1+ - adjacent country #
+            MapNode* parent = countries[stoi(words[0]) - 1];
 
-                MapNode* parent = countries[stoi(words[0]) - 1];
-
-                for (int i = 1; i < words.size(); i++) {
-                    parent->connect(countries[stoi(words[i]) - 1]);
-                }
+            for (int i = 1; i < words.size(); i++) {
+                parent->connect(countries[stoi(words[i]) - 1]);
             }
         }
     }
@@ -124,14 +120,15 @@ ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(cons
 
     string line;
     while (getline(file, line) && !file.eof()) {
-        if (line.empty()) {
+        if (line.rfind(';', 0) == 0 || line.empty()) {
             continue;
-        } else if (line.find("[Map]") == 0) {
+        } else if (line.find("[Map]") == 0 || line.find("[Continents]") == 0) {
             return ConquestFileReaderAdapter::CONQUEST;
-        } else if (line.find("[files]") == 0) {
+        } else if (line.find("[files]") == 0 || line.find("[continents]") == 0) {
             return ConquestFileReaderAdapter::DOMINATION;
         }
     }
+    file.close();
 }
 
 Map *ConquestFileReaderAdapter::load(const string file_name) {
