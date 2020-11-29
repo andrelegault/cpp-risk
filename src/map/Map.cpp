@@ -316,6 +316,10 @@ bool Territory::validate() {
     return this->borders.size() > 0;
 }
 
+Continent* Territory::getContinent() const {
+    return this->continent;
+}
+
 Map* Territory::getMap() const {
     return this->continent->getMap();
 }

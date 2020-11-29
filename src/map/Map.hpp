@@ -413,6 +413,12 @@ public:
     void connect(Continent* continent);
 
     /**
+     * Gets parent Continent of this object
+     * @return Continent.
+     */
+    Continent *getContinent() const;
+
+    /**
      * Gets map object relative to this object.
      * @return Map.
      */

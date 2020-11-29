@@ -102,29 +102,44 @@ void GameEngine::init() {
         break;
     }
 
-    string directory = "maps/";
+    string directory;
+    switch (ask(Banner(), { "Domination Maps", "Conquest Maps" })) {
+        case 2:
+            directory = "maps/conquest/";
+            break;
+        default:
+            directory = "maps/";
+            break;
+    }
 
     vector<string> maps;
+    vector<string> mapNames;
 
     for (const auto& entry : directory_iterator(directory)) {
-        const path mapPath = entry.path();
+        const path& mapPath = entry.path();
 
         if (mapPath.extension() == ".map") {
-            maps.push_back(mapPath.stem());
+            mapNames.emplace_back(mapPath.stem());
+            maps.emplace_back(mapPath.string());
         }
     }
 
     UI::clear();
 
-    this->warzoneMap = MapLoader::load(directory + maps.at(ask("Select Map", maps) - 1) + ".map");
+    if (directory == "maps/") {
+        this->warzoneMap = MapLoader::load(maps.at(ask("Select Map", mapNames) - 1));
+    } else { // The Adapter is capable of falling back to the parent MapLoader if it detects a Dominion map
+        this->warzoneMap = ConquestFileReaderAdapter::load(maps.at(ask("Select Map", mapNames) - 1));
+    }
 
     if (!this->warzoneMap->validate()) {
-        UI::clear();
-
         cout << Grid(new Text("Invalid Map"));
+        cout << this->warzoneMap << endl;
 
-        return;
+        throw logic_error("Map Validation Failed");
     }
+
+    UI::clear();
 
     int numberOfPlayers = range("Number of Players", 2, 5);
 
