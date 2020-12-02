@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cassert>
 
 #include "PlayerStrategies.fwd.cpp"
 #include "Map.hpp"

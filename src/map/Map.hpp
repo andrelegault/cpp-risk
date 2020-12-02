@@ -375,7 +375,7 @@ public:
      * @param other Reference to object to compare to.
      * @return True if this has less armies than other. False otherwise.
      */
-    bool operator<(const Territory& other);
+    bool operator<(const Territory& other) const;
 
     /**
      * Assignment operator overload.
@@ -416,7 +416,7 @@ public:
      * Gets parent Continent of this object
      * @return Continent.
      */
-    Continent *getContinent() const;
+    Continent* getContinent() const;
 
     /**
      * Gets map object relative to this object.
@@ -469,6 +469,8 @@ public:
     void setNumberOfArmies(int numberOfArmies);
 
     int getNumberOfArmies();
+
+    static bool comparePointers(const Territory* t1, const Territory* t2);
 private:
     // Counter for number of armies that current player owns in this country.
     int numberOfArmies;

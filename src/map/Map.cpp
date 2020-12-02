@@ -348,9 +348,14 @@ bool Territory::isNeighbour(Territory* t) {
     return false;
 }
 
-bool Territory::operator<(const Territory& other) {
+bool Territory::operator<(const Territory& other) const {
     return this->numberOfArmies < other.numberOfArmies;
 }
+
+bool Territory::comparePointers(const Territory* t1, const Territory* t2) {
+    return *t1 < *t2;
+}
+
 
 bool Territory::attack(Territory* target, int attackerArmies, int attackerOdds, int defenderOdds) {
     // TODO: replace with a player whose strategy is NeutralPlayerStrategy

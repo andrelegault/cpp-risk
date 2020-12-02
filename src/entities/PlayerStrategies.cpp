@@ -269,16 +269,18 @@ void BenevolentPlayerStrategy::issueOrder(Player* player) {
 
     const int numberToDefend = ascending.size();
     if (!numberToDefend) return;
-    player->addOrder(new Deploy(player, ascending.back(), player->armies));
+    assert(ascending.front()->getNumberOfArmies() <= ascending.back()->getNumberOfArmies());
+    player->addOrder(new Deploy(player, ascending.front(), player->armies));
     if (numberToDefend == 1) return;
 
     // issue defensive advance/airlift orders to fortify weaker territories
-    Territory* weakest = ascending.back();
-    Territory* strongest = ascending.front();
+    Territory* weakest = ascending.front();
+    Territory* strongest = ascending.back();
 
     const bool useAdvance = weakest->isNeighbour(strongest);
 
-    const int difference = abs(strongest->getNumberOfArmies() - weakest->getNumberOfArmies());
+    const int difference = strongest->getNumberOfArmies() - weakest->getNumberOfArmies();
+    assert(difference >= 0);
     if (!difference) return;
 
     const int armies = difference / 2;
@@ -294,7 +296,7 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {
     // sort territories in ascending order (according to numberOfArmies)
     // a copy is made to not alter the player's territory vector
     vector<Territory*> copyToSort = player->getTerritories();
-    sort(copyToSort.begin(), copyToSort.end());
+    sort(copyToSort.begin(), copyToSort.end(), Territory::comparePointers);
     return copyToSort;
 }
 
