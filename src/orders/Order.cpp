@@ -142,7 +142,7 @@ Advance::Advance(const Advance& other) : BlockableOrder(other), source(new Terri
 string Advance::toString() const {
     if (this->source == nullptr || this->target == nullptr) throw std::runtime_error("Invalid Advance Order.");
 
-    return player->getName() + " issues an Advance order moving " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
+    return player->getName() + "'s Advance order moving " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Advance& order) {
@@ -254,7 +254,7 @@ Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*
 Blockade::~Blockade() {}
 
 string Blockade::toString() const {
-    return player->getName() + " issues a Blockade order against " + this->target->getName();
+    return player->getName() + "'s Blockade order against " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Blockade& order) {
