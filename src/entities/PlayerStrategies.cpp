@@ -96,6 +96,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
         Territory* source = sourceArmy.first;
 
         int armyCount = UI::range("How many armies?", 0, sourceArmy.second);
+        // i think there's a bug here, whenever i enter a number smaller than the max, the max is always chosen
 
         territoriesDefend[adjacentIndicies[adjacentIndex]].second -= armyCount;
 
@@ -267,29 +268,13 @@ void BenevolentPlayerStrategy::issueOrder(Player* player) {
     vector<Territory*> ascending = toDefend(player);
 
     const int numberToDefend = ascending.size();
-    if (numberToDefend < 1) return;
-    else if (numberToDefend == 1) {
-        player->addOrder(new Deploy(player, ascending.front(), player->armies));
-        return;
-    }
-
-    int armiesInTerritories = 0;
-    for (auto t : ascending) armiesInTerritories += t->getNumberOfArmies();
-
-    // territories with more armies get less deployments and vice versa
-    for (int i = 0; i < numberToDefend; i++) {
-        Territory* mirror = ascending.at(i == numberToDefend / 2 ? i : numberToDefend - i - 1);
-        if (armiesInTerritories < 0) throw runtime_error("Why is this under 0?");
-        if (armiesInTerritories < 1) break;
-        const double ratio = (double)ascending.at(numberToDefend - i - 1)->getNumberOfArmies() / armiesInTerritories;
-        const int toGive = ratio * player->armies;
-        player->addOrder(new Deploy(player, ascending.at(i), toGive));
-        armiesInTerritories -= toGive;
-    }
+    if (!numberToDefend) return;
+    player->addOrder(new Deploy(player, ascending.back(), player->armies));
+    if (numberToDefend == 1) return;
 
     // issue defensive advance/airlift orders to fortify weaker territories
-    Territory* weakest = ascending.front();
-    Territory* strongest = ascending.back();
+    Territory* weakest = ascending.back();
+    Territory* strongest = ascending.front();
 
     const bool useAdvance = weakest->isNeighbour(strongest);
 
