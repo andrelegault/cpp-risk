@@ -466,10 +466,24 @@ public:
      */
     static std::string territoryTable(std::vector<Territory*> territories, int width = 1);
 
+    /**
+     * Sets the number of armies.
+     * @param numberOfArmies Number of armies to set to.
+     */
     void setNumberOfArmies(int numberOfArmies);
 
+    /**
+     * Gets the number of armies.
+     * @return the number of armies.
+     */
     int getNumberOfArmies();
 
+    /**
+     * Compares 2 territories.
+     * @param t1 First territory.
+     * @param t2 Second territory.
+     * @return whether the first territory has less armies than the second.
+     */
     static bool comparePointers(const Territory* t1, const Territory* t2);
 private:
     // Counter for number of armies that current player owns in this country.

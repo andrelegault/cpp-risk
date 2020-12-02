@@ -6,6 +6,22 @@ ostream& operator<<(ostream& stream, const PlayerStrategy& playerStrategy) {
     stream << playerStrategy.toString();
     return stream;
 }
+ostream& operator<<(ostream& stream, const HumanPlayerStrategy& playerStrategy) {
+    stream << playerStrategy.toString();
+    return stream;
+}
+ostream& operator<<(ostream& stream, const AggressivePlayerStrategy& playerStrategy) {
+    stream << playerStrategy.toString();
+    return stream;
+}
+ostream& operator<<(ostream& stream, const BenevolentPlayerStrategy& playerStrategy) {
+    stream << playerStrategy.toString();
+    return stream;
+}
+ostream& operator<<(ostream& stream, const NeutralPlayerStrategy& playerStrategy) {
+    stream << playerStrategy.toString();
+    return stream;
+}
 
 /******************************************************
  * HUMAN STRATEGY
@@ -96,7 +112,6 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
         Territory* source = sourceArmy.first;
 
         int armyCount = UI::range("How many armies?", 0, sourceArmy.second);
-        // i think there's a bug here, whenever i enter a number smaller than the max, the max is always chosen
 
         territoriesDefend[adjacentIndicies[adjacentIndex]].second -= armyCount;
 
@@ -264,7 +279,7 @@ string AggressivePlayerStrategy::toString() const {
 
 void BenevolentPlayerStrategy::issueOrder(Player* player) {
     // reinforces weakest territories first
-    // never attacks therefore will never have cards
+    // assumes the benevolent used a card to reinforce territories (either advance or airlift)
     vector<Territory*> ascending = toDefend(player);
 
     const int numberToDefend = ascending.size();
