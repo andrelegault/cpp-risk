@@ -74,7 +74,7 @@ bool Deploy::validate() const {
 Deploy::Deploy(const Deploy& order) : Order(order), target(new Territory(*(order.target))) {}
 
 string Deploy::toString() const {
-    return "Deploy " + to_string(this->armyCount) + " unit(s) to " + this->target->getName();
+    return player->getName() + " deploys " + to_string(this->armyCount) + " unit(s) to " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Deploy& order) {
@@ -142,7 +142,7 @@ Advance::Advance(const Advance& other) : BlockableOrder(other), source(new Terri
 string Advance::toString() const {
     if (this->source == nullptr || this->target == nullptr) throw std::runtime_error("Invalid Advance Order.");
 
-    return "Advance " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
+    return player->getName() + " issues an Advance order moving " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Advance& order) {
@@ -206,7 +206,7 @@ Bomb::~Bomb() {}
 Bomb::Bomb(const Bomb& order) : BlockableOrder(order) {}
 
 string Bomb::toString() const {
-    return "Bomb " + this->target->getName();
+    return player->getName()  + " executes a Bomb order against " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Bomb& order) {
@@ -254,7 +254,7 @@ Blockade::Blockade(const Blockade& order) : Order(order), target(new Territory(*
 Blockade::~Blockade() {}
 
 string Blockade::toString() const {
-    return "Blockade " + this->target->getName();
+    return player->getName() + " issues a Blockade order against " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Blockade& order) {
@@ -319,7 +319,7 @@ bool Airlift::validate() const {
 Airlift::Airlift(const Airlift& order) : BlockableOrder(order), armyCount(order.armyCount) {};
 
 string Airlift::toString() const {
-    return "Airlift " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
+    return player->getName() + " executes an Airlift order lifting " + to_string(this->armyCount) + " unit(s) from " + this->source->getName() + " to " + this->target->getName();
 }
 
 ostream& operator<<(ostream& os, const Airlift& order) {
@@ -379,7 +379,7 @@ Negotiate::~Negotiate() {}
 Negotiate::Negotiate(const Negotiate& order) : Order(order), target(new Player(*target)) {}
 
 string Negotiate::toString() const {
-    return "Negotiate with " + this->target->getName();
+    return player->getName() + " executes a Negotiate order against " + this->target->getName();
 }
 ostream& operator<<(ostream& os, const Negotiate& order) {
     os << order.toString();
