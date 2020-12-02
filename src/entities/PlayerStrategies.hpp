@@ -18,7 +18,11 @@ public:
     virtual void issueOrder(Player* player) = 0;
     virtual vector<Territory*> toAttack(Player* player) = 0;
     virtual vector<Territory*> toDefend(Player* player) = 0;
+    virtual string toString() const = 0;
+    friend ostream& operator<<(ostream& stream, const PlayerStrategy& strategy);
 };
+
+ostream& operator<<(ostream& stream, const PlayerStrategy& strategy);
 
 class HumanPlayerStrategy : public PlayerStrategy {
 public:
@@ -26,6 +30,7 @@ public:
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
+    string toString() const;
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
@@ -34,6 +39,7 @@ public:
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
+    string toString() const;
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
@@ -42,6 +48,7 @@ public:
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
+    string toString() const;
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
@@ -50,4 +57,5 @@ public:
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
+    string toString() const;
 };

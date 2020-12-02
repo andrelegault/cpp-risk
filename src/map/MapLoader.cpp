@@ -3,10 +3,10 @@
 using namespace std;
 
 MapLoader::MapLoader() = default;
-MapLoader::MapLoader(const MapLoader& other) = default;
-MapLoader& MapLoader::operator=(const MapLoader& other) = default;
+MapLoader::MapLoader(const MapLoader & other) = default;
+MapLoader& MapLoader::operator=(const MapLoader & other) = default;
 
-ostream& operator<<(ostream& stream, const MapLoader& maploader) {
+ostream& operator<<(ostream & stream, const MapLoader & maploader) {
     stream << "MapLoader @ " << &maploader << endl;
     return stream;
 }
@@ -18,7 +18,7 @@ Map* MapLoader::load(const string file_name) {
     }
 
     string line;
-    enum mode {FILES, CONTINENTS, COUNTRIES, BORDERS};
+    enum mode { FILES, CONTINENTS, COUNTRIES, BORDERS };
     mode mode;
 
 
@@ -34,19 +34,24 @@ Map* MapLoader::load(const string file_name) {
         // When you read useless lines, skip them
         if (line.rfind(';', 0) == 0 || line.empty()) {
             continue;
-        } else if (line.rfind("name", 0) == 0) {
+        }
+        else if (line.rfind("name", 0) == 0) {
             map_name = line.substr(line.find_first_of(" \t") + 1);
             continue;
-        } else if (line.find("[files]") == 0) {
+        }
+        else if (line.find("[files]") == 0) {
             mode = FILES;
             continue;
-        } else if (line.find("[continents]") == 0) {
+        }
+        else if (line.find("[continents]") == 0) {
             mode = CONTINENTS;
             continue;
-        } else if (line.find("[countries]") == 0) {
+        }
+        else if (line.find("[countries]") == 0) {
             mode = COUNTRIES;
             continue;
-        } else if (line.find("[borders]") == 0) {
+        }
+        else if (line.find("[borders]") == 0) {
             mode = BORDERS;
             continue;
         }
@@ -55,7 +60,8 @@ Map* MapLoader::load(const string file_name) {
         if (mode == FILES) {  // Find related files save to 2d vector for now...
             vector<string> words = Utils::split(line);
             files.push_back(words);
-        } else if (mode == CONTINENTS) { // Create Continents
+        }
+        else if (mode == CONTINENTS) { // Create Continents
             vector<string> words = Utils::split(line);
             if (!(words.size() == 3 || words.empty())) {
                 throw logic_error("Invalid Continent Format");
@@ -66,7 +72,8 @@ Map* MapLoader::load(const string file_name) {
             // 2 - color
 
             continents.push_back(new Continent(words[0], stoi(words[1])));
-        } else if (mode == COUNTRIES) { // Create Territories and connect them to their Continents
+        }
+        else if (mode == COUNTRIES) { // Create Territories and connect them to their Continents
             vector<string> words = Utils::split(line);
             if (!(words.size() == 5 || words.empty())) {
                 throw logic_error("Invalid Country Format");
@@ -83,7 +90,8 @@ Map* MapLoader::load(const string file_name) {
             continent->connect(country);
 
             countries.push_back(country);
-        } else if (mode == BORDERS) { // Connect MapNodes with eachother to form Borders between Territories
+        }
+        else if (mode == BORDERS) { // Connect MapNodes with eachother to form Borders between Territories
             vector<string> words = Utils::split(line);
             if (words.size() < 2) {
                 throw logic_error("Invalid Border Format");
@@ -119,37 +127,39 @@ ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(cons
     }
 
     string line;
-    while ( !file.eof() && getline(file, line)) {
+    while (!file.eof() && getline(file, line)) {
         if (line.rfind(';', 0) == 0 || line.empty()) {
             continue;
-        } else if (line.find("[Map]") == 0 || line.find("[Continents]") == 0) {
+        }
+        else if (line.find("[Map]") == 0 || line.find("[Continents]") == 0) {
             return ConquestFileReaderAdapter::CONQUEST;
-        } else if (line.find("[files]") == 0 || line.find("[continents]") == 0) {
+        }
+        else if (line.find("[files]") == 0 || line.find("[continents]") == 0) {
             return ConquestFileReaderAdapter::DOMINATION;
         }
     }
     file.close();
 }
 
-Map *ConquestFileReaderAdapter::load(const string file_name) {
+Map* ConquestFileReaderAdapter::load(const string file_name) {
     switch (checkFileType(file_name)) {
-        case DOMINATION:
-            return MapLoader::load(file_name);
-        case CONQUEST:
-            return ConquestFileReader::load(file_name);
-        default:
-            throw logic_error("Unsupported Map File: " + file_name + " doesn't appear to be a Domination or Conquest map file.");
+    case DOMINATION:
+        return MapLoader::load(file_name);
+    case CONQUEST:
+        return ConquestFileReader::load(file_name);
+    default:
+        throw logic_error("Unsupported Map File: " + file_name + " doesn't appear to be a Domination or Conquest map file.");
     }
 }
 
-Map *ConquestFileReader::load(const string file_name) {
+Map* ConquestFileReader::load(const string file_name) {
     ifstream file(file_name);
     if (!file) {
         throw logic_error("Unable to open file at " + file_name);
     }
 
     string line;
-    enum mode {MAP,CONTINENTS, TERRITORIES};
+    enum mode { MAP, CONTINENTS, TERRITORIES };
     mode mode;
 
     vector<vector<string> > info;
@@ -164,13 +174,16 @@ Map *ConquestFileReader::load(const string file_name) {
         // When you read useless lines, skip them
         if (line.empty()) {
             continue;
-        } else if (line.find("[Map]") == 0) {
+        }
+        else if (line.find("[Map]") == 0) {
             mode = MAP;
             continue;
-        } else if (line.find("[Continents]") == 0) {
+        }
+        else if (line.find("[Continents]") == 0) {
             mode = CONTINENTS;
             continue;
-        } else if (line.find("[Territories]") == 0) {
+        }
+        else if (line.find("[Territories]") == 0) {
             mode = TERRITORIES;
             continue;
         }
@@ -179,7 +192,8 @@ Map *ConquestFileReader::load(const string file_name) {
         if (mode == MAP) { // Map Section (key=value)
             vector<string> words = Utils::split(line, "=");
             info.emplace_back(words);
-        } else if (mode == CONTINENTS) { // Continents Section (name=score)
+        }
+        else if (mode == CONTINENTS) { // Continents Section (name=score)
             vector<string> words = Utils::split(line, "=");
             // The maximum number of continents that a map can have is 32, we'll ignore this limit
             if (words.size() != 2) {
@@ -187,7 +201,8 @@ Map *ConquestFileReader::load(const string file_name) {
             }
 
             continents.emplace_back(new Continent(words[0], stoi(words[1])));
-        } else if (mode == TERRITORIES) { // Territories Section (territory with continent and list of bordering territories)
+        }
+        else if (mode == TERRITORIES) { // Territories Section (territory with continent and list of bordering territories)
             vector<string> words = Utils::split(line, ",");
 
             if (words.size() < 5) {
@@ -203,7 +218,7 @@ Map *ConquestFileReader::load(const string file_name) {
             auto* territory = new Territory(words[0]);
 
             // Search continents by name to connect it 🙃
-            for (Continent* continent: continents){
+            for (Continent* continent : continents) {
                 if (continent->getName() == Utils::trim(words[3])) {
                     continent->connect(territory);
                     break;
@@ -211,7 +226,7 @@ Map *ConquestFileReader::load(const string file_name) {
             }
 
             if (territory->getContinent() == nullptr) {
-                throw logic_error("Invalid Territory Format: couldn't find parent Continent ("+words[3]+") for " +words[0]);
+                throw logic_error("Invalid Territory Format: couldn't find parent Continent (" + words[3] + ") for " + words[0]);
             }
 
             // Save the territory in our territories vector
@@ -234,10 +249,10 @@ Map *ConquestFileReader::load(const string file_name) {
         MapNode* parent = territories[i];
         auto neighbors = borders[i];
         // loop over all the neighbors to connect them
-        for (auto border: neighbors) {
+        for (auto border : neighbors) {
             // Loop over all the territories to find the correct one 😡😡😡😡😡😡😡
             // because someone decided using full names in a map format is efficient and not error-prone
-            for (auto* territory: territories){
+            for (auto* territory : territories) {
                 if (territory->getName() == Utils::trim(border)) {
                     parent->connect(territory);
                     break;

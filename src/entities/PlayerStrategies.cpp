@@ -2,6 +2,11 @@
 
 PlayerStrategy::~PlayerStrategy() {}
 
+ostream& operator<<(ostream& stream, const PlayerStrategy& playerStrategy) {
+    stream << playerStrategy.toString();
+    return stream;
+}
+
 /******************************************************
  * HUMAN STRATEGY
  *****************************************************/
@@ -128,41 +133,41 @@ nextState:;
     std::pair<Territory*, int> territoryPair;
     int armyCount = 0;
 
-    switch(cardType) {
-        case CardType::AIRLIFT:
-            territoryPair = territoriesDefend[UI::ask("Which source territory?", territoryArmies(territoriesDefend)) - 1];
+    switch (cardType) {
+    case CardType::AIRLIFT:
+        territoryPair = territoriesDefend[UI::ask("Which source territory?", territoryArmies(territoriesDefend)) - 1];
 
-            source = territoryPair.first;
+        source = territoryPair.first;
 
-            armyCount = UI::range("How many armies?", 0, territoryPair.second);
+        armyCount = UI::range("How many armies?", 0, territoryPair.second);
 
-            target = territoriesDefend[UI::ask("Which target territory?", territoryArmies(territoriesDefend)) - 1].first;
+        target = territoriesDefend[UI::ask("Which target territory?", territoryArmies(territoriesDefend)) - 1].first;
 
-            break;
-        case CardType::REINFORCEMENT:
-        case CardType::BLOCKADE:
-            source = territoriesDefend[UI::ask("Which territory?", territoryArmies(territoriesDefend)) - 1].first;
+        break;
+    case CardType::REINFORCEMENT:
+    case CardType::BLOCKADE:
+        source = territoriesDefend[UI::ask("Which territory?", territoryArmies(territoriesDefend)) - 1].first;
 
-            break;
-       case CardType::BOMB:
-            target = territoriesAttack[UI::ask("Which territory?", territoryArmies(territoriesAttack)) - 1].first;
+        break;
+    case CardType::BOMB:
+        target = territoriesAttack[UI::ask("Which territory?", territoryArmies(territoriesAttack)) - 1].first;
 
-            break;
-        case CardType::DIPLOMACY:
-            break;
+        break;
+    case CardType::DIPLOMACY:
+        break;
     }
 
-    if(cardType == CardType::DIPLOMACY) {
+    if (cardType == CardType::DIPLOMACY) {
         std::set<Player*> enemySet;
 
-        for(auto territory : player->getTerritories()) {
+        for (auto territory : player->getTerritories()) {
             enemySet.insert(territory->getOwner());
         }
 
         std::vector<Player*> enemies;
         std::vector<string> enemyNames;
 
-        for(auto enemy : enemySet) {
+        for (auto enemy : enemySet) {
             enemies.push_back(enemy);
             enemyNames.push_back(enemy->getName());
         }
@@ -191,6 +196,10 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Player* player) {
 
 vector<Territory*> HumanPlayerStrategy::toDefend(Player* player) {
     return player->getTerritories();
+}
+
+string HumanPlayerStrategy::toString() const {
+    return "Human";
 }
 
 /******************************************************
@@ -242,6 +251,11 @@ vector<Territory*> AggressivePlayerStrategy::toDefend(Player* player) {
 
     return { maxTerritory };
 }
+
+string AggressivePlayerStrategy::toString() const {
+    return "Aggressive";
+}
+
 
 /******************************************************
  * BENEVOLENT STRATEGY
@@ -299,6 +313,10 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) {
     return copyToSort;
 }
 
+string BenevolentPlayerStrategy::toString() const {
+    return "Benevolent";
+}
+
 /******************************************************
  * NEUTRAL PLAYER STRATEGY
  *****************************************************/
@@ -308,3 +326,7 @@ void NeutralPlayerStrategy::issueOrder(Player* player) {}
 vector<Territory*> NeutralPlayerStrategy::toAttack(Player* player) { return {}; }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend(Player* player) { return {}; }
+
+string NeutralPlayerStrategy::toString() const {
+    return "Neutral";
+}

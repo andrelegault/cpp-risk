@@ -104,15 +104,15 @@ void GameEngine::init() {
 
     string directory;
     switch (ask(Banner(), { "Domination Maps", "Conquest Maps", "All Maps" })) {
-        case 1:
-            directory = "maps/domination/";
-            break;
-        case 2:
-            directory = "maps/conquest/";
-            break;
-        default:
-            directory = "maps/";
-            break;
+    case 1:
+        directory = "maps/domination/";
+        break;
+    case 2:
+        directory = "maps/conquest/";
+        break;
+    default:
+        directory = "maps/";
+        break;
     }
 
     vector<string> maps;
@@ -131,7 +131,8 @@ void GameEngine::init() {
 
     if (directory == "maps/dominion/") {
         this->warzoneMap = MapLoader::load(maps.at(ask("Select Map", mapNames) - 1));
-    } else { // The Adapter is capable of falling back to the parent MapLoader if it detects a Dominion map
+    }
+    else { // The Adapter is capable of falling back to the parent MapLoader if it detects a Dominion map
         this->warzoneMap = ConquestFileReaderAdapter::load(maps.at(ask("Select Map", mapNames) - 1));
     }
 
@@ -239,7 +240,7 @@ void GameEngine::mainGameLoop() {
         this->executeOrdersPhase();
 
         for (auto player : this->players) {
-            cout << player->getName() << " has " << player->getTerritories().size() << " territories" << endl;
+            cout << player->getName() << "(" << player->getStrategy() << ")" << " has " << player->getTerritories().size() << " territories" << endl;
         }
 
         cout << Map::neutralP->getName() << " has " << Map::neutralP->getTerritories().size() << " territories" << endl;

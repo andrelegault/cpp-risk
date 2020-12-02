@@ -124,6 +124,12 @@ public:
      */
     void setStrategy(PlayerStrategy* newStrategy);
 
+    /**
+     * Gets the player's current strategy.
+     * @return the player's current strategy.
+     */
+    PlayerStrategy& getStrategy() const;
+
 private:
     // The territories owned by the players.
     vector<Territory*> territories;

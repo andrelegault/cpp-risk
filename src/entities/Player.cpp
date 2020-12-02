@@ -9,7 +9,7 @@ Player::Player(string name) : Player(name, nullptr, nullptr) {}
 Player::Player(Deck* deck, PlayerStrategy* initStrategy) : Player("Player " + to_string(++count), deck, initStrategy) {}
 
 Player::Player(string name, Deck* deck, PlayerStrategy* initStrategy) : name(name), orders(new OrdersList()), hand(new Hand(deck)), armies(0), ps(initStrategy) {
-    for(int i = 0; i < 10; i++) this->hand->draw();
+    for (int i = 0; i < 10; i++) this->hand->draw();
 }
 
 Player::Player(const Player& player) : armies(player.armies), name(player.name), orders(new OrdersList(*(player.orders))), hand(player.hand) {
@@ -121,4 +121,8 @@ vector<Territory*> Player::getTerritories() const {
 
 Order* Player::getNextOrder(const int wantedPriority) const {
     return orders->next(wantedPriority);
+}
+
+PlayerStrategy& Player::getStrategy() const {
+    return *(this->ps);
 }
