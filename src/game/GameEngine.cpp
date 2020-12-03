@@ -79,27 +79,6 @@ void GameEngine::assignTerritories() {
     }
 }
 
-void GameEngine::printTerritories() {
-    vector<vector<UI::Component*>> table;
-
-    for (auto continent : this->warzoneMap->getContinents()) {
-        table.push_back({ new UI::Text(continent->getName()) });
-
-        vector<string> territoryList;
-        for (auto territory : continent->getTerritories()) {
-            stringstream ss;
-
-            ss << territory->getOwnerName() << " -> " << territory->getName() << " -> " << territory->getNumberOfArmies();
-
-            territoryList.push_back(ss.str());
-        }
-
-        table.push_back({ new UI::List(territoryList) });
-    }
-
-    cout << Grid(table);
-}
-
 void GameEngine::init() {
     switch (ask(Banner(), { "Start Game", "Exit" })) {
     case 2:
@@ -200,9 +179,6 @@ void GameEngine::init() {
 void GameEngine::startupPhase() {
     this->initPlayers();
     this->assignTerritories();
-
-    //TODO: make sure that "all players have all the orders for playing in a turn"
-
     this->mainGameLoop();
 }
 

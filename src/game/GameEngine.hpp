@@ -123,13 +123,6 @@ public:
     void assignTerritories();
 
     /**
-     * Print territories with their owner names, grouped by continents.
-     *
-     * @deprecated Should move to Territory::territoryTable() instead.
-     */
-    void printTerritories();
-
-    /**
      * Getter for Current Player.
      * @return Current Player.
      */
