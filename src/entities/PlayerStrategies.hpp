@@ -17,6 +17,8 @@ class PlayerStrategy {
 public:
     /// default constructor
     PlayerStrategy();
+    /// copy constructor
+    PlayerStrategy(const PlayerStrategy& other);
     /// destructor
     ~PlayerStrategy();
     /// creates a PlayerStrategy object depending on a provided integer
@@ -36,41 +38,53 @@ public:
 
 class HumanPlayerStrategy : public PlayerStrategy {
 public:
+    HumanPlayerStrategy();
+    HumanPlayerStrategy(const HumanPlayerStrategy& other);
     ~HumanPlayerStrategy();
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
     string toString() const;
+    HumanPlayerStrategy& operator=(const HumanPlayerStrategy& other);
     friend ostream& operator<<(ostream& stream, const HumanPlayerStrategy& strategy);
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
 public:
+    AggressivePlayerStrategy();
+    AggressivePlayerStrategy(const AggressivePlayerStrategy& other);
     ~AggressivePlayerStrategy();
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
     string toString() const;
+    AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& other);
     friend ostream& operator<<(ostream& stream, const AggressivePlayerStrategy& strategy);
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
+    BenevolentPlayerStrategy();
+    BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other);
     ~BenevolentPlayerStrategy();
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
     string toString() const;
+    BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& other);
     friend ostream& operator<<(ostream& stream, const BenevolentPlayerStrategy& strategy);
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 public:
+    NeutralPlayerStrategy();
+    NeutralPlayerStrategy(const NeutralPlayerStrategy& other);
     ~NeutralPlayerStrategy();
     void issueOrder(Player* player);
     vector<Territory*> toAttack(Player* player);
     vector<Territory*> toDefend(Player* player);
     string toString() const;
+    NeutralPlayerStrategy& operator=(const NeutralPlayerStrategy& other);
     friend ostream& operator<<(ostream& stream, const NeutralPlayerStrategy& strategy);
 };
 

@@ -39,7 +39,12 @@ ostream& operator<<(ostream& stream, const NeutralPlayerStrategy& playerStrategy
  * HUMAN STRATEGY
  *****************************************************/
 
+HumanPlayerStrategy::HumanPlayerStrategy() {}
+HumanPlayerStrategy::HumanPlayerStrategy(const HumanPlayerStrategy& other) {}
 HumanPlayerStrategy::~HumanPlayerStrategy() {}
+HumanPlayerStrategy& HumanPlayerStrategy::operator=(const HumanPlayerStrategy& other) {
+    return *this;
+}
 
 std::vector<std::string> territoryArmies(std::vector<std::pair<Territory*, int>> territoryArmies) {
     std::vector<std::string> strings;
@@ -234,6 +239,13 @@ string HumanPlayerStrategy::toString() const {
  * AGGRESIVE STRATEGY
  *****************************************************/
 
+AggressivePlayerStrategy::AggressivePlayerStrategy() {}
+AggressivePlayerStrategy::AggressivePlayerStrategy(const AggressivePlayerStrategy& other) {}
+AggressivePlayerStrategy::~AggressivePlayerStrategy() {}
+AggressivePlayerStrategy& AggressivePlayerStrategy::operator=(const AggressivePlayerStrategy& other) {
+    return *this;
+}
+
 void AggressivePlayerStrategy::issueOrder(Player* player) {
     Territory* source = player->toDefend()[0];
 
@@ -289,6 +301,13 @@ string AggressivePlayerStrategy::toString() const {
  * BENEVOLENT STRATEGY
  *****************************************************/
 
+BenevolentPlayerStrategy::BenevolentPlayerStrategy() {}
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other) {}
+BenevolentPlayerStrategy::~BenevolentPlayerStrategy() {}
+BenevolentPlayerStrategy& BenevolentPlayerStrategy::operator=(const BenevolentPlayerStrategy& other) {
+    return *this;
+}
+
 void BenevolentPlayerStrategy::issueOrder(Player* player) {
     // reinforces weakest territories first
     // assumes the benevolent used a card to reinforce territories (either advance or airlift)
@@ -334,6 +353,12 @@ string BenevolentPlayerStrategy::toString() const {
 /******************************************************
  * NEUTRAL PLAYER STRATEGY
  *****************************************************/
+NeutralPlayerStrategy::NeutralPlayerStrategy() {}
+NeutralPlayerStrategy::~NeutralPlayerStrategy() {}
+NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy& other) {}
+NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& other) {
+    return *this;
+}
 
 void NeutralPlayerStrategy::issueOrder(Player* player) {}
 
