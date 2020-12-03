@@ -28,7 +28,7 @@ public:
     virtual Component* clone() const override;
 
 protected:
-    //Updates the observer with current phase info.
+    /// Updates the observer with current phase info.
     virtual void update();
 
 private:
@@ -56,7 +56,7 @@ public:
     virtual Component* clone() const override;
 
 protected:
-    //Update the observer with stats for all players.
+    /// Update the observer with stats for all players.
     virtual void update();
 
 private:

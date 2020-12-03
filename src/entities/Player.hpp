@@ -23,13 +23,16 @@ class Player : public Subject {
 public:
     int armies;
 
-    //default constructor
+    /// default constructor
     Player();
 
+    /// parameter constructor
     Player(string name);
 
+    /// parameter constructor
     Player(Deck* deck, PlayerStrategy* initStrategy);
 
+    /// parameter constructor
     Player(string name, Deck* deck, PlayerStrategy* initStrategy);
 
     // Copy constructor
@@ -41,6 +44,7 @@ public:
     // Orders to apply.
     OrdersList* orders;
 
+    /// gets the player's name
     string getName() const;
 
     // The card collection for the Player.
