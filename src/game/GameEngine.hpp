@@ -48,8 +48,10 @@ public:
      */
     static map<tuple<Player*, Player*>, bool> immunities;
 
+    /// default constructor
     GameEngine();
 
+    /// destructor
     ~GameEngine();
 
     /**
@@ -142,6 +144,8 @@ public:
     friend class PhaseObserver;
 
     friend class GameStatisticsObserver;
+
+    friend ostream& operator<<(ostream& stream, const GameEngine& gameEngine);
 private:
     vector<Player*> players;
     Player* currentPlayer;
@@ -162,3 +166,5 @@ private:
      */
     void setCurrentPlayer(Player* player);
 };
+
+ostream& operator<<(ostream& stream, const GameEngine& gameEngine);

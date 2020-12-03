@@ -15,10 +15,21 @@ using namespace std;
 
 class PlayerStrategy {
 public:
+    /// default constructor
+    PlayerStrategy();
+    /// destructor
     ~PlayerStrategy();
+    /// creates a PlayerStrategy object depending on a provided integer
+    static PlayerStrategy* fromInt(int random);
+    /// the number of supported player strategies
+    static const int numStrategies;
+    /// issues an order
     virtual void issueOrder(Player* player) = 0;
+    /// gets a list of territory pointers to attack
     virtual vector<Territory*> toAttack(Player* player) = 0;
+    /// gets a list of territory pointers to defend
     virtual vector<Territory*> toDefend(Player* player) = 0;
+    /// returns a string representation of the player strategy child class
     virtual string toString() const = 0;
     friend ostream& operator<<(ostream& stream, const PlayerStrategy& strategy);
 };

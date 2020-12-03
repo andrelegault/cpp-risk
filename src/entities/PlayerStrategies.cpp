@@ -1,6 +1,18 @@
 #include "PlayerStrategies.hpp"
-
+PlayerStrategy::PlayerStrategy() {}
 PlayerStrategy::~PlayerStrategy() {}
+
+PlayerStrategy* PlayerStrategy::fromInt(int random) {
+    switch(random) {
+        case 0: return new HumanPlayerStrategy(); break;
+        case 1: return new AggressivePlayerStrategy(); break;
+        case 2: return new BenevolentPlayerStrategy(); break;
+        case 3: return new NeutralPlayerStrategy(); break;
+        default: throw logic_error("Unsupported player strategy"); break;
+    }
+}
+
+const int PlayerStrategy::numStrategies = 4;
 
 ostream& operator<<(ostream& stream, const PlayerStrategy& playerStrategy) {
     stream << playerStrategy.toString();

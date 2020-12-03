@@ -12,7 +12,13 @@ string gamePhaseToString(GamePhase gamePhase) {
 
 map<tuple<Player*, Player*>, bool> GameEngine::immunities;
 
-GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {}
+GameEngine::GameEngine() : deck(new Deck()), warzoneMap(nullptr), gameUI(nullptr), gamePhase(STARTUP_PHASE), currentPlayer(nullptr) {
+}
+
+ostream& operator<<(ostream& stream, const GameEngine& gameEngine) {
+    stream << "Game engine" << endl;
+    return stream;
+}
 
 GameEngine::~GameEngine() {
     delete this->deck;
@@ -148,11 +154,12 @@ void GameEngine::init() {
 
     int numberOfPlayers = range("Number of Players", 2, 5);
 
-    vector<PlayerStrategy*> strategies = { new HumanPlayerStrategy(), new AggressivePlayerStrategy(), new BenevolentPlayerStrategy() };
-
     for (int i = 0; i < numberOfPlayers; ++i) {
-        Player* player = new Player(this->deck, strategies[rand() % strategies.size()]);
-
+        bool isAggressive = rand() % 2 == 0;
+        PlayerStrategy* strat = nullptr;
+        if (isAggressive) strat = new AggressivePlayerStrategy();
+        else strat = new BenevolentPlayerStrategy();
+        Player* player = new Player(this->deck, strat);
         this->players.push_back(player);
     }
 
@@ -219,6 +226,16 @@ void GameEngine::mainGameLoop() {
         }
 
         this->players = playersWithTerritory;
+
+        int changeStrategies = Utils::getRandom(1, 100);
+        // 1% chance that player strategies change
+        if (changeStrategies == 1) {
+            cout << "CHANGING PLAYER STRATEGIES DYNAMICALLY" << endl;
+            // exclude neutral player strategy as we already have a neutral player
+            int randomIndex = Utils::getRandom(0, PlayerStrategy::numStrategies - 2);
+            for(auto player: this->players)
+                player->setStrategy(PlayerStrategy::fromInt(randomIndex));
+        }
 
         // Checks win condition.
 
