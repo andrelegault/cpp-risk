@@ -5,13 +5,12 @@ using namespace std;
 MapLoader::MapLoader() = default;
 MapLoader::MapLoader(const MapLoader & other) = default;
 MapLoader& MapLoader::operator=(const MapLoader & other) = default;
-
 ostream& operator<<(ostream & stream, const MapLoader & maploader) {
     stream << "MapLoader @ " << &maploader << endl;
     return stream;
 }
 
-Map* MapLoader::load(const string file_name) {
+Map* MapLoader::load(const string& file_name) {
     ifstream file(file_name);
     if (!file) {
         throw logic_error("Unable to open file at " + file_name);
@@ -120,7 +119,16 @@ Map* MapLoader::load(const string file_name) {
 }
 
 // Conquest File Reader Adapter
-ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(const string file_name) {
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter() = default;
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(const ConquestFileReaderAdapter & other) = default;
+ConquestFileReaderAdapter& ConquestFileReaderAdapter::operator=(const ConquestFileReaderAdapter & other) = default;
+ostream& operator<<(ostream & stream, const ConquestFileReaderAdapter &conquestFileReaderAdapter) {
+    stream << "ConquestFileReaderAdapter @ " << &conquestFileReaderAdapter << endl;
+    return stream;
+}
+
+ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(const string& file_name) {
     ifstream file(file_name);
     if (!file) {
         throw logic_error("Unable to open file at " + file_name);
@@ -141,7 +149,7 @@ ConquestFileReaderAdapter::MapType ConquestFileReaderAdapter::checkFileType(cons
     file.close();
 }
 
-Map* ConquestFileReaderAdapter::load(const string file_name) {
+Map* ConquestFileReaderAdapter::load(const string& file_name) {
     switch (checkFileType(file_name)) {
     case DOMINATION:
         return MapLoader::load(file_name);
@@ -152,7 +160,15 @@ Map* ConquestFileReaderAdapter::load(const string file_name) {
     }
 }
 
-Map* ConquestFileReader::load(const string file_name) {
+ConquestFileReader::ConquestFileReader() = default;
+ConquestFileReader::ConquestFileReader(const ConquestFileReader & other) = default;
+ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader & other) = default;
+ostream& operator<<(ostream & stream, const ConquestFileReader &conquestFileReader) {
+    stream << "ConquestFileReader @ " << &conquestFileReader << endl;
+    return stream;
+}
+
+Map* ConquestFileReader::load(const string& file_name) {
     ifstream file(file_name);
     if (!file) {
         throw logic_error("Unable to open file at " + file_name);
